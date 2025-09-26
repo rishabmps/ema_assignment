@@ -1,3 +1,22 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hotelHilton",
+      "description": "Hilton Chicago hotel exterior",
+      "imageUrl": "https://images.unsplash.com/photo-1711743266323-5badf42d4797?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxob3RlbCUyMGV4dGVyaW9yfGVufDB8fHx8MTc1ODgzMjQxMHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "hotel exterior"
+    },
+    {
+      "id": "hotelRitz",
+      "description": "The Ritz-Carlton, Chicago hotel exterior",
+      "imageUrl": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBob3RlbHxlbnwwfHx8fDE3NTg4MTU2MTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "luxury hotel"
+    },
+    {
+      "id": "hotelPeninsula",
+      "description": "The Peninsula Chicago hotel exterior",
+      "imageUrl": "https://images.unsplash.com/photo-1653892793073-b44de72fd003?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxtb2Rlcm4lMjBob3RlbHxlbnwwfHx8fDE3NTg4NjA0Mjh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern hotel"
+    }
+  ]
 }

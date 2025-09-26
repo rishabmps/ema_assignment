@@ -1,0 +1,28 @@
+
+{
+  "meals": {
+    "daily_limit": 75,
+    "alcohol": false,
+    "receipt_required_over": 25
+  },
+  "airfare": {
+    "classes": {
+      "economy": true,
+      "business": "allowed_if_flight_hours > 6"
+    },
+    "advance_purchase_min_days": 14,
+    "max_fare_domestic": 500
+  },
+  "hotels": {
+    "max_rate": {
+      "default": 200,
+      "high_cost_cities": {
+        "New York": 350,
+        "Chicago": 250,
+        "San Francisco": 375,
+        "London": 300
+      }
+    },
+    "preferred_brands": ["Marriott", "Hilton", "IHG"]
+  }
+}

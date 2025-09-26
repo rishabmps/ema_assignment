@@ -1,0 +1,45 @@
+
+[
+  {
+    "id": "fl_201",
+    "airline": "United",
+    "airline_logo": "/logos/united.svg",
+    "flight_number": "UA 456",
+    "from": "SFO",
+    "to": "ORD",
+    "departure_time": "09:00",
+    "arrival_time": "15:30",
+    "class": "Business",
+    "price": 850,
+    "compliant": false,
+    "reason": "Business class not allowed for flights under 6 hours."
+  },
+  {
+    "id": "fl_202",
+    "airline": "American",
+    "airline_logo": "/logos/american.svg",
+    "from": "SFO",
+    "to": "ORD",
+    "flight_number": "AA 789",
+    "departure_time": "08:15",
+    "arrival_time": "14:45",
+    "class": "Economy",
+    "price": 380,
+    "compliant": true,
+    "reason": null
+  },
+  {
+    "id": "fl_203",
+    "airline": "Delta",
+    "airline_logo": "/logos/delta.svg",
+    "from": "SFO",
+    "to": "ORD",
+    "flight_number": "DL 101",
+    "departure_time": "11:00",
+    "arrival_time": "17:30",
+    "class": "Economy",
+    "price": 550,
+    "compliant": false,
+    "reason": "Exceeds domestic fare cap of $500."
+  }
+]

@@ -1,0 +1,17 @@
+
+[
+  {
+    "id": "user_sarah",
+    "name": "Sarah Chen",
+    "role": "Traveler",
+    "title": "Sales Director",
+    "initials": "SC"
+  },
+  {
+    "id": "user_alex",
+    "name": "Alex Johnson",
+    "role": "Finance Operations",
+    "title": "Finance Controller",
+    "initials": "AJ"
+  }
+]

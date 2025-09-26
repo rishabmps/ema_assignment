@@ -1,0 +1,36 @@
+
+[
+  {
+    "id": "htl_301",
+    "name": "The Ritz-Carlton, Chicago",
+    "image": "hotelRitz",
+    "address": "160 E Pearson St, Chicago, IL 60611",
+    "price_per_night": 450,
+    "market_rate": 475,
+    "preferred_brand": false,
+    "compliant": false,
+    "reason": "Exceeds max rate for Chicago ($250)."
+  },
+  {
+    "id": "htl_302",
+    "name": "Hilton Chicago",
+    "image": "hotelHilton",
+    "address": "720 S Michigan Ave, Chicago, IL 60605",
+    "price_per_night": 220,
+    "market_rate": 265,
+    "preferred_brand": true,
+    "compliant": true,
+    "reason": null
+  },
+  {
+    "id": "htl_303",
+    "name": "The Peninsula Chicago",
+    "image": "hotelPeninsula",
+    "address": "108 E Superior St, Chicago, IL 60611",
+    "price_per_night": 600,
+    "market_rate": 620,
+    "preferred_brand": false,
+    "compliant": false,
+    "reason": "Not a preferred brand and exceeds max rate for Chicago ($250)."
+  }
+]

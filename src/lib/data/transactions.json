@@ -1,0 +1,133 @@
+
+[
+  {
+    "id": "txn_101",
+    "merchant": "The Capital Grille",
+    "merchant_logo": "cutlery",
+    "amount": 125.50,
+    "date": "2024-07-22T10:01:15Z",
+    "user_id": "user_sarah",
+    "status": "Needs Receipt",
+    "category": "Client Meal",
+    "timeline": [
+      {
+        "time": "2024-07-22T10:01:15Z",
+        "status": "Transaction received from card provider."
+      }
+    ],
+    "policy_check": null,
+    "fraud_check": null
+  },
+  {
+    "id": "txn_102",
+    "merchant": "Starbucks",
+    "merchant_logo": "coffee",
+    "amount": 8.75,
+    "date": "2024-07-21T08:34:10Z",
+    "user_id": "user_sarah",
+    "status": "Cleared",
+    "category": "Meals & Refreshments",
+    "timeline": [
+      { "time": "2024-07-21T08:34:10Z", "status": "Transaction received." },
+      { "time": "2024-07-21T08:34:12Z", "agent": "Policy Engine", "status": "No receipt required (under $25)." },
+      { "time": "2024-07-21T08:34:15Z", "agent": "Policy Engine", "status": "Policy check passed." },
+      { "time": "2024-07-21T08:35:00Z", "status": "Expense cleared for ERP posting. No further action needed." }
+    ],
+    "policy_check": null,
+    "fraud_check": null
+  },
+  {
+    "id": "txn_103",
+    "merchant": "Hyatt Regency NYC",
+    "merchant_logo": "building",
+    "amount": 410.00,
+    "date": "2024-07-19T14:20:00Z",
+    "user_id": "user_sarah",
+    "status": "Exception",
+    "category": "Lodging",
+    "timeline": [
+      { "time": "2024-07-19T14:20:00Z", "status": "Transaction received." },
+      { "time": "2024-07-19T14:20:05Z", "agent": "Receipt Concierge", "status": "E-receipt automatically matched." },
+      { "time": "2024-07-19T14:20:10Z", "agent": "Policy Engine", "status": "Policy violation detected. Flagged for review." }
+    ],
+    "policy_check": {
+      "violation": "Exceeds Hotel Max Rate",
+      "details": "Expense amount of $410.00 exceeds the 'New York' limit of $350.",
+      "rule_id": "hotels.max_rate.high_cost_cities.New York"
+    },
+    "fraud_check": null
+  },
+  {
+    "id": "txn_104",
+    "merchant": "Marriott Marquis SF",
+    "merchant_logo": "building",
+    "amount": 370.00,
+    "date": "2024-07-15T22:05:12Z",
+    "user_id": "user_sarah",
+    "status": "Cleared",
+    "category": "Lodging",
+    "timeline": [
+      { "time": "2024-07-15T22:05:12Z", "status": "Transaction received." },
+      { "time": "2024-07-15T22:05:18Z", "agent": "Receipt Concierge", "status": "E-receipt automatically matched." },
+      { "time": "2024-07-15T22:05:25Z", "agent": "Policy Engine", "status": "Policy check passed (within 'San Francisco' per-diem)." },
+      { "time": "2024-07-15T22:06:00Z", "status": "Expense cleared for ERP posting. No further action needed." }
+    ],
+    "policy_check": null,
+    "fraud_check": null
+  },
+  {
+    "id": "txn_105",
+    "merchant": "Blue Bottle Coffee",
+    "merchant_logo": "coffee",
+    "amount": 12.50,
+    "date": "2024-07-20T15:05:00Z",
+    "user_id": "user_sarah",
+    "status": "Exception",
+    "category": "Meals & Refreshments",
+    "timeline": [
+      { "time": "2024-07-20T15:05:00Z", "status": "Transaction received." },
+      { "time": "2024-07-20T15:05:10Z", "agent": "Fraud Sentinel", "status": "Potential duplicate transaction detected. Flagged for review." }
+    ],
+    "policy_check": null,
+    "fraud_check": {
+      "alert": "Potential Duplicate Transaction",
+      "details": "This transaction is similar in amount and merchant to another transaction (ID: txn_106) submitted by the same employee on the same day.",
+      "recommendation": "Review both transactions to ensure they are for separate business purposes."
+    }
+  },
+  {
+    "id": "txn_106",
+    "merchant": "Blue Bottle Coffee",
+    "merchant_logo": "coffee",
+    "amount": 12.50,
+    "date": "2024-07-20T09:10:00Z",
+    "user_id": "user_sarah",
+    "status": "Cleared",
+    "category": "Meals & Refreshments",
+    "timeline": [
+      { "time": "2024-07-20T09:10:00Z", "status": "Transaction received." },
+      { "time": "2024-07-20T09:10:05Z", "agent": "Policy Engine", "status": "Policy check passed." },
+      { "time": "2024-07-20T09:10:15Z", "status": "Expense cleared for ERP posting." }
+    ],
+    "policy_check": null,
+    "fraud_check": null
+  },
+  {
+    "id": "txn_107",
+    "merchant": "United Airlines",
+    "merchant_logo": "plane",
+    "amount": 450.20,
+    "date": "2024-07-18T11:45:00Z",
+    "user_id": "user_sarah",
+    "status": "Cleared",
+    "category": "Airfare",
+    "timeline": [
+      { "time": "2024-07-18T11:45:00Z", "status": "Transaction received from booking." },
+      { "time": "2024-07-18T11:45:05Z", "agent": "Receipt Concierge", "status": "E-receipt automatically attached." },
+      { "time": "2024-07-18T11:45:10Z", "agent": "Policy Engine", "status": "Policy check passed." },
+      { "time": "2024-07-18T11:46:00Z", "status": "Expense cleared for ERP posting." }
+    ],
+    "policy_check": null,
+    "fraud_check": null
+  }
+]
