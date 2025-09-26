@@ -290,34 +290,19 @@ export default function MainDashboard() {
 
   const renderDemo = () => {
     let content;
-    
-    // The key is to apply the motion.div wrapper around each specific component
-    // to ensure the animation triggers for each "Act".
-    const animationWrapper = (key: string, children: React.ReactNode) => (
-      <motion.div
-        key={key}
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full h-full"
-      >
-        {children}
-      </motion.div>
-    );
-
     if (persona === "traveler") {
       switch (act) {
         case 'expense':
-          content = animationWrapper('act1', <TravelerExpenseFeed />);
+          content = <TravelerExpenseFeed />;
           break;
         case 'booking':
-          content = animationWrapper('act2', <TravelerBookingView />);
+          content = <TravelerBookingView />;
           break;
         default:
           content = null;
       }
     } else { // persona === 'finance'
-      content = animationWrapper('alex', <FinanceDashboard />);
+      content = <FinanceDashboard />;
     }
   
     const isMobileView = persona === 'traveler';
@@ -485,11 +470,19 @@ export default function MainDashboard() {
         <AnimatePresence mode="wait">
           {step === "persona" && renderPersonaSelector()}
           {step === "act" && renderActSelector()}
-          {step === "demo" && renderDemo()}
+          {step === "demo" && (
+            <motion.div
+              key={`${persona}-${act}`}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              {renderDemo()}
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
     </div>
   );
 }
-
-    
