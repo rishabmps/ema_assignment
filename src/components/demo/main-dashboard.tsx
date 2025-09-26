@@ -88,8 +88,15 @@ export default function MainDashboard() {
           <p className="text-muted-foreground">Managing exceptions with AI-powered insights.</p>
         </div>
         <div className="flex justify-center">
-            <div className="w-full max-w-4xl rounded-t-2xl bg-gray-800 p-2 pt-4 shadow-2xl">
-                <div className="aspect-video w-full rounded-t-xl bg-background overflow-hidden">
+            <div className="w-full max-w-6xl rounded-t-xl bg-gray-800 shadow-2xl">
+                <div className="h-14 bg-gray-800 rounded-t-lg flex items-center p-4">
+                  <div className="flex space-x-2">
+                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  </div>
+                </div>
+                <div className="bg-background overflow-y-auto" style={{ height: 'calc(100vh - 20rem)'}}>
                     <FinanceDashboard />
                 </div>
             </div>
