@@ -6,12 +6,13 @@ import { TravelerExpenseFeed } from "@/components/demo/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/demo/traveler-booking-view";
 import { FinanceDashboard } from "@/components/demo/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
+import { Bot, ChevronRight, Plane, FileText, Leaf } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
+import { TravelerSustainableBookingView } from "./traveler-sustainable-booking-view";
 
 type Persona = "traveler" | "finance";
-type Act = "expense" | "booking";
+type Act = "expense" | "booking" | "sustainable_booking";
 type Step = "persona" | "act" | "demo";
 
 export default function MainDashboard() {
@@ -25,6 +26,7 @@ export default function MainDashboard() {
   const handlePersonaSelect = (selectedPersona: Persona) => {
     setPersona(selectedPersona);
     if (selectedPersona === 'finance') {
+      setAct('expense'); // Finance persona only has one main view for this demo
       setStep('demo');
     } else {
       setStep('act');
@@ -35,6 +37,18 @@ export default function MainDashboard() {
     setAct(selectedAct);
     setStep('demo');
   };
+  
+  const handleBack = () => {
+    if (step === 'demo') {
+      if (persona === 'traveler') {
+        setStep('act');
+      } else {
+        setStep('persona');
+      }
+    } else if (step === 'act') {
+      setStep('persona');
+    }
+  }
 
   const renderPersonaSelector = () => (
     <motion.div
@@ -43,7 +57,7 @@ export default function MainDashboard() {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.3 }}
-      className="max-w-2xl mx-auto"
+      className="max-w-4xl mx-auto"
     >
       <div className="text-center mb-8">
         <h2 className="text-2xl font-semibold">Step 1: Choose a Persona</h2>
@@ -80,7 +94,7 @@ export default function MainDashboard() {
               </div>
               <p className="text-sm text-muted-foreground mt-4">I oversee company spending, manage exceptions, and ensure policy compliance.</p>
               <div className="flex justify-end items-center mt-4">
-                <span className="text-sm font-semibold text-primary group-hover:underline">Start as Finance</span>
+                <span className="text-sm font-semibold text-primary group-hover:underline">Start as Finance Ops</span>
                 <ChevronRight className="h-4 w-4 text-primary ml-1" />
               </div>
           </Card>
@@ -95,13 +109,13 @@ export default function MainDashboard() {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 50 }}
       transition={{ duration: 0.3 }}
-      className="max-w-2xl mx-auto"
+      className="max-w-4xl mx-auto"
     >
       <div className="text-center mb-8">
         <h2 className="text-2xl font-semibold">Step 2: Choose a Demo</h2>
         <p className="text-muted-foreground mt-1">What would you like to see?</p>
       </div>
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card 
             onClick={() => handleActSelect("expense")}
             className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent flex flex-col"
@@ -126,29 +140,59 @@ export default function MainDashboard() {
                 <ChevronRight className="h-4 w-4 text-primary ml-1" />
               </div>
           </Card>
+           <Card 
+            onClick={() => handleActSelect("sustainable_booking")}
+            className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent flex flex-col"
+          >
+              <Leaf className="h-8 w-8 text-green-600 mb-3" />
+              <CardTitle className="text-lg">Act III: The Smart & Sustainable Trip</CardTitle>
+              <p className="text-sm text-muted-foreground mt-2 flex-grow">See how the AI agent guides you towards greener, budget-friendly choices.</p>
+               <div className="flex justify-end items-center mt-4">
+                <span className="text-sm font-semibold text-primary group-hover:underline">Guided Booking</span>
+                <ChevronRight className="h-4 w-4 text-primary ml-1" />
+              </div>
+          </Card>
       </div>
     </motion.div>
   );
 
-  const renderDemo = () => (
-    <motion.div
-      key="demo"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-      className="w-full"
-    >
-      {persona === "traveler" && (
-         <div className="flex justify-center">
-            <div className="w-full max-w-sm rounded-2xl bg-gray-900 p-2 shadow-2xl ring-8 ring-gray-800">
-                <div className="aspect-[9/19] w-full rounded-[1.25rem] bg-background overflow-hidden">
-                    {act === 'expense' ? <TravelerExpenseFeed /> : <TravelerBookingView />}
-                </div>
+  const renderDemo = () => {
+    let content;
+    if (persona === "traveler") {
+      switch (act) {
+        case 'expense':
+          content = <TravelerExpenseFeed />;
+          break;
+        case 'booking':
+          content = <TravelerBookingView />;
+          break;
+        case 'sustainable_booking':
+          content = <TravelerSustainableBookingView />;
+          break;
+        default:
+          content = null;
+      }
+    } else { // persona === 'finance'
+      content = <FinanceDashboard />;
+    }
+  
+    const isMobileView = persona === 'traveler';
+
+    return (
+      <motion.div
+        key="demo"
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        className="w-full flex justify-center"
+      >
+        {isMobileView ? (
+          <div className="w-full max-w-sm rounded-2xl bg-gray-900 p-2 shadow-2xl ring-8 ring-gray-800">
+            <div className="aspect-[9/19] w-full rounded-[1.25rem] bg-background overflow-hidden">
+              {content}
             </div>
-        </div>
-      )}
-      {persona === "finance" && (
-        <div className="flex justify-center">
+          </div>
+        ) : (
           <div className="w-full max-w-6xl rounded-xl bg-gray-800 shadow-2xl p-2">
             <div className="h-10 bg-gray-700 rounded-t-lg flex items-center p-4">
               <div className="flex space-x-2">
@@ -158,14 +202,14 @@ export default function MainDashboard() {
               </div>
             </div>
             <div className="bg-background overflow-hidden" style={{ height: 'calc(100vh - 4rem)', maxHeight: '800px'}}>
-              <FinanceDashboard />
+              {content}
             </div>
           </div>
-        </div>
-      )}
-    </motion.div>
-  )
-
+        )}
+      </motion.div>
+    );
+  };
+  
   const getBreadcrumb = () => {
     if (step === 'persona') return "Select Persona";
 
@@ -185,7 +229,11 @@ export default function MainDashboard() {
 
     if (step === 'demo' && persona === 'traveler') {
         path = <>{path} <ChevronRight className="h-4 w-4 inline-block mx-1" /> <span className="cursor-pointer hover:underline" onClick={() => setStep('act')}>Select Demo</span></>;
-        path = <>{path} <ChevronRight className="h-4 w-4 inline-block mx-1" /> <span className="text-foreground">{act === 'expense' ? 'Act I' : 'Act II'}</span></>;
+        let actName = '';
+        if (act === 'expense') actName = 'Act I';
+        if (act === 'booking') actName = 'Act II';
+        if (act === 'sustainable_booking') actName = 'Act III';
+        path = <>{path} <ChevronRight className="h-4 w-4 inline-block mx-1" /> <span className="text-foreground">{actName}</span></>;
     }
     
     return path;

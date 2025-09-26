@@ -1,0 +1,12 @@
+[
+  {
+    "id": "tr_501_bos",
+    "carrier": "Amtrak Acela",
+    "from": "NYP",
+    "to": "BOS",
+    "departure_time": "08:00",
+    "arrival_time": "11:40",
+    "price": 179,
+    "co2_kg": 30
+  }
+]

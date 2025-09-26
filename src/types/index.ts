@@ -36,6 +36,10 @@ export interface Transaction {
   timeline: TimelineEvent[];
   policy_check: PolicyCheck | null;
   fraud_check: FraudCheck | null;
+  currency?: string;
+  amount_usd?: number;
+  vat_reclaimable_usd?: number;
+  country_code?: string;
 }
 
 export interface Policy {
@@ -76,6 +80,7 @@ export interface Flight {
   price: number;
   compliant: boolean;
   reason: string | null;
+  co2_kg?: number;
 }
 
 export interface Hotel {
@@ -88,4 +93,30 @@ export interface Hotel {
   preferred_brand: boolean;
   compliant: boolean;
   reason: string | null;
+}
+
+export interface Train {
+  id: string;
+  carrier: string;
+  from: string;
+  to: string;
+  departure_time: string;
+  arrival_time: string;
+  price: number;
+  co2_kg: number;
+}
+
+export interface TripBudget {
+    user_id: string;
+    destination: string;
+    purpose: string;
+    budget_usd: number;
+}
+
+export interface PolicyRecommendation {
+    id: string;
+    rule_id: string;
+    insight: string;
+    recommendation: string;
+    impact: string;
 }

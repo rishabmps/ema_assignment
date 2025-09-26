@@ -18,9 +18,12 @@ import { cn } from "@/lib/utils";
 import type { Transaction, User } from "@/types";
 import transactionsData from "@/lib/data/transactions.json";
 import usersData from "@/lib/data/users.json";
-import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo } from "lucide-react";
+import policyExceptionsData from "@/lib/data/policy_exceptions.json";
+import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, TrendingUp, HandCoins } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
+import { VatReclaimView } from "@/components/demo/vat-reclaim-view";
+import { PolicyInsightView } from "./policy-insight-view";
 
 const users = usersData as User[];
 const transactions = transactionsData as Transaction[];
@@ -52,13 +55,24 @@ const kpiData = [
   },
 ];
 
+const vatReclaimable = transactions.reduce((acc, txn) => acc + (txn.vat_reclaimable_usd || 0), 0);
+const policyInsightsCount = policyExceptionsData.recommendations.length;
+
 export function FinanceDashboard() {
   const exceptionTransactions = transactions.filter((t) => t.status === "Exception");
   const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(exceptionTransactions[0] || null);
+  const [activeView, setActiveView] = useState("default");
 
   const getUserForTxn = (txn: Transaction) => users.find(u => u.id === txn.user_id);
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
 
+
+  if (activeView === "vat_reclaim") {
+    return <VatReclaimView onBack={() => setActiveView("default")} transactions={transactions} totalReclaimable={vatReclaimable} />
+  }
+  if (activeView === "policy_insights") {
+    return <PolicyInsightView onBack={() => setActiveView("default")} recommendations={policyExceptionsData.recommendations} />
+  }
 
   return (
     <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full">
@@ -69,16 +83,16 @@ export function FinanceDashboard() {
           </div>
       </header>
 
-      <Tabs defaultValue="exceptions" className="space-y-4 flex flex-col flex-grow">
+      <Tabs defaultValue="dashboard" className="space-y-4 flex flex-col flex-grow">
         <div className="flex-shrink-0 flex justify-between items-center">
             <TabsList>
+                 <TabsTrigger value="dashboard">
+                    <LayoutGrid />
+                    Dashboard
+                </TabsTrigger>
                 <TabsTrigger value="exceptions">
                     <ListTodo />
                     Exception Queue
-                </TabsTrigger>
-                <TabsTrigger value="dashboard">
-                    <LayoutGrid />
-                    Dashboard
                 </TabsTrigger>
             </TabsList>
             <Button variant="outline">
@@ -101,6 +115,28 @@ export function FinanceDashboard() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <Card onClick={() => setActiveView('vat_reclaim')} className="cursor-pointer hover:border-primary">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Automated VAT Reclaim</CardTitle>
+                      <HandCoins className="h-4 w-4 text-muted-foreground"/>
+                  </CardHeader>
+                  <CardContent>
+                      <div className="text-2xl font-bold">{currencyFormatter.format(vatReclaimable)}</div>
+                      <p className="text-xs text-muted-foreground">Identified in the last 30 days</p>
+                  </CardContent>
+              </Card>
+               <Card onClick={() => setActiveView('policy_insights')} className="cursor-pointer hover:border-primary">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Policy Insights</CardTitle>
+                      <Lightbulb className="h-4 w-4 text-muted-foreground"/>
+                  </CardHeader>
+                  <CardContent>
+                      <div className="text-2xl font-bold">{policyInsightsCount} New Recommendation</div>
+                      <p className="text-xs text-muted-foreground">Data-driven suggestions to improve efficiency</p>
+                  </CardContent>
+              </Card>
           </div>
         </TabsContent>
 

@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        {
+            "id": "rec_001",
+            "rule_id": "hotels.max_rate.high_cost_cities.New York",
+            "insight": "The hotel rate cap for New York City ($350) was flagged as an exception on 32 compliant trips in the last 90 days. 95% of these exceptions were manually approved.",
+            "recommendation": "Consider increasing the NYC hotel cap to $375 to reduce exception handling by an estimated 28%.",
+            "impact": "Reduces manual exception reviews, saving an estimated 5 hours of administrative work per month."
+        }
+    ]
+}

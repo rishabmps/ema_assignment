@@ -12,7 +12,8 @@
     "class": "Business",
     "price": 850,
     "compliant": false,
-    "reason": "Business class not allowed for flights under 6 hours."
+    "reason": "Business class not allowed for flights under 6 hours.",
+    "co2_kg": 450
   },
   {
     "id": "fl_202",
@@ -26,7 +27,8 @@
     "class": "Economy",
     "price": 380,
     "compliant": true,
-    "reason": null
+    "reason": null,
+    "co2_kg": 420
   },
   {
     "id": "fl_203",
@@ -40,6 +42,22 @@
     "class": "Economy",
     "price": 550,
     "compliant": false,
-    "reason": "Exceeds domestic fare cap of $500."
+    "reason": "Exceeds domestic fare cap of $500.",
+    "co2_kg": 435
+  },
+  {
+    "id": "fl_401_bos",
+    "airline": "Delta",
+    "airline_logo": "/logos/delta.svg",
+    "from": "LGA",
+    "to": "BOS",
+    "flight_number": "DL 2123",
+    "departure_time": "09:30",
+    "arrival_time": "10:45",
+    "class": "Economy",
+    "price": 229,
+    "compliant": true,
+    "reason": null,
+    "co2_kg": 160
   }
 ]
