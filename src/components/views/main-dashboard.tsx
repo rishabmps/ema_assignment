@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { TravelerExpenseFeed } from "@/components/features/traveler/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/features/traveler/traveler-booking-view";
@@ -20,8 +20,17 @@ export default function MainDashboard() {
   const [act, setAct] = useState<Act>("expense");
   const [step, setStep] = useState<Step>("persona");
 
+  const demoRef = useRef<HTMLDivElement>(null);
+
   const traveler = usersData.find(u => u.role === "Traveler");
   const finance = usersData.find(u => u.role === "Finance Operations");
+
+  useEffect(() => {
+    if (step === 'demo') {
+      demoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, [step]);
+
 
   const handlePersonaSelect = (selectedPersona: Persona) => {
     setPersona(selectedPersona);
@@ -362,7 +371,7 @@ export default function MainDashboard() {
           </div>
         </motion.div>
 
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center" ref={demoRef}>
           <AnimatePresence mode="wait">
             {step === "persona" && renderPersonaSelector()}
             {step === "act" && renderActSelector()}
