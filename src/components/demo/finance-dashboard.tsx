@@ -104,113 +104,111 @@ export function FinanceDashboard() {
           </div>
         </TabsContent>
 
-        <TabsContent value="exceptions" className="space-y-4">
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-              <Card className="lg:col-span-2 bg-background">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <FileWarning className="h-5 w-5 text-destructive" />
-                    Exception Queue
-                  </CardTitle>
-                  <CardDescription>Transactions requiring manual review and approval.</CardDescription>
-                  <div className="relative pt-2">
-                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input placeholder="Search exceptions..." className="pl-9 bg-secondary" />
-                  </div>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <div className="max-h-[500px] overflow-y-auto">
-                    <Table>
-                      <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm">
-                        <TableRow>
-                          <TableHead>Employee</TableHead>
-                          <TableHead>Merchant</TableHead>
-                          <TableHead className="text-right">Amount</TableHead>
+        <TabsContent value="exceptions" className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+            <Card className="lg:col-span-2 bg-background">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileWarning className="h-5 w-5 text-destructive" />
+                  Exception Queue
+                </CardTitle>
+                <CardDescription>Transactions requiring manual review and approval.</CardDescription>
+                <div className="relative pt-2">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Search exceptions..." className="pl-9 bg-secondary" />
+                </div>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="max-h-[500px] overflow-y-auto">
+                  <Table>
+                    <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm">
+                      <TableRow>
+                        <TableHead>Employee</TableHead>
+                        <TableHead>Merchant</TableHead>
+                        <TableHead className="text-right">Amount</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {exceptionTransactions.map((txn) => (
+                        <TableRow
+                          key={txn.id}
+                          onClick={() => setSelectedTxn(txn)}
+                          className={cn(
+                            "cursor-pointer",
+                            selectedTxn?.id === txn.id && "bg-secondary"
+                          )}
+                        >
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-8 w-8">
+                                <AvatarFallback>{getUserForTxn(txn)?.initials}</AvatarFallback>
+                              </Avatar>
+                              <div className="flex flex-col">
+                                  <span className="font-medium text-sm">{getUserForTxn(txn)?.name}</span>
+                                  <span className="text-xs text-muted-foreground">{getUserForTxn(txn)?.title}</span>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell>{txn.merchant}</TableCell>
+                          <TableCell className="text-right font-medium">
+                            {currencyFormatter.format(txn.amount)}
+                          </TableCell>
                         </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {exceptionTransactions.map((txn) => (
-                          <TableRow
-                            key={txn.id}
-                            onClick={() => setSelectedTxn(txn)}
-                            className={cn(
-                              "cursor-pointer",
-                              selectedTxn?.id === txn.id && "bg-secondary"
-                            )}
-                          >
-                            <TableCell>
-                              <div className="flex items-center gap-2">
-                                <Avatar className="h-8 w-8">
-                                  <AvatarFallback>{getUserForTxn(txn)?.initials}</AvatarFallback>
-                                </Avatar>
-                                <div className="flex flex-col">
-                                    <span className="font-medium text-sm">{getUserForTxn(txn)?.name}</span>
-                                    <span className="text-xs text-muted-foreground">{getUserForTxn(txn)?.title}</span>
-                                </div>
-                              </div>
-                            </TableCell>
-                            <TableCell>{txn.merchant}</TableCell>
-                            <TableCell className="text-right font-medium">
-                              {currencyFormatter.format(txn.amount)}
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card className="lg:col-span-3 bg-background">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <BarChart className="h-5 w-5 text-primary"/>
+                        Agent Analysis
+                    </CardTitle>
+                    <CardDescription>AI-powered insights for the selected transaction.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {selectedTxn ? (
+                        <div className="space-y-6">
+                            <div>
+                                <p className="text-sm text-muted-foreground">
+                                    {format(new Date(selectedTxn.date), "EEEE, MMMM d, yyyy 'at' p")}
+                                </p>
+                                <h3 className="text-xl font-semibold">{selectedTxn.merchant}</h3>
+                                <p className="text-3xl font-bold mt-1">{currencyFormatter.format(selectedTxn.amount)}</p>
+                            </div>
+                            <div className="space-y-4">
+                              {selectedTxn.policy_check && (
+                                  <ExceptionDetailCard 
+                                      type="policy"
+                                      title="Policy Engine Finding"
+                                      details={selectedTxn.policy_check.details}
+                                      reference={selectedTxn.policy_check.rule_id}
+                                  />
+                              )}
+                              {selectedTxn.fraud_check && (
+                                  <ExceptionDetailCard
+                                      type="fraud"
+                                      title="Fraud Sentinel Finding"
+                                      details={selectedTxn.fraud_check.details}
+                                      reference={selectedTxn.fraud_check.recommendation}
+                                  />
+                              )}
+                            </div>
+                            <div className="flex justify-end space-x-2 pt-4 border-t">
+                                <Button variant="outline">Request Info</Button>
+                                <Button variant="destructive">Reject Expense</Button>
+                                <Button>Approve Exception</Button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="flex h-[300px] items-center justify-center text-muted-foreground rounded-lg border-2 border-dashed">
+                            <p>Select an exception to view details</p>
+                        </div>
+                    )}
                 </CardContent>
-              </Card>
-              
-              <Card className="lg:col-span-3 bg-background">
-                  <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                          <BarChart className="h-5 w-5 text-primary"/>
-                          Agent Analysis
-                      </CardTitle>
-                      <CardDescription>AI-powered insights for the selected transaction.</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                      {selectedTxn ? (
-                          <div className="space-y-6">
-                              <div>
-                                  <p className="text-sm text-muted-foreground">
-                                      {format(new Date(selectedTxn.date), "EEEE, MMMM d, yyyy 'at' p")}
-                                  </p>
-                                  <h3 className="text-xl font-semibold">{selectedTxn.merchant}</h3>
-                                  <p className="text-3xl font-bold mt-1">{currencyFormatter.format(selectedTxn.amount)}</p>
-                              </div>
-                              <div className="space-y-4">
-                                {selectedTxn.policy_check && (
-                                    <ExceptionDetailCard 
-                                        type="policy"
-                                        title="Policy Engine Finding"
-                                        details={selectedTxn.policy_check.details}
-                                        reference={selectedTxn.policy_check.rule_id}
-                                    />
-                                )}
-                                {selectedTxn.fraud_check && (
-                                    <ExceptionDetailCard
-                                        type="fraud"
-                                        title="Fraud Sentinel Finding"
-                                        details={selectedTxn.fraud_check.details}
-                                        reference={selectedTxn.fraud_check.recommendation}
-                                    />
-                                )}
-                              </div>
-                              <div className="flex justify-end space-x-2 pt-4 border-t">
-                                  <Button variant="outline">Request Info</Button>
-                                  <Button variant="destructive">Reject Expense</Button>
-                                  <Button>Approve Exception</Button>
-                              </div>
-                          </div>
-                      ) : (
-                          <div className="flex h-[300px] items-center justify-center text-muted-foreground rounded-lg border-2 border-dashed">
-                              <p>Select an exception to view details</p>
-                          </div>
-                      )}
-                  </CardContent>
-              </Card>
-            </div>
+            </Card>
         </TabsContent>
       </Tabs>
     </div>
