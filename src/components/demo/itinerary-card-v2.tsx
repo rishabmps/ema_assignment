@@ -1,3 +1,4 @@
+
 "use client";
 
 import type { Flight, Train } from "@/types";
@@ -74,3 +75,5 @@ export function ItineraryCardV2({ option, type, onConfirm }: ItineraryCardV2Prop
     </Card>
   );
 }
+
+    
