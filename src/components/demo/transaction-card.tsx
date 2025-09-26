@@ -25,7 +25,6 @@ import { format } from "date-fns";
 
 interface TransactionCardProps {
   transaction: Transaction;
-  onReceiptNeededClick: (transactionId: string) => void;
   isExpanded: boolean;
   onToggleExpand: (transactionId: string) => void;
 }
@@ -60,17 +59,9 @@ const getAgentIcon = (agent?: string) => {
 
 export function TransactionCard({
   transaction,
-  onReceiptNeededClick,
   isExpanded,
   onToggleExpand,
 }: TransactionCardProps) {
-  const handleCardClick = () => {
-    if (transaction.status === "Needs Receipt") {
-      onReceiptNeededClick(transaction.id);
-    } else {
-      onToggleExpand(transaction.id);
-    }
-  };
 
   const currencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -83,7 +74,7 @@ export function TransactionCard({
         "cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-md",
         transaction.status === "Needs Receipt" ? "border-primary/50 ring-1 ring-primary/50" : ""
       )}
-      onClick={handleCardClick}
+      onClick={() => onToggleExpand(transaction.id)}
     >
       <CardContent className="p-0">
         <Accordion
@@ -109,10 +100,12 @@ export function TransactionCard({
                 </p>
                 <StatusTag status={transaction.status} />
               </div>
-              <AccordionTrigger
-                className="ml-2 w-auto p-2 hover:no-underline [&[data-state=open]>svg]:rotate-180"
-                aria-label="Toggle details"
-              />
+              {transaction.status !== "Needs Receipt" && (
+                <AccordionTrigger
+                  className="ml-2 w-auto p-2 hover:no-underline [&[data-state=open]>svg]:rotate-180"
+                  aria-label="Toggle details"
+                />
+              )}
             </div>
             <AccordionContent>
               <div className="bg-secondary/50 px-4 py-4">

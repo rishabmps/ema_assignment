@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TravelerExpenseFeed } from "@/components/demo/traveler-expense-feed";
@@ -10,6 +10,7 @@ import { FinanceDashboard } from "@/components/demo/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, Briefcase, ChevronRight, User } from "lucide-react";
 import usersData from "@/lib/data/users.json";
+import { Separator } from "@/components/ui/separator";
 
 type Persona = "traveler" | "finance";
 
@@ -19,15 +20,15 @@ export default function MainDashboard() {
   const finance = usersData.find(u => u.role === "Finance Operations");
 
   const renderPersonaSwitcher = () => (
-    <Card className="mb-6">
+    <Card>
         <div className="p-6">
-            <h3 className="text-lg font-semibold mb-4">Select Persona</h3>
+            <h2 className="text-lg font-semibold mb-4">Select Persona</h2>
             <RadioGroup
                 value={persona}
                 onValueChange={(value: Persona) => setPersona(value)}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
             >
-                <Label htmlFor="traveler" className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:bg-accent has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                <Label htmlFor="traveler" className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:bg-accent has-[:checked]:bg-primary/10 has-[:checked]:border-primary transition-colors">
                     <RadioGroupItem value="traveler" id="traveler" />
                     <Avatar className="h-10 w-10"><AvatarFallback>{traveler?.initials}</AvatarFallback></Avatar>
                     <div>
@@ -35,7 +36,7 @@ export default function MainDashboard() {
                         <p className="text-sm text-muted-foreground">{traveler?.title}</p>
                     </div>
                 </Label>
-                <Label htmlFor="finance" className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:bg-accent has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                <Label htmlFor="finance" className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:bg-accent has-[:checked]:bg-primary/10 has-[:checked]:border-primary transition-colors">
                     <RadioGroupItem value="finance" id="finance" />
                     <Avatar className="h-10 w-10"><AvatarFallback>{finance?.initials}</AvatarFallback></Avatar>
                     <div>
@@ -49,10 +50,10 @@ export default function MainDashboard() {
   );
 
   const renderTravelerView = () => (
-    <>
-      <section id="act1" className="mb-12">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <section id="expense-journey">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-semibold">Act I: The Invisible Expense</h2>
+          <h2 className="text-2xl font-semibold">The Invisible Expense Report</h2>
           <p className="text-muted-foreground">Showcasing the "Zero-Touch" expense flow.</p>
         </div>
         <div className="flex justify-center">
@@ -64,10 +65,10 @@ export default function MainDashboard() {
         </div>
       </section>
 
-      <section id="act2">
+      <section id="booking-journey">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-semibold">Act II: The Conversational Trip</h2>
-          <p className="text-muted-foreground">Demonstrating "Simple Trip" auto-booking.</p>
+          <h2 className="text-2xl font-semibold">The Conversational Trip</h2>
+          <p className="text-muted-foreground">Demonstrating AI-powered travel booking.</p>
         </div>
         <div className="flex justify-center">
             <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
@@ -77,14 +78,14 @@ export default function MainDashboard() {
             </div>
         </div>
       </section>
-    </>
+    </div>
   )
 
   const renderFinanceView = () => (
-     <section id="act1" className="mb-12">
+     <section id="finance-journey">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-semibold">Act I: The Finance Ops View</h2>
-          <p className="text-muted-foreground">Managing the exception queue.</p>
+          <h2 className="text-2xl font-semibold">The Finance Operations Cockpit</h2>
+          <p className="text-muted-foreground">Managing exceptions with AI-powered insights.</p>
         </div>
         <FinanceDashboard />
       </section>
@@ -103,6 +104,8 @@ export default function MainDashboard() {
       </header>
 
       {renderPersonaSwitcher()}
+      
+      <Separator className="my-8" />
       
       {persona === "traveler" ? renderTravelerView() : renderFinanceView()}
 
