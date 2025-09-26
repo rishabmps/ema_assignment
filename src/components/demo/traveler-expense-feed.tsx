@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import type { Transaction } from "@/types";
 import allTransactions from "@/lib/data/transactions.json";
-import { Camera, Receipt, X } from "lucide-react";
+import { Camera, Receipt, Settings, Bell, PlusCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 interface InAppNotification {
   id: string;
@@ -206,33 +207,51 @@ export function TravelerExpenseFeed() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-slate-100 relative overflow-hidden">
-        <AnimatePresence>
-          {notification && (
-            <motion.div
-              initial={{ y: "-150%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "-150%" }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="absolute top-4 left-4 right-4 z-10"
-            >
-              <div
-                onClick={() => handleReceiptNeededClick(notification.id)}
-                className="rounded-xl bg-background/80 backdrop-blur-md p-4 shadow-lg cursor-pointer border"
-              >
-                  <h4 className="text-sm text-primary">{notification.title}</h4>
-                  <p className="text-sm text-foreground">{notification.description}</p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+    <div className="flex h-full flex-col bg-secondary relative overflow-hidden">
+      <header className="p-4 bg-background/80 backdrop-blur-sm border-b">
+        <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+                <Avatar><AvatarFallback>SC</AvatarFallback></Avatar>
+                <div>
+                    <p className="text-sm font-semibold">Sarah Chen</p>
+                    <p className="text-xs text-muted-foreground">Sales Director</p>
+                </div>
+            </div>
+            <div className="flex items-center gap-2">
+                <Button variant="ghost" size="icon"><Bell className="h-5 w-5" /></Button>
+                <Button variant="ghost" size="icon"><Settings className="h-5 w-5" /></Button>
+            </div>
+        </div>
+      </header>
 
-      <div className="p-4">
+      <AnimatePresence>
+        {notification && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="absolute top-20 left-4 right-4 z-10"
+          >
+            <div
+              onClick={() => handleReceiptNeededClick(notification.id)}
+              className="rounded-xl bg-background/80 backdrop-blur-md p-4 shadow-lg cursor-pointer border"
+            >
+                <h4 className="text-sm text-primary">{notification.title}</h4>
+                <p className="text-sm text-foreground">{notification.description}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="p-4 flex-shrink-0">
         <Button onClick={handleSimulateTransaction} className="w-full">
+          <PlusCircle className="mr-2 h-4 w-4" />
           Simulate Client Lunch Purchase
         </Button>
       </div>
-      <div className="flex-1 space-y-2 overflow-y-auto p-4 pt-0">
+
+      <div className="flex-1 space-y-3 overflow-y-auto px-4 pt-0 pb-4">
         {transactions.map((transaction) => (
           <TransactionCard
             key={transaction.id}

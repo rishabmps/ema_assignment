@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { TravelerExpenseFeed } from "@/components/demo/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/demo/traveler-booking-view";
 import { FinanceDashboard } from "@/components/demo/finance-dashboard";
@@ -60,8 +58,8 @@ export default function MainDashboard() {
               <div className="flex items-center gap-4">
                   <Avatar className="h-12 w-12"><AvatarFallback>{traveler?.initials}</AvatarFallback></Avatar>
                   <div>
-                      <h3 className="font-semibold text-lg">{traveler?.name}</h3>
-                      <p className="text-sm text-muted-foreground">{traveler?.title}</p>
+                      <CardTitle className="text-lg">{traveler?.name}</CardTitle>
+                      <CardDescription className="text-sm">{traveler?.title}</CardDescription>
                   </div>
               </div>
               <p className="text-sm text-muted-foreground mt-4">I'm on the go, making purchases and booking trips. I want everything to be fast and easy.</p>
@@ -77,8 +75,8 @@ export default function MainDashboard() {
               <div className="flex items-center gap-4">
                   <Avatar className="h-12 w-12"><AvatarFallback>{finance?.initials}</AvatarFallback></Avatar>
                   <div>
-                      <h3 className="font-semibold text-lg">{finance?.name}</h3>
-                      <p className="text-sm text-muted-foreground">{finance?.title}</p>
+                      <CardTitle className="text-lg">{finance?.name}</CardTitle>
+                      <CardDescription className="text-sm">{finance?.title}</CardDescription>
                   </div>
               </div>
               <p className="text-sm text-muted-foreground mt-4">I oversee company spending, manage exceptions, and ensure policy compliance.</p>
@@ -107,11 +105,11 @@ export default function MainDashboard() {
        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card 
             onClick={() => handleActSelect("expense")}
-            className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent"
+            className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent flex flex-col"
           >
               <FileText className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold text-lg">Act I: The Invisible Expense Report</h3>
-              <p className="text-sm text-muted-foreground mt-2">See how AI turns a 20-minute chore into a 5-second task.</p>
+              <CardTitle className="text-lg">Act I: The Invisible Expense Report</CardTitle>
+              <p className="text-sm text-muted-foreground mt-2 flex-grow">See how AI turns a 20-minute chore into a 5-second task.</p>
                <div className="flex justify-end items-center mt-4">
                 <span className="text-sm font-semibold text-primary group-hover:underline">File an Expense</span>
                 <ChevronRight className="h-4 w-4 text-primary ml-1" />
@@ -119,11 +117,11 @@ export default function MainDashboard() {
           </Card>
           <Card 
             onClick={() => handleActSelect("booking")}
-            className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent"
+            className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent flex flex-col"
           >
               <Plane className="h-8 w-8 text-primary mb-3" />
-              <h3 className="font-semibold text-lg">Act II: The Conversational Trip</h3>
-              <p className="text-sm text-muted-foreground mt-2">Book a fully compliant trip with a single sentence.</p>
+              <CardTitle className="text-lg">Act II: The Conversational Trip</CardTitle>
+              <p className="text-sm text-muted-foreground mt-2 flex-grow">Book a fully compliant trip with a single sentence.</p>
                <div className="flex justify-end items-center mt-4">
                 <span className="text-sm font-semibold text-primary group-hover:underline">Book a Trip</span>
                 <ChevronRight className="h-4 w-4 text-primary ml-1" />
@@ -143,8 +141,8 @@ export default function MainDashboard() {
     >
       {persona === "traveler" && (
          <div className="flex justify-center">
-            <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
-                <div className="aspect-[9/19] w-full rounded-xl bg-background overflow-hidden">
+            <div className="w-full max-w-sm rounded-2xl bg-gray-900 p-2 shadow-2xl ring-8 ring-gray-800">
+                <div className="aspect-[9/19] w-full rounded-[1.25rem] bg-background overflow-hidden">
                     {act === 'expense' ? <TravelerExpenseFeed /> : <TravelerBookingView />}
                 </div>
             </div>

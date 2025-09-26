@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -13,13 +13,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { ExceptionDetailCard } from "@/components/demo/exception-detail-card";
 import { StatusTag } from "@/components/demo/status-tag";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import type { Transaction, User } from "@/types";
 import transactionsData from "@/lib/data/transactions.json";
 import usersData from "@/lib/data/users.json";
-import { Activity, AlertCircle, BarChart, CheckCircle, Clock, FileWarning, DollarSign, ShieldAlert } from "lucide-react";
+import { Activity, BarChart, CheckCircle, Clock, FileWarning, DollarSign, Search, Users, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
+import { Input } from "@/components/ui/input";
 
 const users = usersData as User[];
 const transactions = transactionsData as Transaction[];
@@ -27,20 +28,20 @@ const transactions = transactionsData as Transaction[];
 const kpiData = [
   {
     title: "% Spend Automated",
-    value: "95%",
+    value: "95.2%",
     icon: Activity,
     description: "Last 30 Days",
   },
   {
     title: "Avg. Time to Close",
-    value: "2 Hours",
+    value: "2.1 Hours",
     icon: Clock,
     description: "From transaction to posting",
   },
   {
     title: "Total Open Exceptions",
     value: transactions.filter((t) => t.status === "Exception").length.toString(),
-    icon: AlertCircle,
+    icon: FileWarning,
     description: "Items needing review",
   },
   {
@@ -60,10 +61,20 @@ export function FinanceDashboard() {
 
 
   return (
-    <div className="w-full space-y-6 p-4 md:p-8">
+    <div className="w-full space-y-6 p-6 md:p-8 bg-secondary/50">
+       <header className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-foreground">Finance Operations</h1>
+            <p className="text-muted-foreground">Welcome back, Alex.</p>
+          </div>
+          <Button>
+              <ExternalLink className="mr-2"/>
+              Export Data
+          </Button>
+      </header>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {kpiData.map((kpi) => (
-          <Card key={kpi.title}>
+          <Card key={kpi.title} className="bg-background">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
               <kpi.icon className="h-4 w-4 text-muted-foreground" />
@@ -77,12 +88,17 @@ export function FinanceDashboard() {
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-        <Card className="lg:col-span-2">
+        <Card className="lg:col-span-2 bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <FileWarning className="h-5 w-5 text-destructive" />
               Exception Queue
             </CardTitle>
+            <CardDescription>Transactions requiring manual review and approval.</CardDescription>
+            <div className="relative pt-2">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Search exceptions..." className="pl-9 bg-secondary" />
+            </div>
           </CardHeader>
           <CardContent className="p-0">
             <Table>
@@ -108,7 +124,10 @@ export function FinanceDashboard() {
                         <Avatar className="h-8 w-8">
                           <AvatarFallback>{getUserForTxn(txn)?.initials}</AvatarFallback>
                         </Avatar>
-                        <span className="font-medium">{getUserForTxn(txn)?.name}</span>
+                        <div className="flex flex-col">
+                            <span className="font-medium text-sm">{getUserForTxn(txn)?.name}</span>
+                            <span className="text-xs text-muted-foreground">{getUserForTxn(txn)?.title}</span>
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>{txn.merchant}</TableCell>
@@ -122,22 +141,23 @@ export function FinanceDashboard() {
           </CardContent>
         </Card>
         
-        <Card className="lg:col-span-3">
+        <Card className="lg:col-span-3 bg-background">
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <BarChart className="h-5 w-5 text-primary"/>
                     Agent Analysis
                 </CardTitle>
+                <CardDescription>AI-powered insights for the selected transaction.</CardDescription>
             </CardHeader>
             <CardContent>
                 {selectedTxn ? (
                     <div className="space-y-6">
                         <div>
-                            <h3 className="text-lg font-semibold">{selectedTxn.merchant}</h3>
-                            <p className="text-muted-foreground">
-                                {format(new Date(selectedTxn.date), "MMMM d, yyyy 'at' p")}
+                            <p className="text-sm text-muted-foreground">
+                                {format(new Date(selectedTxn.date), "EEEE, MMMM d, yyyy 'at' p")}
                             </p>
-                            <p className="text-2xl font-bold mt-2">{currencyFormatter.format(selectedTxn.amount)}</p>
+                            <h3 className="text-xl font-semibold">{selectedTxn.merchant}</h3>
+                            <p className="text-3xl font-bold mt-1">{currencyFormatter.format(selectedTxn.amount)}</p>
                         </div>
                         <div className="space-y-4">
                            {selectedTxn.policy_check && (
@@ -157,14 +177,14 @@ export function FinanceDashboard() {
                                />
                            )}
                         </div>
-                        <div className="flex justify-end space-x-2 pt-4">
+                        <div className="flex justify-end space-x-2 pt-4 border-t">
                             <Button variant="outline">Request Info</Button>
                             <Button variant="destructive">Reject Expense</Button>
                             <Button>Approve Exception</Button>
                         </div>
                     </div>
                 ) : (
-                    <div className="flex h-64 items-center justify-center text-muted-foreground">
+                    <div className="flex h-[300px] items-center justify-center text-muted-foreground rounded-lg border-2 border-dashed">
                         <p>Select an exception to view details</p>
                     </div>
                 )}

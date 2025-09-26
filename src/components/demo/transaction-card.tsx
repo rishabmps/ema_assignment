@@ -14,6 +14,7 @@ import {
   Bot,
   Building,
   CheckCircle,
+  ChevronDown,
   Clock,
   Coffee,
   UtensilsCrossed,
@@ -32,15 +33,15 @@ interface TransactionCardProps {
 const getIcon = (logo: string) => {
   switch (logo) {
     case "coffee":
-      return <Coffee className="h-6 w-6 text-muted-foreground" />;
+      return <Coffee className="h-6 w-6" />;
     case "cutlery":
-      return <UtensilsCrossed className="h-6 w-6 text-muted-foreground" />;
+      return <UtensilsCrossed className="h-6 w-6" />;
     case "building":
-      return <Building className="h-6 w-6 text-muted-foreground" />;
+      return <Building className="h-6 w-6" />;
     case "plane":
-      return <Plane className="h-6 w-6 text-muted-foreground" />;
+      return <Plane className="h-6 w-6" />;
     default:
-      return <Receipt className="h-6 w-6 text-muted-foreground" />;
+      return <Receipt className="h-6 w-6" />;
   }
 };
 
@@ -68,13 +69,16 @@ export function TransactionCard({
     currency: "USD",
   });
 
+  const cardIsClickable = transaction.status !== 'Needs Receipt';
+
   return (
     <Card
       className={cn(
-        "overflow-hidden transition-all duration-300",
-        isExpanded ? "shadow-md" : "hover:shadow-md",
-        transaction.status === "Needs Receipt" ? "border-primary/50 ring-1 ring-primary/50 cursor-pointer" : ""
+        "overflow-hidden transition-all duration-300 rounded-xl bg-background shadow-sm",
+        isExpanded && "shadow-lg",
+        !cardIsClickable && "border-primary/50 ring-1 ring-primary/50 cursor-pointer"
       )}
+      onClick={!cardIsClickable ? () => onToggleExpand(transaction.id) : undefined}
     >
       <CardContent className="p-0">
         <Accordion
@@ -84,8 +88,8 @@ export function TransactionCard({
           onValueChange={() => onToggleExpand(transaction.id)}
         >
           <AccordionItem value="item-1" className="border-b-0">
-            <div className={cn("flex items-center p-4", transaction.status !== 'Needs Receipt' && "cursor-pointer")}>
-              <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
+            <div className={cn("flex items-center p-3", cardIsClickable && "cursor-pointer")}>
+              <div className="mr-4 flex h-11 w-11 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
                 {getIcon(transaction.merchant_logo)}
               </div>
               <div className="flex-grow">
@@ -95,26 +99,29 @@ export function TransactionCard({
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-lg font-semibold text-foreground">
+                <p className="text-lg font-bold text-foreground">
                   {currencyFormatter.format(transaction.amount)}
                 </p>
                 <StatusTag status={transaction.status} />
               </div>
               <AccordionTrigger
+                asChild
                 className={cn(
-                  "ml-2 w-auto p-2 hover:no-underline [&[data-state=open]>svg]:rotate-180",
-                  transaction.status === "Needs Receipt" && "hidden"
-                  )}
+                  "ml-2 w-auto p-1 text-muted-foreground hover:bg-secondary rounded-md",
+                  !cardIsClickable && "hidden"
+                )}
                 aria-label="Toggle details"
-              />
+              >
+                  <div><ChevronDown className="h-5 w-5 transition-transform duration-200" /></div>
+              </AccordionTrigger>
             </div>
             <AccordionContent>
-              <div className="bg-secondary/50 px-4 py-4">
-                <h4 className="mb-2 text-sm font-semibold text-foreground">Automation Timeline</h4>
-                <ul className="space-y-3">
+              <div className="bg-secondary/50 px-4 py-4 border-t">
+                <h4 className="mb-3 text-sm font-semibold text-foreground">Automation Timeline</h4>
+                <ul className="space-y-4">
                   {transaction.timeline.map((event, index) => (
                     <li key={index} className="flex items-start gap-3">
-                      <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-background">
+                      <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-background ring-1 ring-border">
                         {getAgentIcon(event.agent)}
                       </div>
                       <div>
