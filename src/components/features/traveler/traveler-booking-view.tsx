@@ -15,6 +15,7 @@ import tripBudgetsData from "@/lib/data/trip_budgets.json";
 import { SendHorizonal, Bot, Sparkles, CheckCircle, Calendar } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BudgetCopilotWidget } from "@/components/common/budget-copilot-widget";
+import { AgentActivityPanel, InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
 
 type Message = {
   id: string;
@@ -45,6 +46,12 @@ export function TravelerBookingView() {
   const [showBudget, setShowBudget] = useState(false);
   const { toast } = useToast();
   const chatEndRef = useRef<HTMLDivElement>(null);
+  
+  const { 
+    activities, 
+    simulateTripBookingFlow, 
+    clearActivities 
+  } = useAgentActivity();
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -58,9 +65,14 @@ export function TravelerBookingView() {
     e.preventDefault();
     if (!input.trim() || isTyping) return;
 
+    const destination = input.trim();
     addMessage({ id: generateUniqueId(), sender: "user", content: input, type: "text" });
     setInput("");
     setIsTyping(true);
+    
+    // Trigger agent activity simulation for trip booking - now shown inline!
+    simulateTripBookingFlow(destination);
+    // No need to manually open panel - it shows inline automatically
 
     setTimeout(() => {
       addMessage({ id: generateUniqueId(), sender: "agent", content: "Got it. Planning your trip to Boston...", type: "loading" });
@@ -146,6 +158,16 @@ export function TravelerBookingView() {
       </header>
       
       {showBudget && <BudgetCopilotWidget budget={tripBudget.budget_usd} currentCost={0} />}
+
+      {/* Inline Agent Activity - shown seamlessly in the main flow */}
+      {activities.length > 0 && (
+        <div className="p-4 pb-2">
+          <InlineAgentActivity 
+            activities={activities} 
+            compact={true}
+          />
+        </div>
+      )}
 
       <div className="flex-1 space-y-4 overflow-y-auto p-4">
         <AnimatePresence initial={false}>

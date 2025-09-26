@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import type { Transaction } from "@/types";
 import allTransactions from "@/lib/data/transactions.json";
-import { Camera, Receipt, Settings, Bell, PlusCircle } from "lucide-react";
+import { Camera, Receipt, Settings, Bell, PlusCircle, Bot } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { AgentActivityPanel, InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
 
 interface InAppNotification {
   id: string;
@@ -36,6 +37,13 @@ export function TravelerExpenseFeed() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const notificationTimer = useRef<NodeJS.Timeout>();
+  
+  const { 
+    activities, 
+    simulateExpenseFlow, 
+    simulateExceptionFlow, 
+    clearActivities 
+  } = useAgentActivity();
 
   useEffect(() => {
     const initialTransactions = allTransactions
@@ -127,6 +135,14 @@ export function TravelerExpenseFeed() {
       description: "Receipt Concierge is analyzing it...",
       duration: 2000,
     });
+
+    // Find the transaction details for agent simulation
+    const transaction = transactions.find(t => t.id === receiptTxnId);
+    if (transaction) {
+      // Simulate agent activity for expense processing - now shown inline!
+      simulateExpenseFlow(transaction.amount, transaction.merchant);
+      // No need to manually open the panel - it shows inline automatically
+    }
 
     setTransactions((prev) =>
       prev.map((t) => (t.id === receiptTxnId ? { ...t, status: "Processing" } : t))
@@ -266,6 +282,16 @@ export function TravelerExpenseFeed() {
           Simulate Client Lunch Purchase
         </Button>
       </div>
+
+      {/* Inline Agent Activity - shown seamlessly in the main flow */}
+      {activities.length > 0 && (
+        <div className="px-4 pb-3">
+          <InlineAgentActivity 
+            activities={activities} 
+            compact={true}
+          />
+        </div>
+      )}
 
       <div className="flex-1 space-y-3 overflow-y-auto px-4 pt-0 pb-4 relative z-10">
         {transactions.map((transaction) => (

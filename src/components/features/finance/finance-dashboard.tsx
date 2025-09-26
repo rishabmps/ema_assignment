@@ -20,12 +20,13 @@ import type { Transaction, User } from "@/types";
 import transactionsData from "@/lib/data/transactions.json";
 import usersData from "@/lib/data/users.json";
 import policyExceptionsData from "@/lib/data/policy_exceptions.json";
-import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, HandCoins, Leaf } from "lucide-react";
+import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, HandCoins, Leaf, Bot } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { VatReclaimView } from "@/components/features/finance/vat-reclaim-view";
 import { PolicyInsightView } from "@/components/features/finance/policy-insight-view";
 import { SustainabilityDashboard } from "@/components/features/finance/sustainability-dashboard";
+import { AgentActivityPanel, InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
 
 const users = usersData as User[];
 const transactions = transactionsData as Transaction[];
@@ -75,6 +76,23 @@ export function FinanceDashboard() {
 
   const getUserForTxn = (txn: Transaction) => users.find(u => u.id === txn.user_id);
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  
+  const { 
+    activities, 
+    simulateExpenseFlow, 
+    simulateExceptionFlow, 
+    clearActivities 
+  } = useAgentActivity();
+
+  const handleTransactionSelect = (txn: Transaction) => {
+    setSelectedTxn(txn);
+    
+    // If it's an exception transaction, simulate the exception flow - now shown inline!
+    if (txn.status === "Exception" && txn.policy_check) {
+      simulateExceptionFlow(txn.policy_check.violation);
+      // No need to manually open panel - it shows inline automatically
+    }
+  };
 
 
   if (activeView === "vat_reclaim") {
@@ -235,7 +253,7 @@ export function FinanceDashboard() {
                       {exceptionTransactions.map((txn) => (
                         <TableRow
                           key={txn.id}
-                          onClick={() => setSelectedTxn(txn)}
+                          onClick={() => handleTransactionSelect(txn)}
                           className={cn(
                             "cursor-pointer transition-all duration-200 hover:bg-slate-50/80",
                             selectedTxn?.id === txn.id && "bg-blue-50/80 border-l-4 border-l-blue-500"
@@ -277,6 +295,16 @@ export function FinanceDashboard() {
                     <CardDescription className="text-slate-600">AI-powered insights for the selected transaction.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow overflow-y-auto">
+                    {/* Inline Agent Activity - shown seamlessly in the main flow */}
+                    {activities.length > 0 && (
+                      <div className="mb-4">
+                        <InlineAgentActivity 
+                          activities={activities} 
+                          compact={false}
+                        />
+                      </div>
+                    )}
+                    
                     {selectedTxn ? (
                         <div className="space-y-6 flex flex-col justify-between h-full">
                             <div>
