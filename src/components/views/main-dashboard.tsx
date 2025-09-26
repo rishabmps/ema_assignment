@@ -290,31 +290,40 @@ export default function MainDashboard() {
 
   const renderDemo = () => {
     let content;
+    
+    // The key is to apply the motion.div wrapper around each specific component
+    // to ensure the animation triggers for each "Act".
+    const animationWrapper = (key: string, children: React.ReactNode) => (
+      <motion.div
+        key={key}
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="w-full h-full"
+      >
+        {children}
+      </motion.div>
+    );
+
     if (persona === "traveler") {
       switch (act) {
         case 'expense':
-          content = <TravelerExpenseFeed />;
+          content = animationWrapper('act1', <TravelerExpenseFeed />);
           break;
         case 'booking':
-          content = <TravelerBookingView />;
+          content = animationWrapper('act2', <TravelerBookingView />);
           break;
         default:
           content = null;
       }
     } else { // persona === 'finance'
-      content = <FinanceDashboard />;
+      content = animationWrapper('alex', <FinanceDashboard />);
     }
   
     const isMobileView = persona === 'traveler';
 
     return (
-      <motion.div
-        key="demo"
-        initial={{ opacity: 0, scale: 0.95, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-full flex justify-center"
-      >
+      <div className="w-full flex justify-center">
         {isMobileView ? (
           <div className="relative">
             {/* Mobile device frame with enhanced styling */}
@@ -395,7 +404,7 @@ export default function MainDashboard() {
             </div>
           </div>
         )}
-      </motion.div>
+      </div>
     );
   };
   
@@ -482,3 +491,5 @@ export default function MainDashboard() {
     </div>
   );
 }
+
+    
