@@ -325,7 +325,7 @@ export default function MainDashboard() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-400 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse"></div>
       </div>
 
-      <div className="w-full py-8 px-4 relative z-10">
+      <div className="w-full py-8 relative z-10">
         <header className="text-center mb-12">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
@@ -492,5 +492,3 @@ export default function MainDashboard() {
     </div>
   );
 }
-
-    
