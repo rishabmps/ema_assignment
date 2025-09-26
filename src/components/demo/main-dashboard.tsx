@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TravelerExpenseFeed } from "@/components/demo/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/demo/traveler-booking-view";
 import { FinanceDashboard } from "@/components/demo/finance-dashboard";
@@ -49,36 +48,20 @@ export default function MainDashboard() {
     </Card>
   );
 
-  return (
-    <div className="container mx-auto py-8 px-4">
-      <header className="text-center mb-8">
-        <h1 className="text-4xl font-bold tracking-tight text-foreground flex items-center justify-center gap-3">
-          <Bot className="h-10 w-10 text-primary" />
-          Agentic T&E
-        </h1>
-        <p className="text-lg text-muted-foreground mt-2">
-          The future of Travel & Expense management is invisible.
-        </p>
-      </header>
-
+  const renderTravelerView = () => (
+    <>
       <section id="act1" className="mb-12">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-semibold">Act I: The Invisible Expense</h2>
           <p className="text-muted-foreground">Showcasing the "Zero-Touch" expense flow.</p>
         </div>
-        {renderPersonaSwitcher()}
-        
-        {persona === "traveler" ? (
-             <div className="flex justify-center">
-                <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
-                    <div className="aspect-[9/19] w-full rounded-xl bg-background overflow-hidden">
-                        <TravelerExpenseFeed />
-                    </div>
+        <div className="flex justify-center">
+            <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
+                <div className="aspect-[9/19] w-full rounded-xl bg-background overflow-hidden">
+                    <TravelerExpenseFeed />
                 </div>
             </div>
-        ) : (
-            <FinanceDashboard />
-        )}
+        </div>
       </section>
 
       <section id="act2">
@@ -94,6 +77,35 @@ export default function MainDashboard() {
             </div>
         </div>
       </section>
+    </>
+  )
+
+  const renderFinanceView = () => (
+     <section id="act1" className="mb-12">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-semibold">Act I: The Finance Ops View</h2>
+          <p className="text-muted-foreground">Managing the exception queue.</p>
+        </div>
+        <FinanceDashboard />
+      </section>
+  )
+
+  return (
+    <div className="container mx-auto py-8 px-4">
+      <header className="text-center mb-8">
+        <h1 className="text-4xl font-bold tracking-tight text-foreground flex items-center justify-center gap-3">
+          <Bot className="h-10 w-10 text-primary" />
+          Agentic T&E
+        </h1>
+        <p className="text-lg text-muted-foreground mt-2">
+          The future of Travel & Expense management is invisible.
+        </p>
+      </header>
+
+      {renderPersonaSwitcher()}
+      
+      {persona === "traveler" ? renderTravelerView() : renderFinanceView()}
+
     </div>
   );
 }
