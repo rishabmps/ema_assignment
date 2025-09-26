@@ -1,0 +1,59 @@
+{
+    "recommendations": [
+        {
+            "id": "rec_log_001",
+            "date": "2024-07-25T00:00:00Z",
+            "user_id": "user_sarah",
+            "route": "NYC-BOS",
+            "default_option_co2_kg": 160,
+            "greener_option_co2_kg": 30,
+            "co2_saved_kg": 130,
+            "cost_change_usd": -50,
+            "user_action": "Accepted"
+        },
+        {
+            "id": "rec_log_002",
+            "date": "2024-07-22T00:00:00Z",
+            "user_id": "user_sarah",
+            "route": "LAX-SFO",
+            "default_option_co2_kg": 180,
+            "greener_option_co2_kg": 45,
+            "co2_saved_kg": 135,
+            "cost_change_usd": 25,
+            "user_action": "Declined"
+        },
+        {
+            "id": "rec_log_003",
+            "date": "2024-07-18T00:00:00Z",
+            "user_id": "user_sarah",
+            "route": "NYC-DC",
+            "default_option_co2_kg": 150,
+            "greener_option_co2_kg": 25,
+            "co2_saved_kg": 125,
+            "cost_change_usd": -40,
+            "user_action": "Accepted"
+        },
+        {
+            "id": "rec_log_004",
+            "date": "2024-07-15T00:00:00Z",
+            "user_id": "user_sarah",
+            "route": "NYC-DC",
+            "default_option_co2_kg": 150,
+            "greener_option_co2_kg": 25,
+            "co2_saved_kg": 125,
+            "cost_change_usd": -40,
+            "user_action": "Accepted"
+        },
+        {
+            "id": "rec_log_005",
+            "date": "2024-07-12T00:00:00Z",
+            "user_id": "user_sarah",
+            "route": "LAX-SFO",
+            "default_option_co2_kg": 180,
+            "greener_option_co2_kg": 45,
+            "co2_saved_kg": 135,
+            "cost_change_usd": 25,
+            "user_action": "Declined"
+        }
+    ]
+}

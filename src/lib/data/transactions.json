@@ -55,7 +55,8 @@
       "details": "Expense amount of $410.00 exceeds the 'New York' limit of $350.",
       "rule_id": "hotels.max_rate.high_cost_cities.New York"
     },
-    "fraud_check": null
+    "fraud_check": null,
+    "co2_kg": 25
   },
   {
     "id": "txn_104",
@@ -73,7 +74,8 @@
       { "time": "2024-07-15T22:06:00Z", "status": "Expense cleared for ERP posting. No further action needed." }
     ],
     "policy_check": null,
-    "fraud_check": null
+    "fraud_check": null,
+    "co2_kg": 22
   },
   {
     "id": "txn_105",
@@ -110,7 +112,8 @@
     "country_code": "GB",
     "timeline": [],
     "policy_check": null,
-    "fraud_check": null
+    "fraud_check": null,
+    "co2_kg": 35
   },
   {
     "id": "txn_107",
@@ -127,7 +130,8 @@
     "country_code": "FR",
     "timeline": [],
     "policy_check": null,
-    "fraud_check": null
+    "fraud_check": null,
+    "co2_kg": 40
   },
   {
     "id": "txn_108",
@@ -143,6 +147,7 @@
     "vat_reclaimable_usd": 0,
      "timeline": [],
     "policy_check": null,
-    "fraud_check": null
+    "fraud_check": null,
+    "co2_kg": 1200
   }
 ]

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -19,11 +20,13 @@ import type { Transaction, User } from "@/types";
 import transactionsData from "@/lib/data/transactions.json";
 import usersData from "@/lib/data/users.json";
 import policyExceptionsData from "@/lib/data/policy_exceptions.json";
-import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, TrendingUp, HandCoins } from "lucide-react";
+import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, TrendingUp, HandCoins, Leaf } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { VatReclaimView } from "@/components/demo/vat-reclaim-view";
 import { PolicyInsightView } from "./policy-insight-view";
+import { SustainabilityDashboard } from "./sustainability-dashboard";
+import { Badge } from "@/components/ui/badge";
 
 const users = usersData as User[];
 const transactions = transactionsData as Transaction[];
@@ -73,6 +76,10 @@ export function FinanceDashboard() {
   if (activeView === "policy_insights") {
     return <PolicyInsightView onBack={() => setActiveView("default")} recommendations={policyExceptionsData.recommendations} />
   }
+  if (activeView === "sustainability") {
+    return <SustainabilityDashboard onBack={() => setActiveView("default")} />
+  }
+
 
   return (
     <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full">
@@ -93,6 +100,11 @@ export function FinanceDashboard() {
                 <TabsTrigger value="exceptions">
                     <ListTodo />
                     Exception Queue
+                </TabsTrigger>
+                 <TabsTrigger value="sustainability" onClick={() => setActiveView('sustainability')}>
+                    <Leaf />
+                    Sustainability
+                    <Badge variant="secondary" className="ml-2 bg-primary/10 text-primary">New</Badge>
                 </TabsTrigger>
             </TabsList>
             <Button variant="outline">

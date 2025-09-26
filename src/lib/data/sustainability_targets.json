@@ -1,0 +1,10 @@
+{
+  "company_wide": {
+    "quarterly_co2e_ton_budget": 50
+  },
+  "departments": {
+    "sales": { "quarterly_co2e_ton_budget": 30 },
+    "engineering": { "quarterly_co2e_ton_budget": 10 },
+    "marketing": { "quarterly_co2e_ton_budget": 10 }
+  }
+}

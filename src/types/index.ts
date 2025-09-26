@@ -40,6 +40,7 @@ export interface Transaction {
   amount_usd?: number;
   vat_reclaimable_usd?: number;
   country_code?: string;
+  co2_kg?: number;
 }
 
 export interface Policy {
@@ -119,4 +120,27 @@ export interface PolicyRecommendation {
     insight: string;
     recommendation: string;
     impact: string;
+}
+
+export interface SustainabilityTarget {
+    company_wide: {
+        quarterly_co2e_ton_budget: number;
+    };
+    departments: {
+        [key: string]: {
+            quarterly_co2e_ton_budget: number;
+        };
+    };
+}
+
+export interface RecommendationLogEntry {
+    id: string;
+    date: string;
+    user_id: string;
+    route: string;
+    default_option_co2_kg: number;
+    greener_option_co2_kg: number;
+    co2_saved_kg: number;
+    cost_change_usd: number;
+    user_action: 'Accepted' | 'Declined';
 }
