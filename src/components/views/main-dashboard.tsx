@@ -337,7 +337,7 @@ export default function MainDashboard() {
               <Bot className="h-12 w-12 text-blue-600 animate-bounce-subtle" />
               <div className="absolute -inset-1 bg-blue-600 rounded-full opacity-20 animate-pulse-ring"></div>
             </div>
-            <h1 className="text-5xl font-bold tracking-tight text-gradient bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent animate-gradient-x">
+            <h1 className="text-5xl font-bold tracking-tight text-gradient bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent animate-gradient-x leading-tight">
               Agentic T&E
             </h1>
           </motion.div>
@@ -366,7 +366,7 @@ export default function MainDashboard() {
           <AnimatePresence mode="wait">
             {step === "persona" && renderPersonaSelector()}
             {step === "act" && renderActSelector()}
-
+            
             {step === "demo" && persona === "traveler" && act === "expense" && (
               <motion.div
                 key="traveler-expense"
