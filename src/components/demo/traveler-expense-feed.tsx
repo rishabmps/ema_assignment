@@ -66,7 +66,7 @@ export function TravelerExpenseFeed() {
 
   const handleSimulateTransaction = () => {
     const newTransaction = allTransactions.find((t) => t.id === "txn_101");
-    if (newTransaction) {
+    if (newTransaction && !transactions.find(t => t.id === "txn_101")) {
       setTransactions((prev) => [newTransaction, ...prev]);
       toast({
         title: (
