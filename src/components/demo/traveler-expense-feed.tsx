@@ -37,13 +37,13 @@ export function TravelerExpenseFeed() {
   };
 
   const handleReceiptNeededClick = (transactionId: string) => {
+    toast({
+      title: "Receipt Uploaded",
+      description: "Receipt Concierge is on it!",
+    });
     setTransactions((prev) =>
       prev.map((t) => {
         if (t.id === transactionId) {
-          toast({
-            title: "Receipt Uploaded",
-            description: "Receipt Concierge is on it!",
-          });
           return {
             ...t,
             status: "Processing",
