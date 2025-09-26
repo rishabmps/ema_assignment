@@ -197,7 +197,8 @@ export function TravelerExpenseFeed() {
   };
   
   const handleToggleExpand = (transactionId: string) => {
-    if (transactions.find(t => t.id === transactionId && t.status === 'Needs Receipt')) {
+    const transaction = transactions.find(t => t.id === transactionId);
+    if (transaction?.status === 'Needs Receipt') {
       handleReceiptNeededClick(transactionId);
     } else {
       setExpandedId(currentId => currentId === transactionId ? null : transactionId);

@@ -71,10 +71,10 @@ export function TransactionCard({
   return (
     <Card
       className={cn(
-        "cursor-pointer overflow-hidden transition-all duration-300 hover:shadow-md",
-        transaction.status === "Needs Receipt" ? "border-primary/50 ring-1 ring-primary/50" : ""
+        "overflow-hidden transition-all duration-300",
+        isExpanded ? "shadow-md" : "hover:shadow-md",
+        transaction.status === "Needs Receipt" ? "border-primary/50 ring-1 ring-primary/50 cursor-pointer" : ""
       )}
-      onClick={() => onToggleExpand(transaction.id)}
     >
       <CardContent className="p-0">
         <Accordion
@@ -84,7 +84,7 @@ export function TransactionCard({
           onValueChange={() => onToggleExpand(transaction.id)}
         >
           <AccordionItem value="item-1" className="border-b-0">
-            <div className="flex items-center p-4">
+            <div className={cn("flex items-center p-4", transaction.status !== 'Needs Receipt' && "cursor-pointer")}>
               <div className="mr-4 flex h-10 w-10 items-center justify-center rounded-full bg-secondary">
                 {getIcon(transaction.merchant_logo)}
               </div>
@@ -100,12 +100,13 @@ export function TransactionCard({
                 </p>
                 <StatusTag status={transaction.status} />
               </div>
-              {transaction.status !== "Needs Receipt" && (
-                <AccordionTrigger
-                  className="ml-2 w-auto p-2 hover:no-underline [&[data-state=open]>svg]:rotate-180"
-                  aria-label="Toggle details"
-                />
-              )}
+              <AccordionTrigger
+                className={cn(
+                  "ml-2 w-auto p-2 hover:no-underline [&[data-state=open]>svg]:rotate-180",
+                  transaction.status === "Needs Receipt" && "hidden"
+                  )}
+                aria-label="Toggle details"
+              />
             </div>
             <AccordionContent>
               <div className="bg-secondary/50 px-4 py-4">
