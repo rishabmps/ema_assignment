@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, ArrowUpRight, CheckCircle, FileText, Leaf, XCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, FileText, XCircle } from "lucide-react";
 import type { RecommendationLogEntry } from "@/types";
 import recommendationLog from "@/lib/data/recommendation_log.json";
 import sustainabilityTargets from "@/lib/data/sustainability_targets.json";
@@ -62,10 +62,10 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-secondary/30">
+    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-slate-50">
       <header className="flex-shrink-0 flex items-center justify-between">
         <div>
-          <Button variant="ghost" onClick={onBack} className="mb-2">
+          <Button variant="ghost" onClick={onBack} className="mb-2 -ml-4">
             <ArrowLeft className="mr-2" /> Back to Dashboard
           </Button>
           <h1 className="text-2xl font-bold text-foreground">Sustainability Command Center</h1>
@@ -77,8 +77,8 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
         </Button>
       </header>
 
-      <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
+        <div className="lg:col-span-2 space-y-6 flex flex-col">
             <Card>
                 <CardHeader>
                     <CardTitle>Quarterly Travel Emissions</CardTitle>
@@ -92,11 +92,11 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                     <Progress value={progress} className="mt-2" />
                 </CardContent>
             </Card>
-            <Card>
+            <Card className="flex-grow">
                 <CardHeader>
                     <CardTitle className='flex items-center justify-between'>
                         Emissions by Department
-                        <Badge variant="outline" className='font-normal text-sm'>
+                        <Badge variant="outline" className='font-normal text-sm bg-background'>
                             Adoption Rate: {adoptionRate.toFixed(0)}%
                         </Badge>
                     </CardTitle>
@@ -116,12 +116,12 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
             </Card>
         </div>
 
-        <Card className="lg:col-span-1 flex flex-col">
+        <Card className="lg:col-span-1 flex flex-col min-h-0">
             <CardHeader>
                 <CardTitle>Recommendation Impact</CardTitle>
                 <CardDescription>Log of sustainable travel recommendations made by the CO2 Advisor agent.</CardDescription>
             </CardHeader>
-            <CardContent className="p-0 overflow-y-auto">
+            <CardContent className="p-0 flex-grow overflow-y-auto">
                 <Table>
                     <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm z-10">
                     <TableRow>

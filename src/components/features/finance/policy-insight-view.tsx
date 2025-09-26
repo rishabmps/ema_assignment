@@ -13,10 +13,10 @@ interface PolicyInsightViewProps {
 
 export function PolicyInsightView({ onBack, recommendations }: PolicyInsightViewProps) {
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full">
+    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-slate-50">
       <header className="flex-shrink-0 flex items-center justify-between">
         <div>
-          <Button variant="ghost" onClick={onBack} className="mb-2">
+          <Button variant="ghost" onClick={onBack} className="mb-2 -ml-4">
             <ArrowLeft className="mr-2" /> Back to Dashboard
           </Button>
           <h1 className="text-2xl font-bold text-foreground">Policy Insights</h1>
@@ -24,7 +24,7 @@ export function PolicyInsightView({ onBack, recommendations }: PolicyInsightView
         </div>
       </header>
       
-      <div className="flex-grow overflow-y-auto space-y-6">
+      <div className="flex-grow overflow-y-auto space-y-6 -mr-6 pr-6">
         {recommendations.map((rec, index) => (
           <Card key={index} className="bg-background">
             <CardHeader>
