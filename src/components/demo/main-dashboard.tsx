@@ -1,21 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { TravelerExpenseFeed } from "@/components/demo/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/demo/traveler-booking-view";
 import { FinanceDashboard } from "@/components/demo/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Bot, Briefcase, ChevronRight, User } from "lucide-react";
+import { Bot } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { Separator } from "@/components/ui/separator";
 
 type Persona = "traveler" | "finance";
+type Act = "expense" | "booking";
 
 export default function MainDashboard() {
   const [persona, setPersona] = useState<Persona>("traveler");
+  const [act, setAct] = useState<Act>("expense");
+
   const traveler = usersData.find(u => u.role === "Traveler");
   const finance = usersData.find(u => u.role === "Finance Operations");
 
@@ -50,35 +53,45 @@ export default function MainDashboard() {
   );
 
   const renderTravelerView = () => (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <section id="expense-journey">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-semibold">The Invisible Expense Report</h2>
-          <p className="text-muted-foreground">Showcasing the "Zero-Touch" expense flow.</p>
-        </div>
-        <div className="flex justify-center">
-            <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
-                <div className="aspect-[9/19] w-full rounded-xl bg-background overflow-hidden">
-                    <TravelerExpenseFeed />
-                </div>
-            </div>
-        </div>
-      </section>
-
-      <section id="booking-journey">
-        <div className="text-center mb-6">
-          <h2 className="text-2xl font-semibold">The Conversational Trip</h2>
-          <p className="text-muted-foreground">Demonstrating AI-powered travel booking.</p>
-        </div>
-        <div className="flex justify-center">
-            <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
-                <div className="aspect-[9/19] w-full rounded-xl bg-background overflow-hidden">
-                    <TravelerBookingView />
-                </div>
-            </div>
-        </div>
-      </section>
-    </div>
+    <>
+      <div className="text-center">
+        <h2 className="text-2xl font-semibold">Choose a Demo</h2>
+      </div>
+      <RadioGroup
+        value={act}
+        onValueChange={(value: Act) => setAct(value)}
+        className="grid grid-cols-1 md:grid-cols-2 gap-8"
+      >
+        <Label htmlFor="act1" className="cursor-pointer">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-semibold">Act I: The Invisible Expense Report</h2>
+            <p className="text-muted-foreground">Showcasing the "Zero-Touch" expense flow.</p>
+          </div>
+          <div className="flex justify-center">
+              <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
+                  <div className="aspect-[9/19] w-full rounded-xl bg-background overflow-hidden">
+                      <RadioGroupItem value="expense" id="act1" className="sr-only" />
+                      <TravelerExpenseFeed />
+                  </div>
+              </div>
+          </div>
+        </Label>
+        <Label htmlFor="act2" className="cursor-pointer">
+          <div className="text-center mb-6">
+            <h2 className="text-2xl font-semibold">Act II: The Conversational Trip</h2>
+            <p className="text-muted-foreground">Demonstrating AI-powered travel booking.</p>
+          </div>
+          <div className="flex justify-center">
+              <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
+                  <div className="aspect-[9/19] w-full rounded-xl bg-background overflow-hidden">
+                      <RadioGroupItem value="booking" id="act2" className="sr-only" />
+                      <TravelerBookingView />
+                  </div>
+              </div>
+          </div>
+        </Label>
+      </RadioGroup>
+    </>
   )
 
   const renderFinanceView = () => (
@@ -88,15 +101,15 @@ export default function MainDashboard() {
           <p className="text-muted-foreground">Managing exceptions with AI-powered insights.</p>
         </div>
         <div className="flex justify-center">
-            <div className="w-full max-w-6xl rounded-t-xl bg-gray-800 shadow-2xl">
-                <div className="h-14 bg-gray-800 rounded-t-lg flex items-center p-4">
+            <div className="w-full max-w-6xl rounded-xl bg-gray-800 shadow-2xl p-2">
+                <div className="h-10 bg-gray-700 rounded-t-lg flex items-center p-4">
                   <div className="flex space-x-2">
                       <div className="w-3 h-3 rounded-full bg-red-500"></div>
                       <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
                       <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
                 </div>
-                <div className="bg-background overflow-y-auto" style={{ height: 'calc(100vh - 20rem)'}}>
+                <div className="bg-background overflow-y-auto aspect-video">
                     <FinanceDashboard />
                 </div>
             </div>
