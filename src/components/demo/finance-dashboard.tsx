@@ -61,7 +61,7 @@ export function FinanceDashboard() {
 
 
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 bg-secondary/50 flex flex-col h-full">
+    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full">
        <header className="flex-shrink-0 flex items-start justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Finance Operations</h1>
