@@ -113,7 +113,7 @@ export default function MainDashboard() {
               <h3 className="font-semibold text-lg">Act I: The Invisible Expense Report</h3>
               <p className="text-sm text-muted-foreground mt-2">See how AI turns a 20-minute chore into a 5-second task.</p>
                <div className="flex justify-end items-center mt-4">
-                <span className="text-sm font-semibold text-primary group-hover:underline">Show Demo</span>
+                <span className="text-sm font-semibold text-primary group-hover:underline">File an Expense</span>
                 <ChevronRight className="h-4 w-4 text-primary ml-1" />
               </div>
           </Card>
@@ -125,7 +125,7 @@ export default function MainDashboard() {
               <h3 className="font-semibold text-lg">Act II: The Conversational Trip</h3>
               <p className="text-sm text-muted-foreground mt-2">Book a fully compliant trip with a single sentence.</p>
                <div className="flex justify-end items-center mt-4">
-                <span className="text-sm font-semibold text-primary group-hover:underline">Show Demo</span>
+                <span className="text-sm font-semibold text-primary group-hover:underline">Book a Trip</span>
                 <ChevronRight className="h-4 w-4 text-primary ml-1" />
               </div>
           </Card>
