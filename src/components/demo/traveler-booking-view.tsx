@@ -28,6 +28,8 @@ type DemoStage = "initial" | "clarifying" | "searching" | "presenting_options" |
 const flights = flightsData as Flight[];
 const hotels = hotelsData as Hotel[];
 
+const generateUniqueId = () => `${Date.now()}-${Math.random()}`;
+
 const initialAgentMessage: Message = {
   id: "1",
   sender: "agent",
@@ -51,7 +53,7 @@ export function TravelerBookingView() {
     if (!input.trim() || stage !== 'initial') return;
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: generateUniqueId(),
       sender: "user",
       content: input,
       type: "text",
@@ -61,7 +63,7 @@ export function TravelerBookingView() {
     
     setTimeout(() => {
         const clarifyingMessage: Message = {
-            id: Date.now().toString(),
+            id: generateUniqueId(),
             sender: 'agent',
             content: "Sounds good. To find the best hotel, could you tell me the purpose of your trip? E.g. conference, client meeting, etc.",
             type: 'text'
@@ -77,7 +79,7 @@ export function TravelerBookingView() {
     if (!input.trim() || stage !== 'clarifying') return;
     
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: generateUniqueId(),
       sender: "user",
       content: input,
       type: "text",
@@ -87,7 +89,7 @@ export function TravelerBookingView() {
     setStage('searching');
 
     const loadingMessage: Message = {
-      id: Date.now().toString(),
+      id: generateUniqueId(),
       sender: "agent",
       content: "Perfect. Searching for policy-compliant flights and hotels near downtown Chicago...",
       type: "loading",
@@ -97,7 +99,7 @@ export function TravelerBookingView() {
     setTimeout(() => {
       const compliantHotels = hotels.filter(h => h.compliant);
       const optionsMessage: Message = {
-        id: Date.now().toString(),
+        id: generateUniqueId(),
         sender: 'agent',
         content: <HotelOptions onSelect={handleHotelSelect} hotels={compliantHotels} />,
         type: 'options'
@@ -109,7 +111,7 @@ export function TravelerBookingView() {
 
   const handleHotelSelect = (hotel: Hotel) => {
     const selectionMessage: Message = {
-        id: Date.now().toString(),
+        id: generateUniqueId(),
         sender: 'user',
         content: `Great, let's go with the ${hotel.name}.`,
         type: 'text'
@@ -119,7 +121,7 @@ export function TravelerBookingView() {
 
     setTimeout(() => {
          const loadingMessage: Message = {
-            id: Date.now().toString(),
+            id: generateUniqueId(),
             sender: "agent",
             content: "Excellent choice. Putting together the final itinerary for you now...",
             type: "loading",
@@ -131,7 +133,7 @@ export function TravelerBookingView() {
         const compliantFlight = flights.find((f) => f.id === "fl_202");
         if (compliantFlight && hotel) {
             const itineraryCard: Message = {
-            id: Date.now().toString(),
+            id: generateUniqueId(),
             sender: "agent",
             content: (
                 <ItineraryCard
@@ -151,7 +153,7 @@ export function TravelerBookingView() {
 
   const handleConfirmBooking = () => {
     const confirmationMessage: Message = {
-      id: Date.now().toString(),
+      id: generateUniqueId(),
       sender: "agent",
       content: (
         <div className="rounded-lg border border-success/50 bg-success/10 p-4 text-center">
