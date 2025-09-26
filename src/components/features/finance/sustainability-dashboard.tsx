@@ -18,7 +18,7 @@ import recommendationLog from "@/lib/data/recommendation_log.json";
 import sustainabilityTargets from "@/lib/data/sustainability_targets.json";
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { format } from "date-fns";
 import users from '@/lib/data/users.json';
 
@@ -108,7 +108,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                             <CartesianGrid vertical={false} />
                             <XAxis dataKey="department" tickLine={false} tickMargin={10} axisLine={false} />
                             <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `${value}t`} />
-                             <ChartTooltipContent />
+                             <ChartTooltip content={<ChartTooltipContent />} />
                             <Bar dataKey="emissions" radius={8} />
                         </BarChart>
                     </ChartContainer>
@@ -121,38 +121,36 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                 <CardTitle>Recommendation Impact</CardTitle>
                 <CardDescription>Log of sustainable travel recommendations made by the CO2 Advisor agent.</CardDescription>
             </CardHeader>
-            <CardContent className="p-0 flex-grow overflow-hidden">
-                <div className="h-full overflow-y-auto">
-                    <Table>
-                        <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm z-10">
-                        <TableRow>
-                            <TableHead>Route</TableHead>
-                            <TableHead>CO2 Saved</TableHead>
-                            <TableHead>Status</TableHead>
+            <CardContent className="p-0 overflow-y-auto">
+                <Table>
+                    <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm z-10">
+                    <TableRow>
+                        <TableHead>Route</TableHead>
+                        <TableHead>CO2 Saved</TableHead>
+                        <TableHead>Status</TableHead>
+                    </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                    {recommendations.map((rec) => (
+                        <TableRow key={rec.id}>
+                            <TableCell>
+                                <div className="font-medium">{rec.route}</div>
+                                <div className="text-xs text-muted-foreground">{getUserById(rec.user_id)?.name} on {format(new Date(rec.date), "MMM d")}</div>
+                            </TableCell>
+                            <TableCell className="text-green-600 font-medium">
+                                {rec.co2_saved_kg} kg
+                            </TableCell>
+                            <TableCell>
+                                {rec.user_action === "Accepted" ? (
+                                    <CheckCircle className="h-5 w-5 text-green-600" />
+                                ) : (
+                                    <XCircle className="h-5 w-5 text-muted-foreground" />
+                                )}
+                            </TableCell>
                         </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                        {recommendations.map((rec) => (
-                            <TableRow key={rec.id}>
-                                <TableCell>
-                                    <div className="font-medium">{rec.route}</div>
-                                    <div className="text-xs text-muted-foreground">{getUserById(rec.user_id)?.name} on {format(new Date(rec.date), "MMM d")}</div>
-                                </TableCell>
-                                <TableCell className="text-green-600 font-medium">
-                                    {rec.co2_saved_kg} kg
-                                </TableCell>
-                                <TableCell>
-                                    {rec.user_action === "Accepted" ? (
-                                        <CheckCircle className="h-5 w-5 text-green-600" />
-                                    ) : (
-                                        <XCircle className="h-5 w-5 text-muted-foreground" />
-                                    )}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                </div>
+                    ))}
+                    </TableBody>
+                </Table>
             </CardContent>
         </Card>
       </div>

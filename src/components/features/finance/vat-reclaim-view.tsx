@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -58,31 +59,29 @@ export function VatReclaimView({ onBack, transactions, totalReclaimable }: VatRe
           <CardTitle>Reclaimable Transactions</CardTitle>
           <CardDescription>International expenses with identified reclaimable VAT.</CardDescription>
         </CardHeader>
-        <CardContent className="p-0 flex-grow overflow-hidden">
-           <div className="h-full overflow-y-auto">
-              <Table>
-                <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm z-10">
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Merchant</TableHead>
-                    <TableHead>Country</TableHead>
-                    <TableHead className="text-right">Total Amount (USD)</TableHead>
-                    <TableHead className="text-right">Reclaimable VAT (USD)</TableHead>
+        <CardContent className="p-0 overflow-y-auto">
+            <Table>
+              <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm z-10">
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Merchant</TableHead>
+                  <TableHead>Country</TableHead>
+                  <TableHead className="text-right">Total Amount (USD)</TableHead>
+                  <TableHead className="text-right">Reclaimable VAT (USD)</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {reclaimableTransactions.map((txn) => (
+                  <TableRow key={txn.id}>
+                    <TableCell>{format(new Date(txn.date), "PPP")}</TableCell>
+                    <TableCell className="font-medium">{txn.merchant}</TableCell>
+                    <TableCell>{txn.country_code || 'N/A'}</TableCell>
+                    <TableCell className="text-right">{currencyFormatter.format(txn.amount_usd || txn.amount)}</TableCell>
+                    <TableCell className="text-right font-semibold text-green-600">{currencyFormatter.format(txn.vat_reclaimable_usd || 0)}</TableCell>
                   </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {reclaimableTransactions.map((txn) => (
-                    <TableRow key={txn.id}>
-                      <TableCell>{format(new Date(txn.date), "PPP")}</TableCell>
-                      <TableCell className="font-medium">{txn.merchant}</TableCell>
-                      <TableCell>{txn.country_code || 'N/A'}</TableCell>
-                      <TableCell className="text-right">{currencyFormatter.format(txn.amount_usd || txn.amount)}</TableCell>
-                      <TableCell className="text-right font-semibold text-green-600">{currencyFormatter.format(txn.vat_reclaimable_usd || 0)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                ))}
+              </TableBody>
+            </Table>
         </CardContent>
       </Card>
     </div>
