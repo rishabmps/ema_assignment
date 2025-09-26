@@ -82,7 +82,7 @@ export function FinanceDashboard() {
 
 
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full">
+    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-secondary/30">
        <header className="flex-shrink-0 flex items-start justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Finance Operations</h1>
@@ -101,13 +101,8 @@ export function FinanceDashboard() {
                     <ListTodo />
                     Exception Queue
                 </TabsTrigger>
-                 <TabsTrigger value="sustainability" onClick={() => setActiveView('sustainability')}>
-                    <Leaf />
-                    Sustainability
-                    <Badge variant="secondary" className="ml-2 bg-primary/10 text-primary">New</Badge>
-                </TabsTrigger>
             </TabsList>
-            <Button variant="outline">
+            <Button variant="outline" className="bg-background">
               <ExternalLink />
               Export Data
             </Button>
@@ -116,7 +111,7 @@ export function FinanceDashboard() {
         <TabsContent value="dashboard" className="space-y-4 flex-grow">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {kpiData.map((kpi) => (
-              <Card key={kpi.title} className="bg-background">
+              <Card key={kpi.title}>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
                   <kpi.icon className="h-4 w-4 text-muted-foreground" />
@@ -128,8 +123,8 @@ export function FinanceDashboard() {
               </Card>
             ))}
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-              <Card onClick={() => setActiveView('vat_reclaim')} className="cursor-pointer hover:border-primary">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <Card onClick={() => setActiveView('vat_reclaim')} className="cursor-pointer hover:border-primary transition-colors col-span-1">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">Automated VAT Reclaim</CardTitle>
                       <HandCoins className="h-4 w-4 text-muted-foreground"/>
@@ -139,7 +134,7 @@ export function FinanceDashboard() {
                       <p className="text-xs text-muted-foreground">Identified in the last 30 days</p>
                   </CardContent>
               </Card>
-               <Card onClick={() => setActiveView('policy_insights')} className="cursor-pointer hover:border-primary">
+               <Card onClick={() => setActiveView('policy_insights')} className="cursor-pointer hover:border-primary transition-colors col-span-1">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">Policy Insights</CardTitle>
                       <Lightbulb className="h-4 w-4 text-muted-foreground"/>
@@ -147,6 +142,16 @@ export function FinanceDashboard() {
                   <CardContent>
                       <div className="text-2xl font-bold">{policyInsightsCount} New Recommendation</div>
                       <p className="text-xs text-muted-foreground">Data-driven suggestions to improve efficiency</p>
+                  </CardContent>
+              </Card>
+              <Card onClick={() => setActiveView('sustainability')} className="cursor-pointer hover:border-primary transition-colors col-span-1">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">Sustainability</CardTitle>
+                      <Leaf className="h-4 w-4 text-muted-foreground"/>
+                  </CardHeader>
+                  <CardContent>
+                      <div className="text-2xl font-bold">45.2 tons</div>
+                      <p className="text-xs text-muted-foreground">Quarterly CO2e on track to meet goal</p>
                   </CardContent>
               </Card>
           </div>
