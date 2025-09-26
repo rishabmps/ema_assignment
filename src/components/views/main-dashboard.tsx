@@ -57,7 +57,7 @@ export default function MainDashboard() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
       transition={{ duration: 0.6 }}
-      className="max-w-5xl mx-auto"
+      className="max-w-5xl w-full mx-auto"
     >
       <div className="text-center mb-12">
         <motion.h2 
@@ -182,7 +182,7 @@ export default function MainDashboard() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
       transition={{ duration: 0.6 }}
-      className="max-w-5xl mx-auto"
+      className="max-w-5xl w-full mx-auto"
     >
       <div className="text-center mb-12">
         <motion.h2 
@@ -436,7 +436,7 @@ export default function MainDashboard() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-400 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse"></div>
       </div>
 
-      <div className="container mx-auto py-8 px-4 relative z-10">
+      <div className="w-full py-8 px-4 relative z-10">
         <header className="text-center mb-12">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
