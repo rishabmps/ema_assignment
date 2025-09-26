@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { TransactionCard } from "@/components/demo/transaction-card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -15,16 +16,24 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+interface InAppNotification {
+  id: string;
+  title: React.ReactNode;
+  description: string;
+}
+
 export function TravelerExpenseFeed() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const [receiptTxnId, setReceiptTxnId] = useState<string | null>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+  const [notification, setNotification] = useState<InAppNotification | null>(null);
 
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const notificationTimer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     const initialTransactions = allTransactions
@@ -63,24 +72,38 @@ export function TravelerExpenseFeed() {
       }
     }
   }, [showCamera]);
+  
+  useEffect(() => {
+    if (notification) {
+      notificationTimer.current = setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    }
+    return () => {
+      if (notificationTimer.current) {
+        clearTimeout(notificationTimer.current);
+      }
+    };
+  }, [notification]);
 
   const handleSimulateTransaction = () => {
     const newTransaction = allTransactions.find((t) => t.id === "txn_101");
     if (newTransaction && !transactions.find(t => t.id === "txn_101")) {
       setTransactions((prev) => [newTransaction, ...prev]);
-      toast({
+      setNotification({
+        id: newTransaction.id,
         title: (
-          <div className="flex items-center gap-2">
-            <Receipt className="h-5 w-5 text-primary" /> New Transaction
+          <div className="flex items-center gap-2 font-bold">
+            <Receipt className="h-5 w-5" /> New Transaction
           </div>
         ),
         description: `The Capital Grille: $125.50. Tap to add receipt.`,
-        duration: 5000,
       });
     }
   };
 
   const handleReceiptNeededClick = (transactionId: string) => {
+    setNotification(null);
     setReceiptTxnId(transactionId);
     setShowCamera(true);
   };
@@ -95,7 +118,6 @@ export function TravelerExpenseFeed() {
     const context = canvas.getContext('2d');
     context?.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
     
-    // Simulate processing the captured image
     setShowCamera(false);
     
     toast({
@@ -183,7 +205,27 @@ export function TravelerExpenseFeed() {
   };
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col bg-slate-100 relative overflow-hidden">
+        <AnimatePresence>
+          {notification && (
+            <motion.div
+              initial={{ y: "-150%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-150%" }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="absolute top-4 left-4 right-4 z-10"
+            >
+              <div
+                onClick={() => handleReceiptNeededClick(notification.id)}
+                className="rounded-xl bg-background/80 backdrop-blur-md p-4 shadow-lg cursor-pointer border"
+              >
+                  <h4 className="text-sm text-primary">{notification.title}</h4>
+                  <p className="text-sm text-foreground">{notification.description}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
       <div className="p-4">
         <Button onClick={handleSimulateTransaction} className="w-full">
           Simulate Client Lunch Purchase
