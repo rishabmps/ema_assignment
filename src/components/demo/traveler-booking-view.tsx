@@ -7,13 +7,14 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import type { Flight, Hotel } from "@/types";
+import type { Flight, Hotel, User } from "@/types";
 import flightsData from "@/lib/data/flights.json";
 import hotelsData from "@/lib/data/hotels.json";
+import usersData from "@/lib/data/users.json";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { SendHorizonal, Bot, Calendar, Sparkles, CheckCircle, Check, Building, Star } from "lucide-react";
+import { SendHorizonal, Bot, Calendar, Sparkles, CheckCircle, Check, Building } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
 type Message = {
@@ -27,11 +28,13 @@ type DemoStage = "initial" | "clarifying" | "searching" | "presenting_options" |
 
 const flights = flightsData as Flight[];
 const hotels = hotelsData as Hotel[];
+const traveler = usersData.find(u => u.role === "Traveler") as User;
 
-const generateUniqueId = () => `${Date.now()}-${Math.random()}`;
+
+const generateUniqueId = () => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
 const initialAgentMessage: Message = {
-  id: "1",
+  id: generateUniqueId(),
   sender: "agent",
   content: "Hi Sarah! Where can I help you book a trip to today?",
   type: "text",
@@ -205,10 +208,10 @@ export function TravelerBookingView() {
     <div className="flex h-full flex-col bg-background">
       <header className="p-4 bg-background/80 backdrop-blur-sm border-b z-10">
         <div className="flex items-center gap-3">
-            <Avatar><AvatarFallback>SC</AvatarFallback></Avatar>
+            <Avatar><AvatarFallback>{traveler.initials}</AvatarFallback></Avatar>
             <div>
-                <p className="text-sm font-semibold">Sarah Chen</p>
-                <p className="text-xs text-muted-foreground">Sales Director</p>
+                <p className="text-sm font-semibold">{traveler.name}</p>
+                <p className="text-xs text-muted-foreground">{traveler.title}</p>
             </div>
         </div>
       </header>
@@ -231,7 +234,11 @@ export function TravelerBookingView() {
               }}
               className={`flex items-end gap-2 ${msg.sender === 'agent' ? 'justify-start' : 'justify-end'}`}
             >
-              {msg.sender === 'agent' && <Avatar className="h-8 w-8 self-start"><AvatarFallback><Bot className="h-5 w-5 text-primary" /></AvatarFallback></Avatar>}
+              {msg.sender === 'agent' && (
+                <Avatar className="h-8 w-8 self-start">
+                    <AvatarFallback><Bot className="h-5 w-5 text-primary" /></AvatarFallback>
+                </Avatar>
+              )}
               <div 
                 className={`max-w-[90%] rounded-lg px-3 py-2 shadow-sm ${msg.sender === 'agent' ? 'bg-secondary' : 'bg-primary text-primary-foreground'} ${msg.type === 'options' || msg.type === 'card' ? 'p-0 bg-transparent shadow-none' : ''}`}>
                 {msg.type === "loading" ? (
@@ -243,6 +250,11 @@ export function TravelerBookingView() {
                   msg.content
                 )}
               </div>
+               {msg.sender === 'user' && (
+                <Avatar className="h-8 w-8 self-start">
+                    <AvatarFallback>{traveler.initials}</AvatarFallback>
+                </Avatar>
+              )}
             </motion.div>
           ))}
         </AnimatePresence>
@@ -278,13 +290,13 @@ function HotelOptions({ hotels, onSelect }: { hotels: Hotel[], onSelect: (hotel:
 
   return (
     <div className="w-full">
-      <p className="text-sm mb-2 text-foreground">OK. I found a few great, policy-compliant hotels near downtown. Which one looks best?</p>
+      <p className="text-sm mb-2 text-foreground bg-secondary rounded-lg px-3 py-2">OK. I found a few great, policy-compliant hotels near downtown. Which one looks best?</p>
       <div className="space-y-2">
         {hotelOptions.map(({ hotel, reason }) => {
           const hotelImage = PlaceHolderImages.find(img => img.id === hotel.image);
           return (
             <Card key={hotel.id} onClick={() => onSelect(hotel)} className="p-3 hover:border-primary cursor-pointer transition-colors flex gap-3 items-center bg-background">
-              {hotelImage && <Image src={hotelImage.imageUrl} alt={hotel.name} width={64} height={64} className="rounded-md object-cover h-16 w-16" />}
+              {hotelImage && <Image src={hotelImage.imageUrl} alt={hotel.name} width={64} height={64} className="rounded-md object-cover h-16 w-16" data-ai-hint={hotelImage.imageHint} />}
               <div className="flex-grow">
                 <p className="font-semibold">{hotel.name}</p>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
@@ -295,7 +307,7 @@ function HotelOptions({ hotels, onSelect }: { hotels: Hotel[], onSelect: (hotel:
                     <span className="text-sm font-semibold">{currencyFormatter.format(hotel.price_per_night)}<span className="font-normal text-xs text-muted-foreground">/night</span></span>
                  </div>
               </div>
-              <Button size="sm" variant="outline">
+              <Button size="sm" variant="outline" className="shrink-0">
                 Select <Check className="ml-2 h-4 w-4"/>
               </Button>
             </Card>
