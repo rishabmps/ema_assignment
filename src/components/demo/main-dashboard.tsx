@@ -7,7 +7,7 @@ import { TravelerExpenseFeed } from "@/components/demo/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/demo/traveler-booking-view";
 import { FinanceDashboard } from "@/components/demo/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Bot, ChevronRight, Plane, FileText, Leaf } from "lucide-react";
+import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -247,5 +247,3 @@ export default function MainDashboard() {
     </div>
   );
 }
-
-    

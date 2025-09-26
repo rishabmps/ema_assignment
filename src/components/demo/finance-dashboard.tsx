@@ -20,13 +20,12 @@ import type { Transaction, User } from "@/types";
 import transactionsData from "@/lib/data/transactions.json";
 import usersData from "@/lib/data/users.json";
 import policyExceptionsData from "@/lib/data/policy_exceptions.json";
-import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, TrendingUp, HandCoins, Leaf } from "lucide-react";
+import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, HandCoins, Leaf } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { VatReclaimView } from "@/components/demo/vat-reclaim-view";
 import { PolicyInsightView } from "./policy-insight-view";
 import { SustainabilityDashboard } from "./sustainability-dashboard";
-import { Badge } from "@/components/ui/badge";
 
 const users = usersData as User[];
 const transactions = transactionsData as Transaction[];
