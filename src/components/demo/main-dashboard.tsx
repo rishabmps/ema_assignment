@@ -87,7 +87,13 @@ export default function MainDashboard() {
           <h2 className="text-2xl font-semibold">The Finance Operations Cockpit</h2>
           <p className="text-muted-foreground">Managing exceptions with AI-powered insights.</p>
         </div>
-        <FinanceDashboard />
+        <div className="flex justify-center">
+            <div className="w-full max-w-4xl rounded-t-2xl bg-gray-800 p-2 pt-4 shadow-2xl">
+                <div className="aspect-video w-full rounded-t-xl bg-background overflow-hidden">
+                    <FinanceDashboard />
+                </div>
+            </div>
+        </div>
       </section>
   )
 
