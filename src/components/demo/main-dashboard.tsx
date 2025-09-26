@@ -28,7 +28,7 @@ export default function MainDashboard() {
             <h2 className="text-lg font-semibold mb-4">Select Persona</h2>
             <RadioGroup
                 value={persona}
-                onValueChange={(value: Persona) => setPersona(value)}
+                onValueChange={(value: string) => setPersona(value as Persona)}
                 className="grid grid-cols-1 md:grid-cols-2 gap-4"
             >
                 <Label htmlFor="traveler" className="flex items-center gap-3 rounded-lg border p-4 cursor-pointer hover:bg-accent has-[:checked]:bg-primary/10 has-[:checked]:border-primary transition-colors">
@@ -59,13 +59,13 @@ export default function MainDashboard() {
       </div>
       <RadioGroup
         value={act}
-        onValueChange={(value: Act) => setAct(value)}
+        onValueChange={(value: string) => setAct(value as Act)}
         className="grid grid-cols-1 md:grid-cols-2 gap-8"
       >
         <Label htmlFor="act1" className="cursor-pointer">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-semibold">Act I: The Invisible Expense Report</h2>
-            <p className="text-muted-foreground">Showcasing the "Zero-Touch" expense flow.</p>
+          <div className="text-center mb-6 h-24 flex flex-col justify-end">
+            <h2 className="text-2xl font-semibold">Act I: The Invisible<br/>Expense Report</h2>
+            <p className="text-muted-foreground mt-2">Showcasing the "Zero-Touch" expense flow.</p>
           </div>
           <div className="flex justify-center">
               <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
@@ -77,9 +77,9 @@ export default function MainDashboard() {
           </div>
         </Label>
         <Label htmlFor="act2" className="cursor-pointer">
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-semibold">Act II: The Conversational Trip</h2>
-            <p className="text-muted-foreground">Demonstrating AI-powered travel booking.</p>
+          <div className="text-center mb-6 h-24 flex flex-col justify-end">
+            <h2 className="text-2xl font-semibold">Act II: The<br/>Conversational Trip</h2>
+            <p className="text-muted-foreground mt-2">Demonstrating AI-powered travel booking.</p>
           </div>
           <div className="flex justify-center">
               <div className="w-full max-w-sm rounded-2xl bg-gray-800 p-2 shadow-2xl">
@@ -109,7 +109,7 @@ export default function MainDashboard() {
                       <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
                 </div>
-                <div className="bg-background overflow-y-auto" style={{ height: 'calc(100% - 2.5rem)'}}>
+                <div className="bg-background overflow-y-auto" style={{ height: 'calc(80vh - 2.5rem)', maxHeight: '700px'}}>
                     <FinanceDashboard />
                 </div>
             </div>
