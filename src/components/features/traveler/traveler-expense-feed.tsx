@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import type { Transaction } from "@/types";
 import allTransactions from "@/lib/data/transactions.json";
-import { Camera, Receipt, Settings, Bell, PlusCircle } from "lucide-react";
+import { Camera, Receipt, Settings, Bell, PlusCircle, Bot } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { AgentActivityPanel, useAgentActivity } from "@/components/features/agent-activity";
 
 interface InAppNotification {
   id: string;
@@ -31,11 +32,19 @@ export function TravelerExpenseFeed() {
   const [receiptTxnId, setReceiptTxnId] = useState<string | null>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [notification, setNotification] = useState<InAppNotification | null>(null);
+  const [showAgentPanel, setShowAgentPanel] = useState(false);
 
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const notificationTimer = useRef<NodeJS.Timeout>();
+  
+  const { 
+    activities, 
+    simulateExpenseFlow, 
+    simulateExceptionFlow, 
+    clearActivities 
+  } = useAgentActivity();
 
   useEffect(() => {
     const initialTransactions = allTransactions
@@ -127,6 +136,15 @@ export function TravelerExpenseFeed() {
       description: "Receipt Concierge is analyzing it...",
       duration: 2000,
     });
+
+    // Find the transaction details for agent simulation
+    const transaction = transactions.find(t => t.id === receiptTxnId);
+    if (transaction) {
+      // Simulate agent activity for expense processing
+      simulateExpenseFlow(transaction.amount, transaction.merchant);
+      // Also show the agent panel
+      setShowAgentPanel(true);
+    }
 
     setTransactions((prev) =>
       prev.map((t) => (t.id === receiptTxnId ? { ...t, status: "Processing" } : t))
@@ -227,6 +245,17 @@ export function TravelerExpenseFeed() {
                 </div>
             </div>
             <div className="flex items-center gap-2">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="hover:bg-slate-100/80 transition-colors relative"
+                  onClick={() => setShowAgentPanel(true)}
+                >
+                  <Bot className="h-5 w-5 text-slate-600" />
+                  {activities.length > 0 && (
+                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 rounded-full animate-pulse" />
+                  )}
+                </Button>
                 <Button variant="ghost" size="icon" className="hover:bg-slate-100/80 transition-colors">
                   <Bell className="h-5 w-5 text-slate-600" />
                 </Button>
@@ -309,6 +338,17 @@ export function TravelerExpenseFeed() {
           <canvas ref={canvasRef} className="hidden" />
         </DialogContent>
       </Dialog>
+
+      {/* Agent Activity Panel */}
+      <AgentActivityPanel
+        activities={activities}
+        isOpen={showAgentPanel}
+        onClose={() => setShowAgentPanel(false)}
+        title="Agent Activity"
+        flow="expense"
+        isMobile={true}
+        compact={true}
+      />
     </div>
   );
 }

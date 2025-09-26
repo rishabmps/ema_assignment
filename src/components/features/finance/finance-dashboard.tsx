@@ -20,12 +20,13 @@ import type { Transaction, User } from "@/types";
 import transactionsData from "@/lib/data/transactions.json";
 import usersData from "@/lib/data/users.json";
 import policyExceptionsData from "@/lib/data/policy_exceptions.json";
-import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, HandCoins, Leaf } from "lucide-react";
+import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, HandCoins, Leaf, Bot } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { VatReclaimView } from "@/components/features/finance/vat-reclaim-view";
 import { PolicyInsightView } from "@/components/features/finance/policy-insight-view";
 import { SustainabilityDashboard } from "@/components/features/finance/sustainability-dashboard";
+import { AgentActivityPanel, useAgentActivity } from "@/components/features/agent-activity";
 
 const users = usersData as User[];
 const transactions = transactionsData as Transaction[];
@@ -72,9 +73,27 @@ export function FinanceDashboard() {
   const exceptionTransactions = transactions.filter((t) => t.status === "Exception");
   const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(exceptionTransactions[0] || null);
   const [activeView, setActiveView] = useState("default");
+  const [showAgentPanel, setShowAgentPanel] = useState(false);
 
   const getUserForTxn = (txn: Transaction) => users.find(u => u.id === txn.user_id);
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+  
+  const { 
+    activities, 
+    simulateExpenseFlow, 
+    simulateExceptionFlow, 
+    clearActivities 
+  } = useAgentActivity();
+
+  const handleTransactionSelect = (txn: Transaction) => {
+    setSelectedTxn(txn);
+    
+    // If it's an exception transaction, simulate the exception flow
+    if (txn.status === "Exception" && txn.policy_check) {
+      simulateExceptionFlow(txn.policy_check.violation);
+      setShowAgentPanel(true);
+    }
+  };
 
 
   if (activeView === "vat_reclaim") {
@@ -100,6 +119,20 @@ export function FinanceDashboard() {
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Finance Operations</h1>
             <p className="text-slate-600 text-lg font-medium">Welcome back, Alex.</p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg hover:bg-slate-50"
+              onClick={() => setShowAgentPanel(true)}
+            >
+              <Bot className="h-4 w-4 mr-2 text-slate-600" />
+              Agent Activity
+              {activities.length > 0 && (
+                <div className="ml-2 w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
+              )}
+            </Button>
           </div>
       </header>
 
@@ -235,7 +268,7 @@ export function FinanceDashboard() {
                       {exceptionTransactions.map((txn) => (
                         <TableRow
                           key={txn.id}
-                          onClick={() => setSelectedTxn(txn)}
+                          onClick={() => handleTransactionSelect(txn)}
                           className={cn(
                             "cursor-pointer transition-all duration-200 hover:bg-slate-50/80",
                             selectedTxn?.id === txn.id && "bg-blue-50/80 border-l-4 border-l-blue-500"
@@ -327,6 +360,17 @@ export function FinanceDashboard() {
             </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Agent Activity Panel */}
+      <AgentActivityPanel
+        activities={activities}
+        isOpen={showAgentPanel}
+        onClose={() => setShowAgentPanel(false)}
+        title="Agent Activity"
+        flow="exception"
+        isMobile={false}
+        compact={false}
+      />
     </div>
   );
 }
