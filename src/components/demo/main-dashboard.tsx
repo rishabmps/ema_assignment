@@ -157,7 +157,7 @@ export default function MainDashboard() {
                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
               </div>
             </div>
-            <div className="bg-background overflow-y-auto" style={{ height: 'calc(100vh - 4rem)', maxHeight: '720px'}}>
+            <div className="bg-background overflow-hidden" style={{ height: 'calc(100vh - 4rem)', maxHeight: '800px'}}>
               <FinanceDashboard />
             </div>
           </div>

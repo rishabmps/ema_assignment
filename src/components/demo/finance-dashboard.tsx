@@ -61,16 +61,16 @@ export function FinanceDashboard() {
 
 
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 bg-secondary/50">
-       <header className="flex items-start justify-between">
+    <div className="w-full space-y-4 p-6 md:p-8 bg-secondary/50 flex flex-col h-full">
+       <header className="flex-shrink-0 flex items-start justify-between">
           <div>
             <h1 className="text-2xl font-bold text-foreground">Finance Operations</h1>
             <p className="text-muted-foreground">Welcome back, Alex.</p>
           </div>
       </header>
 
-      <Tabs defaultValue="exceptions" className="space-y-4">
-        <div className="flex justify-between items-center">
+      <Tabs defaultValue="exceptions" className="space-y-4 flex flex-col flex-grow">
+        <div className="flex-shrink-0 flex justify-between items-center">
             <TabsList>
                 <TabsTrigger value="exceptions">
                     <ListTodo />
@@ -87,7 +87,7 @@ export function FinanceDashboard() {
             </Button>
         </div>
         
-        <TabsContent value="dashboard" className="space-y-4">
+        <TabsContent value="dashboard" className="space-y-4 flex-grow">
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {kpiData.map((kpi) => (
               <Card key={kpi.title} className="bg-background">
@@ -104,9 +104,9 @@ export function FinanceDashboard() {
           </div>
         </TabsContent>
 
-        <TabsContent value="exceptions" className="grid grid-cols-1 gap-6 lg:grid-cols-5">
-            <Card className="lg:col-span-2 bg-background">
-              <CardHeader>
+        <TabsContent value="exceptions" className="grid grid-cols-1 lg:grid-cols-5 gap-6 flex-grow">
+            <Card className="lg:col-span-2 bg-background flex flex-col">
+              <CardHeader className="flex-shrink-0">
                 <CardTitle className="flex items-center gap-2">
                   <FileWarning className="h-5 w-5 text-destructive" />
                   Exception Queue
@@ -117,10 +117,10 @@ export function FinanceDashboard() {
                     <Input placeholder="Search exceptions..." className="pl-9 bg-secondary" />
                 </div>
               </CardHeader>
-              <CardContent className="p-0">
-                <div className="max-h-[500px] overflow-y-auto">
+              <CardContent className="p-0 flex-grow overflow-hidden">
+                <div className="h-full overflow-y-auto">
                   <Table>
-                    <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm">
+                    <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm z-10">
                       <TableRow>
                         <TableHead>Employee</TableHead>
                         <TableHead>Merchant</TableHead>
@@ -160,41 +160,43 @@ export function FinanceDashboard() {
               </CardContent>
             </Card>
             
-            <Card className="lg:col-span-3 bg-background">
-                <CardHeader>
+            <Card className="lg:col-span-3 bg-background flex flex-col">
+                <CardHeader className="flex-shrink-0">
                     <CardTitle className="flex items-center gap-2">
                         <BarChart className="h-5 w-5 text-primary"/>
                         Agent Analysis
                     </CardTitle>
                     <CardDescription>AI-powered insights for the selected transaction.</CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="flex-grow overflow-y-auto">
                     {selectedTxn ? (
-                        <div className="space-y-6">
+                        <div className="space-y-6 flex flex-col justify-between h-full">
                             <div>
-                                <p className="text-sm text-muted-foreground">
-                                    {format(new Date(selectedTxn.date), "EEEE, MMMM d, yyyy 'at' p")}
-                                </p>
-                                <h3 className="text-xl font-semibold">{selectedTxn.merchant}</h3>
-                                <p className="text-3xl font-bold mt-1">{currencyFormatter.format(selectedTxn.amount)}</p>
-                            </div>
-                            <div className="space-y-4">
-                              {selectedTxn.policy_check && (
-                                  <ExceptionDetailCard 
-                                      type="policy"
-                                      title="Policy Engine Finding"
-                                      details={selectedTxn.policy_check.details}
-                                      reference={selectedTxn.policy_check.rule_id}
-                                  />
-                              )}
-                              {selectedTxn.fraud_check && (
-                                  <ExceptionDetailCard
-                                      type="fraud"
-                                      title="Fraud Sentinel Finding"
-                                      details={selectedTxn.fraud_check.details}
-                                      reference={selectedTxn.fraud_check.recommendation}
-                                  />
-                              )}
+                                <div className="mb-6">
+                                    <p className="text-sm text-muted-foreground">
+                                        {format(new Date(selectedTxn.date), "EEEE, MMMM d, yyyy 'at' p")}
+                                    </p>
+                                    <h3 className="text-xl font-semibold">{selectedTxn.merchant}</h3>
+                                    <p className="text-3xl font-bold mt-1">{currencyFormatter.format(selectedTxn.amount)}</p>
+                                </div>
+                                <div className="space-y-4">
+                                  {selectedTxn.policy_check && (
+                                      <ExceptionDetailCard 
+                                          type="policy"
+                                          title="Policy Engine Finding"
+                                          details={selectedTxn.policy_check.details}
+                                          reference={selectedTxn.policy_check.rule_id}
+                                      />
+                                  )}
+                                  {selectedTxn.fraud_check && (
+                                      <ExceptionDetailCard
+                                          type="fraud"
+                                          title="Fraud Sentinel Finding"
+                                          details={selectedTxn.fraud_check.details}
+                                          reference={selectedTxn.fraud_check.recommendation}
+                                      />
+                                  )}
+                                </div>
                             </div>
                             <div className="flex justify-end space-x-2 pt-4 border-t">
                                 <Button variant="outline">Request Info</Button>
@@ -203,7 +205,7 @@ export function FinanceDashboard() {
                             </div>
                         </div>
                     ) : (
-                        <div className="flex h-[300px] items-center justify-center text-muted-foreground rounded-lg border-2 border-dashed">
+                        <div className="flex h-full items-center justify-center text-muted-foreground rounded-lg border-2 border-dashed">
                             <p>Select an exception to view details</p>
                         </div>
                     )}
