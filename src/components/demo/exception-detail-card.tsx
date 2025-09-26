@@ -28,7 +28,7 @@ export function ExceptionDetailCard({
         <p className="text-foreground">{details}</p>
         {reference && (
           <p className="mt-2 text-xs text-muted-foreground">
-            Policy Rule: <code className="rounded bg-muted px-1 py-0.5 font-mono">{reference}</code>
+            Reference: <code className="rounded bg-muted px-1 py-0.5 font-mono">{reference}</code>
           </p>
         )}
       </CardContent>
