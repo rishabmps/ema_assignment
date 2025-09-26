@@ -287,111 +287,6 @@ export default function MainDashboard() {
       </div>
     </motion.div>
   );
-
-  const renderDemo = () => {
-    let content;
-    if (persona === "traveler") {
-      switch (act) {
-        case 'expense':
-          content = <TravelerExpenseFeed />;
-          break;
-        case 'booking':
-          content = <TravelerBookingView />;
-          break;
-        default:
-          content = null;
-      }
-    } else { // persona === 'finance'
-      content = <FinanceDashboard />;
-    }
-  
-    const isMobileView = persona === 'traveler';
-
-    return (
-      <div className="w-full flex justify-center">
-        {isMobileView ? (
-          <div className="relative">
-            {/* Mobile device frame with enhanced styling */}
-            <div className="w-full max-w-sm relative">
-              {/* Device shadow */}
-              <div className="absolute inset-0 bg-slate-900 rounded-[2.5rem] transform rotate-1 scale-105 opacity-20 blur-xl"></div>
-              {/* Main device */}
-              <div className="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-3 rounded-[2.5rem] shadow-2xl">
-                {/* Screen bezel */}
-                <div className="bg-black p-1 rounded-[2rem]">
-                  {/* Notch */}
-                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-16 h-6 bg-black rounded-b-2xl z-20"></div>
-                  {/* Screen */}
-                  <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
-                    {/* Status bar overlay */}
-                    <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
-                    <div className="h-full">
-                      {content}
-                    </div>
-                  </div>
-                </div>
-                {/* Home indicator */}
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-white/20 rounded-full"></div>
-              </div>
-              
-              {/* Floating elements around phone */}
-              <motion.div 
-                className="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full opacity-20"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-              <motion.div 
-                className="absolute -bottom-6 -left-6 w-6 h-6 bg-purple-500 rounded-full opacity-20"
-                animate={{ y: [0, 10, 0] }}
-                transition={{ duration: 4, repeat: Infinity, delay: 1 }}
-              />
-            </div>
-          </div>
-        ) : (
-          <div className="w-full max-w-7xl relative">
-            {/* Desktop browser frame with enhanced styling */}
-            <div className="relative">
-              {/* Browser shadow */}
-              <div className="absolute inset-0 bg-slate-800 rounded-2xl transform rotate-1 scale-105 opacity-20 blur-2xl"></div>
-              {/* Main browser */}
-              <div className="relative bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 rounded-2xl shadow-2xl overflow-hidden">
-                {/* Browser header */}
-                <div className="h-12 bg-gradient-to-r from-slate-700 to-slate-600 border-b border-slate-600 flex items-center px-6">
-                  <div className="flex space-x-3">
-                    <div className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors cursor-pointer"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors cursor-pointer"></div>
-                  </div>
-                  <div className="flex-1 mx-8">
-                    <div className="bg-slate-600 rounded-lg px-4 py-1 text-slate-300 text-sm font-mono flex items-center gap-2">
-                      <div className="w-3 h-3 text-slate-400">🔒</div>
-                      agentic-te.demo/dashboard
-                    </div>
-                  </div>
-                </div>
-                {/* Browser content */}
-                <div className="bg-white" style={{ height: 'calc(100vh - 8rem)', maxHeight: '800px'}}>
-                  {content}
-                </div>
-              </div>
-              
-              {/* Floating elements around browser */}
-              <motion.div 
-                className="absolute -top-8 -right-8 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full opacity-10"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 20, repeat: Infinity }}
-              />
-              <motion.div 
-                className="absolute -bottom-8 -left-8 w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full opacity-10"
-                animate={{ rotate: -360 }}
-                transition={{ duration: 25, repeat: Infinity }}
-              />
-            </div>
-          </div>
-        )}
-      </div>
-    );
-  };
   
   const getBreadcrumb = () => {
     if (step === 'persona') return "Select Persona";
@@ -470,17 +365,130 @@ export default function MainDashboard() {
         <AnimatePresence mode="wait">
           {step === "persona" && renderPersonaSelector()}
           {step === "act" && renderActSelector()}
-          {step === "demo" && (
+
+          {step === "demo" && persona === "traveler" && act === "expense" && (
             <motion.div
-              key={`${persona}-${act}`}
+              key="traveler-expense"
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
+              className="w-full flex justify-center"
             >
-              {renderDemo()}
+              <div className="relative">
+                <div className="w-full max-w-sm relative">
+                  <div className="absolute inset-0 bg-slate-900 rounded-[2.5rem] transform rotate-1 scale-105 opacity-20 blur-xl"></div>
+                  <div className="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-3 rounded-[2.5rem] shadow-2xl">
+                    <div className="bg-black p-1 rounded-[2rem]">
+                      <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-16 h-6 bg-black rounded-b-2xl z-20"></div>
+                      <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
+                        <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
+                        <div className="h-full">
+                          <TravelerExpenseFeed />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-white/20 rounded-full"></div>
+                  </div>
+                  <motion.div 
+                    className="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full opacity-20"
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  />
+                  <motion.div 
+                    className="absolute -bottom-6 -left-6 w-6 h-6 bg-purple-500 rounded-full opacity-20"
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+                  />
+                </div>
+              </div>
             </motion.div>
           )}
+
+          {step === "demo" && persona === "traveler" && act === "booking" && (
+             <motion.div
+              key="traveler-booking"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="w-full flex justify-center"
+            >
+              <div className="relative">
+                <div className="w-full max-w-sm relative">
+                  <div className="absolute inset-0 bg-slate-900 rounded-[2.5rem] transform rotate-1 scale-105 opacity-20 blur-xl"></div>
+                  <div className="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-3 rounded-[2.5rem] shadow-2xl">
+                    <div className="bg-black p-1 rounded-[2rem]">
+                      <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-16 h-6 bg-black rounded-b-2xl z-20"></div>
+                      <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
+                        <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
+                        <div className="h-full">
+                          <TravelerBookingView />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-white/20 rounded-full"></div>
+                  </div>
+                  <motion.div 
+                    className="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full opacity-20"
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  />
+                  <motion.div 
+                    className="absolute -bottom-6 -left-6 w-6 h-6 bg-purple-500 rounded-full opacity-20"
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, delay: 1 }}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {step === "demo" && persona === "finance" && (
+            <motion.div
+              key="finance-dashboard"
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="w-full flex justify-center"
+            >
+               <div className="w-full max-w-7xl relative">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-slate-800 rounded-2xl transform rotate-1 scale-105 opacity-20 blur-2xl"></div>
+                    <div className="relative bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+                      <div className="h-12 bg-gradient-to-r from-slate-700 to-slate-600 border-b border-slate-600 flex items-center px-6">
+                        <div className="flex space-x-3">
+                          <div className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors cursor-pointer"></div>
+                          <div className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer"></div>
+                          <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors cursor-pointer"></div>
+                        </div>
+                        <div className="flex-1 mx-8">
+                          <div className="bg-slate-600 rounded-lg px-4 py-1 text-slate-300 text-sm font-mono flex items-center gap-2">
+                            <div className="w-3 h-3 text-slate-400">🔒</div>
+                            agentic-te.demo/dashboard
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-white" style={{ height: 'calc(100vh - 8rem)', maxHeight: '800px'}}>
+                        <FinanceDashboard />
+                      </div>
+                    </div>
+                    <motion.div 
+                      className="absolute -top-8 -right-8 w-12 h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full opacity-10"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 20, repeat: Infinity }}
+                    />
+                    <motion.div 
+                      className="absolute -bottom-8 -left-8 w-10 h-10 bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full opacity-10"
+                      animate={{ rotate: -360 }}
+                      transition={{ duration: 25, repeat: Infinity }}
+                    />
+                  </div>
+                </div>
+            </motion.div>
+          )}
+
         </AnimatePresence>
       </div>
     </div>
