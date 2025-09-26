@@ -27,7 +27,7 @@ export default function MainDashboard() {
 
   useEffect(() => {
     if (step === 'demo') {
-      demoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      demoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   }, [step]);
 
@@ -66,7 +66,7 @@ export default function MainDashboard() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
       transition={{ duration: 0.6 }}
-      className="max-w-5xl w-full mx-auto"
+      className="max-w-5xl w-full"
     >
       <div className="text-center mb-12">
         <motion.h2 
@@ -191,7 +191,7 @@ export default function MainDashboard() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
       transition={{ duration: 0.6 }}
-      className="max-w-5xl w-full mx-auto"
+      className="max-w-5xl w-full"
     >
       <div className="text-center mb-12">
         <motion.h2 
@@ -371,10 +371,18 @@ export default function MainDashboard() {
           </div>
         </motion.div>
 
-        <div className="w-full flex justify-center" ref={demoRef}>
+        <div ref={demoRef}>
           <AnimatePresence mode="wait">
-            {step === "persona" && renderPersonaSelector()}
-            {step === "act" && renderActSelector()}
+            {step === "persona" && (
+              <motion.div key="persona-selector" className="w-full flex justify-center">
+                {renderPersonaSelector()}
+              </motion.div>
+            )}
+            {step === "act" && (
+              <motion.div key="act-selector" className="w-full flex justify-center">
+                {renderActSelector()}
+              </motion.div>
+            )}
             
             {step === "demo" && persona === "traveler" && act === "expense" && (
               <motion.div
@@ -383,6 +391,7 @@ export default function MainDashboard() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
+                className="w-full flex justify-center"
               >
                 <div className="relative">
                   <div className="w-full max-w-sm relative">
@@ -421,6 +430,7 @@ export default function MainDashboard() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
+                className="w-full flex justify-center"
               >
                 <div className="relative">
                   <div className="w-full max-w-sm relative">
@@ -459,6 +469,7 @@ export default function MainDashboard() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
+                className="w-full flex justify-center"
               >
                 <div className="w-full max-w-7xl relative">
                     <div className="relative">
