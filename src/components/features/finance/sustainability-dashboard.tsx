@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -18,7 +18,7 @@ import recommendationLog from "@/lib/data/recommendation_log.json";
 import sustainabilityTargets from "@/lib/data/sustainability_targets.json";
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { ChartContainer } from '@/components/ui/chart';
+import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { format } from "date-fns";
 import users from '@/lib/data/users.json';
 
@@ -62,7 +62,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-secondary/50">
+    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-secondary/30">
       <header className="flex-shrink-0 flex items-center justify-between">
         <div>
           <Button variant="ghost" onClick={onBack} className="mb-2">
@@ -108,7 +108,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                             <CartesianGrid vertical={false} />
                             <XAxis dataKey="department" tickLine={false} tickMargin={10} axisLine={false} />
                             <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `${value}t`} />
-                             <RechartsTooltip cursor={false} content={<div className='rounded-md bg-background/80 backdrop-blur-sm border px-3 py-2 text-sm'>Custom Tooltip</div>} />
+                             <ChartTooltipContent />
                             <Bar dataKey="emissions" radius={8} />
                         </BarChart>
                     </ChartContainer>
