@@ -148,13 +148,13 @@ export function TravelerBookingView() {
             type: "card",
             };
             setMessages((prev) => prev.filter((m) => m.type !== "loading").concat(itineraryCard));
-            setStage('confirmed');
         }
     }, 2000);
   }
 
 
   const handleConfirmBooking = () => {
+    setStage('confirmed');
     const confirmationMessage: Message = {
       id: generateUniqueId(),
       sender: "agent",
@@ -165,15 +165,14 @@ export function TravelerBookingView() {
             <p className="text-sm text-muted-foreground mt-1">Flight: AA 789 (Conf: XYZ123)</p>
             <p className="text-sm text-muted-foreground">Hotel: Hilton Chicago (Conf: 987654)</p>
             <div className="flex justify-center gap-2 mt-4">
-                <Button variant="outline" size="sm"><Calendar className="mr-2 h-4 w-4" /> Add to Calendar</Button>
-                <Button variant="outline" size="sm">View Expenses</Button>
+                <Button variant="outline" size="sm" className="bg-background"><Calendar className="mr-2 h-4 w-4" /> Add to Calendar</Button>
+                <Button variant="outline" size="sm" className="bg-background">View Expenses</Button>
             </div>
         </div>
       ),
       type: "confirmed",
     };
     setMessages((prev) => prev.filter((m) => m.type !== "card").concat(confirmationMessage));
-    setStage('confirmed');
     toast({
       title: "Booking Confirmed!",
       description: "Your trip to Chicago has been successfully booked.",
@@ -240,7 +239,7 @@ export function TravelerBookingView() {
                 </Avatar>
               )}
               <div 
-                className={`max-w-[90%] rounded-lg px-3 py-2 shadow-sm ${msg.sender === 'agent' ? 'bg-secondary' : 'bg-primary text-primary-foreground'} ${msg.type === 'options' || msg.type === 'card' ? 'p-0 bg-transparent shadow-none' : ''}`}>
+                className={`max-w-[85%] rounded-lg px-3 py-2 shadow-sm ${msg.sender === 'agent' ? 'bg-secondary' : 'bg-primary text-primary-foreground'} ${msg.type === 'options' || msg.type === 'card' || msg.type === 'confirmed' ? 'p-0 bg-transparent shadow-none' : ''}`}>
                 {msg.type === "loading" ? (
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 animate-pulse" />
