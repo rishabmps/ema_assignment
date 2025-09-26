@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -9,10 +10,9 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, ChevronRight, Plane, FileText, Leaf } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
-import { TravelerSustainableBookingView } from "./traveler-sustainable-booking-view";
 
 type Persona = "traveler" | "finance";
-type Act = "expense" | "booking" | "sustainable_booking";
+type Act = "expense" | "booking";
 type Step = "persona" | "act" | "demo";
 
 export default function MainDashboard() {
@@ -115,7 +115,7 @@ export default function MainDashboard() {
         <h2 className="text-2xl font-semibold">Step 2: Choose a Demo</h2>
         <p className="text-muted-foreground mt-1">What would you like to see?</p>
       </div>
-       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card 
             onClick={() => handleActSelect("expense")}
             className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent flex flex-col"
@@ -133,22 +133,10 @@ export default function MainDashboard() {
             className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent flex flex-col"
           >
               <Plane className="h-8 w-8 text-primary mb-3" />
-              <CardTitle className="text-lg">Act II: The Conversational Trip</CardTitle>
-              <p className="text-sm text-muted-foreground mt-2 flex-grow">Book a fully compliant trip with a single sentence.</p>
+              <CardTitle className="text-lg">Act II: The Intelligent & Guided Trip</CardTitle>
+              <p className="text-sm text-muted-foreground mt-2 flex-grow">Book a trip conversationally and see how the agent guides you to smarter, sustainable choices.</p>
                <div className="flex justify-end items-center mt-4">
                 <span className="text-sm font-semibold text-primary group-hover:underline">Book a Trip</span>
-                <ChevronRight className="h-4 w-4 text-primary ml-1" />
-              </div>
-          </Card>
-           <Card 
-            onClick={() => handleActSelect("sustainable_booking")}
-            className="p-6 cursor-pointer hover:border-primary transition-all group border-2 border-transparent flex flex-col"
-          >
-              <Leaf className="h-8 w-8 text-green-600 mb-3" />
-              <CardTitle className="text-lg">Act III: The Smart & Sustainable Trip</CardTitle>
-              <p className="text-sm text-muted-foreground mt-2 flex-grow">See how the AI agent guides you towards greener, budget-friendly choices.</p>
-               <div className="flex justify-end items-center mt-4">
-                <span className="text-sm font-semibold text-primary group-hover:underline">Guided Booking</span>
                 <ChevronRight className="h-4 w-4 text-primary ml-1" />
               </div>
           </Card>
@@ -165,9 +153,6 @@ export default function MainDashboard() {
           break;
         case 'booking':
           content = <TravelerBookingView />;
-          break;
-        case 'sustainable_booking':
-          content = <TravelerSustainableBookingView />;
           break;
         default:
           content = null;
@@ -232,7 +217,6 @@ export default function MainDashboard() {
         let actName = '';
         if (act === 'expense') actName = 'Act I';
         if (act === 'booking') actName = 'Act II';
-        if (act === 'sustainable_booking') actName = 'Act III';
         path = <>{path} <ChevronRight className="h-4 w-4 inline-block mx-1" /> <span className="text-foreground">{actName}</span></>;
     }
     
@@ -263,3 +247,5 @@ export default function MainDashboard() {
     </div>
   );
 }
+
+    
