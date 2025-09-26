@@ -109,7 +109,7 @@ export default function MainDashboard() {
                       <div className="w-3 h-3 rounded-full bg-green-500"></div>
                   </div>
                 </div>
-                <div className="bg-background overflow-y-auto aspect-video">
+                <div className="bg-background overflow-y-auto" style={{ height: 'calc(100% - 2.5rem)'}}>
                     <FinanceDashboard />
                 </div>
             </div>
