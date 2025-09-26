@@ -208,19 +208,31 @@ export function TravelerExpenseFeed() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-secondary relative overflow-hidden">
-      <header className="p-4 bg-background/80 backdrop-blur-sm border-b">
+    <div className="flex h-full flex-col bg-gradient-to-b from-slate-50 to-blue-50 relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-4 right-4 w-16 h-16 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse"></div>
+        <div className="absolute bottom-20 left-4 w-12 h-12 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse" style={{animationDelay: '1s'}}></div>
+      </div>
+      
+      <header className="p-4 bg-white/90 backdrop-blur-md border-b border-slate-200/50 shadow-sm relative z-10">
         <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
-                <Avatar><AvatarFallback>SC</AvatarFallback></Avatar>
+                <Avatar className="ring-2 ring-blue-100">
+                  <AvatarFallback className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold">SC</AvatarFallback>
+                </Avatar>
                 <div>
-                    <p className="text-sm font-semibold">Sarah Chen</p>
-                    <p className="text-xs text-muted-foreground">Sales Director</p>
+                    <p className="text-sm font-bold text-slate-800">Sarah Chen</p>
+                    <p className="text-xs text-slate-500 font-medium">Sales Director</p>
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon"><Bell className="h-5 w-5" /></Button>
-                <Button variant="ghost" size="icon"><Settings className="h-5 w-5" /></Button>
+                <Button variant="ghost" size="icon" className="hover:bg-slate-100/80 transition-colors">
+                  <Bell className="h-5 w-5 text-slate-600" />
+                </Button>
+                <Button variant="ghost" size="icon" className="hover:bg-slate-100/80 transition-colors">
+                  <Settings className="h-5 w-5 text-slate-600" />
+                </Button>
             </div>
         </div>
       </header>
@@ -232,27 +244,30 @@ export function TravelerExpenseFeed() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="absolute top-20 left-4 right-4 z-10"
+            className="absolute top-20 left-4 right-4 z-20"
           >
             <div
               onClick={() => handleReceiptNeededClick(notification.id)}
-              className="rounded-xl bg-background/80 backdrop-blur-md p-4 shadow-lg cursor-pointer border"
+              className="rounded-2xl bg-white/95 backdrop-blur-md p-4 shadow-xl cursor-pointer border border-blue-200/50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
             >
-                <h4 className="text-sm text-primary">{notification.title}</h4>
-                <p className="text-sm text-foreground">{notification.description}</p>
+                <h4 className="text-sm text-blue-600 font-semibold">{notification.title}</h4>
+                <p className="text-sm text-slate-700 font-medium">{notification.description}</p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="p-4 flex-shrink-0">
-        <Button onClick={handleSimulateTransaction} className="w-full">
-          <PlusCircle className="mr-2 h-4 w-4" />
+      <div className="p-4 flex-shrink-0 relative z-10">
+        <Button 
+          onClick={handleSimulateTransaction} 
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+        >
+          <PlusCircle className="mr-2 h-5 w-5" />
           Simulate Client Lunch Purchase
         </Button>
       </div>
 
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 pt-0 pb-4">
+      <div className="flex-1 space-y-3 overflow-y-auto px-4 pt-0 pb-4 relative z-10">
         {transactions.map((transaction) => (
           <TransactionCard
             key={transaction.id}
@@ -264,26 +279,31 @@ export function TravelerExpenseFeed() {
       </div>
 
       <Dialog open={showCamera} onOpenChange={setShowCamera}>
-        <DialogContent className="max-w-sm p-0">
-          <DialogHeader className="p-4 pb-0">
-            <DialogTitle>Capture Receipt</DialogTitle>
+        <DialogContent className="max-w-sm p-0 bg-white/95 backdrop-blur-md border border-slate-200/50 shadow-2xl">
+          <DialogHeader className="p-6 pb-0">
+            <DialogTitle className="text-slate-800 font-bold">Capture Receipt</DialogTitle>
           </DialogHeader>
-          <div className="p-4 space-y-4">
-            <div className="relative w-full aspect-video bg-black rounded-md overflow-hidden">
+          <div className="p-6 space-y-4">
+            <div className="relative w-full aspect-video bg-slate-900 rounded-2xl overflow-hidden shadow-inner">
                 <video ref={videoRef} className="w-full h-full object-cover" autoPlay playsInline muted />
-                <div className="absolute inset-0 border-4 border-dashed border-white/50 rounded-md" />
+                <div className="absolute inset-4 border-4 border-dashed border-white/70 rounded-xl" />
+                <div className="absolute top-4 left-4 right-4 bottom-4 rounded-xl bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
             {hasCameraPermission === false && (
-                <Alert variant="destructive">
-                    <AlertTitle>Camera Access Denied</AlertTitle>
-                    <AlertDescription>
+                <Alert variant="destructive" className="border-red-200 bg-red-50">
+                    <AlertTitle className="text-red-800 font-semibold">Camera Access Denied</AlertTitle>
+                    <AlertDescription className="text-red-700">
                         Please enable camera permissions in your browser settings.
                     </AlertDescription>
                 </Alert>
             )}
-            <Button onClick={handleCaptureReceipt} disabled={!hasCameraPermission} className="w-full">
-              <Camera className="mr-2 h-4 w-4" />
-              Capture
+            <Button 
+              onClick={handleCaptureReceipt} 
+              disabled={!hasCameraPermission} 
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+            >
+              <Camera className="mr-2 h-5 w-5" />
+              Capture Receipt
             </Button>
           </div>
           <canvas ref={canvasRef} className="hidden" />

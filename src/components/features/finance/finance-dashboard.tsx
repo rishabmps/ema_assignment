@@ -36,24 +36,32 @@ const kpiData = [
     value: "95.2%",
     icon: Activity,
     description: "Last 30 Days",
+    color: "from-emerald-500 to-emerald-600",
+    bgColor: "from-emerald-50 to-emerald-100/50"
   },
   {
     title: "Avg. Time to Close",
     value: "2.1 Hours",
     icon: Clock,
     description: "From transaction to posting",
+    color: "from-blue-500 to-blue-600", 
+    bgColor: "from-blue-50 to-blue-100/50"
   },
   {
     title: "Total Open Exceptions",
     value: transactions.filter((t) => t.status === "Exception").length.toString(),
     icon: FileWarning,
     description: "Items needing review",
+    color: "from-orange-500 to-orange-600",
+    bgColor: "from-orange-50 to-orange-100/50"
   },
   {
     title: "Productivity Savings",
     value: "$4,060",
     icon: DollarSign,
     description: "Based on 70 automated reports",
+    color: "from-purple-500 to-purple-600",
+    bgColor: "from-purple-50 to-purple-100/50"
   },
 ];
 
@@ -81,102 +89,146 @@ export function FinanceDashboard() {
 
 
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-secondary/30">
-       <header className="flex-shrink-0 flex items-start justify-between">
+    <div className="w-full space-y-6 p-6 md:p-8 flex flex-col h-full bg-gradient-to-br from-slate-50 to-blue-50 relative">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-10 left-10 w-24 h-24 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse" style={{animationDelay: '2s'}}></div>
+      </div>
+      
+      <header className="flex-shrink-0 flex items-start justify-between relative z-10">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Finance Operations</h1>
-            <p className="text-muted-foreground">Welcome back, Alex.</p>
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Finance Operations</h1>
+            <p className="text-slate-600 text-lg font-medium">Welcome back, Alex.</p>
           </div>
       </header>
 
-      <Tabs defaultValue="dashboard" className="space-y-4 flex flex-col flex-grow">
+      <Tabs defaultValue="dashboard" className="space-y-6 flex flex-col flex-grow relative z-10">
         <div className="flex-shrink-0 flex justify-between items-center">
-            <TabsList>
-                 <TabsTrigger value="dashboard">
-                    <LayoutGrid />
+            <TabsList className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
+                 <TabsTrigger value="dashboard" className="flex items-center gap-2 font-medium">
+                    <LayoutGrid className="h-4 w-4" />
                     Dashboard
                 </TabsTrigger>
-                <TabsTrigger value="exceptions">
-                    <ListTodo />
+                <TabsTrigger value="exceptions" className="flex items-center gap-2 font-medium">
+                    <ListTodo className="h-4 w-4" />
                     Exception Queue
                 </TabsTrigger>
             </TabsList>
-            <Button variant="outline" className="bg-background">
-              <ExternalLink />
+            <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-slate-200/50 shadow-lg hover:bg-white/90 hover:shadow-xl transition-all duration-300 flex items-center gap-2">
+              <ExternalLink className="h-4 w-4" />
               Export Data
             </Button>
         </div>
         
-        <TabsContent value="dashboard" className="space-y-4 flex-grow">
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {kpiData.map((kpi) => (
-              <Card key={kpi.title}>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">{kpi.title}</CardTitle>
-                  <kpi.icon className="h-4 w-4 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-bold">{kpi.value}</div>
-                  <p className="text-xs text-muted-foreground">{kpi.description}</p>
-                </CardContent>
+        <TabsContent value="dashboard" className="space-y-6 flex-grow">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {kpiData.map((kpi, index) => (
+              <Card 
+                key={kpi.title} 
+                className={`bg-gradient-to-br ${kpi.bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm relative overflow-hidden`}
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <div className="absolute inset-0 bg-white/60 backdrop-blur-sm"></div>
+                <div className="relative z-10">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                    <CardTitle className="text-sm font-semibold text-slate-700">{kpi.title}</CardTitle>
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg`}>
+                      <kpi.icon className="h-5 w-5 text-white" />
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-bold text-slate-800 mb-1">{kpi.value}</div>
+                    <p className="text-sm text-slate-600 font-medium">{kpi.description}</p>
+                  </CardContent>
+                </div>
               </Card>
             ))}
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <Card onClick={() => setActiveView('vat_reclaim')} className="cursor-pointer hover:border-primary transition-colors col-span-1">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Automated VAT Reclaim</CardTitle>
-                      <HandCoins className="h-4 w-4 text-muted-foreground"/>
-                  </CardHeader>
-                  <CardContent>
-                      <div className="text-2xl font-bold">{currencyFormatter.format(vatReclaimable)}</div>
-                      <p className="text-xs text-muted-foreground">Identified in the last 30 days</p>
-                  </CardContent>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <Card 
+                onClick={() => setActiveView('vat_reclaim')} 
+                className="cursor-pointer hover:border-emerald-300 transition-all duration-300 bg-gradient-to-br from-white to-emerald-50/30 hover:shadow-xl hover:scale-105 transform border-2 border-transparent backdrop-blur-sm group relative overflow-hidden col-span-1"
+              >
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                        <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-emerald-700 transition-colors">Automated VAT Reclaim</CardTitle>
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <HandCoins className="h-5 w-5 text-white"/>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-3xl font-bold text-slate-800 mb-1">{currencyFormatter.format(vatReclaimable)}</div>
+                        <p className="text-sm text-slate-600 font-medium">Identified in the last 30 days</p>
+                    </CardContent>
+                  </div>
               </Card>
-               <Card onClick={() => setActiveView('policy_insights')} className="cursor-pointer hover:border-primary transition-colors col-span-1">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Policy Insights</CardTitle>
-                      <Lightbulb className="h-4 w-4 text-muted-foreground"/>
-                  </CardHeader>
-                  <CardContent>
-                      <div className="text-2xl font-bold">{policyInsightsCount} New Recommendation</div>
-                      <p className="text-xs text-muted-foreground">Data-driven suggestions to improve efficiency</p>
-                  </CardContent>
+              
+              <Card 
+                onClick={() => setActiveView('policy_insights')} 
+                className="cursor-pointer hover:border-amber-300 transition-all duration-300 bg-gradient-to-br from-white to-amber-50/30 hover:shadow-xl hover:scale-105 transform border-2 border-transparent backdrop-blur-sm group relative overflow-hidden col-span-1"
+              >
+                  <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                        <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-amber-700 transition-colors">Policy Insights</CardTitle>
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <Lightbulb className="h-5 w-5 text-white"/>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-3xl font-bold text-slate-800 mb-1">{policyInsightsCount} New Recommendation</div>
+                        <p className="text-sm text-slate-600 font-medium">Data-driven suggestions to improve efficiency</p>
+                    </CardContent>
+                  </div>
               </Card>
-              <Card onClick={() => setActiveView('sustainability')} className="cursor-pointer hover:border-primary transition-colors col-span-1">
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Sustainability</CardTitle>
-                      <Leaf className="h-4 w-4 text-muted-foreground"/>
-                  </CardHeader>
-                  <CardContent>
-                      <div className="text-2xl font-bold">45.2 tons</div>
-                      <p className="text-xs text-muted-foreground">Quarterly CO2e on track to meet goal</p>
-                  </CardContent>
+              
+              <Card 
+                onClick={() => setActiveView('sustainability')} 
+                className="cursor-pointer hover:border-green-300 transition-all duration-300 bg-gradient-to-br from-white to-green-50/30 hover:shadow-xl hover:scale-105 transform border-2 border-transparent backdrop-blur-sm group relative overflow-hidden col-span-1"
+              >
+                  <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative z-10">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                        <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-green-700 transition-colors">Sustainability</CardTitle>
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                          <Leaf className="h-5 w-5 text-white"/>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="text-3xl font-bold text-slate-800 mb-1">45.2 tons</div>
+                        <p className="text-sm text-slate-600 font-medium">Quarterly CO2e on track to meet goal</p>
+                    </CardContent>
+                  </div>
               </Card>
           </div>
         </TabsContent>
 
         <TabsContent value="exceptions" className="grid grid-cols-1 lg:grid-cols-5 gap-6 flex-grow">
-            <Card className="lg:col-span-2 bg-background flex flex-col">
+            <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
               <CardHeader className="flex-shrink-0">
-                <CardTitle className="flex items-center gap-2">
-                  <FileWarning className="h-5 w-5 text-destructive" />
+                <CardTitle className="flex items-center gap-2 text-slate-800">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
+                    <FileWarning className="h-4 w-4 text-white" />
+                  </div>
                   Exception Queue
                 </CardTitle>
-                <CardDescription>Transactions requiring manual review and approval.</CardDescription>
-                <div className="relative pt-2">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Search exceptions..." className="pl-9 bg-secondary" />
+                <CardDescription className="text-slate-600">Transactions requiring manual review and approval.</CardDescription>
+                <div className="relative pt-4">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <Input placeholder="Search exceptions..." className="pl-9 bg-white/50 border-slate-200/50 focus:border-blue-300 transition-colors" />
                 </div>
               </CardHeader>
               <CardContent className="p-0 flex-grow overflow-hidden">
                 <div className="h-full overflow-y-auto">
                   <Table>
-                    <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm z-10">
-                      <TableRow>
-                        <TableHead>Employee</TableHead>
-                        <TableHead>Merchant</TableHead>
-                        <TableHead className="text-right">Amount</TableHead>
+                    <TableHeader className="sticky top-0 bg-white/95 backdrop-blur-sm z-10 border-b border-slate-200/50">
+                      <TableRow className="hover:bg-transparent">
+                        <TableHead className="font-semibold text-slate-700">Employee</TableHead>
+                        <TableHead className="font-semibold text-slate-700">Merchant</TableHead>
+                        <TableHead className="text-right font-semibold text-slate-700">Amount</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -185,23 +237,25 @@ export function FinanceDashboard() {
                           key={txn.id}
                           onClick={() => setSelectedTxn(txn)}
                           className={cn(
-                            "cursor-pointer",
-                            selectedTxn?.id === txn.id && "bg-secondary"
+                            "cursor-pointer transition-all duration-200 hover:bg-slate-50/80",
+                            selectedTxn?.id === txn.id && "bg-blue-50/80 border-l-4 border-l-blue-500"
                           )}
                         >
-                          <TableCell>
-                            <div className="flex items-center gap-2">
-                              <Avatar className="h-8 w-8">
-                                <AvatarFallback>{getUserForTxn(txn)?.initials}</AvatarFallback>
+                          <TableCell className="py-4">
+                            <div className="flex items-center gap-3">
+                              <Avatar className="h-10 w-10 ring-2 ring-white shadow-md">
+                                <AvatarFallback className="bg-gradient-to-r from-slate-600 to-slate-700 text-white font-semibold">
+                                  {getUserForTxn(txn)?.initials}
+                                </AvatarFallback>
                               </Avatar>
                               <div className="flex flex-col">
-                                  <span className="font-medium text-sm">{getUserForTxn(txn)?.name}</span>
-                                  <span className="text-xs text-muted-foreground">{getUserForTxn(txn)?.title}</span>
+                                  <span className="font-semibold text-sm text-slate-800">{getUserForTxn(txn)?.name}</span>
+                                  <span className="text-xs text-slate-500 font-medium">{getUserForTxn(txn)?.title}</span>
                               </div>
                             </div>
                           </TableCell>
-                          <TableCell>{txn.merchant}</TableCell>
-                          <TableCell className="text-right font-medium">
+                          <TableCell className="font-medium text-slate-700">{txn.merchant}</TableCell>
+                          <TableCell className="text-right font-bold text-slate-800">
                             {currencyFormatter.format(txn.amount)}
                           </TableCell>
                         </TableRow>
@@ -212,24 +266,26 @@ export function FinanceDashboard() {
               </CardContent>
             </Card>
             
-            <Card className="lg:col-span-3 bg-background flex flex-col">
+            <Card className="lg:col-span-3 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
                 <CardHeader className="flex-shrink-0">
-                    <CardTitle className="flex items-center gap-2">
-                        <BarChart className="h-5 w-5 text-primary"/>
+                    <CardTitle className="flex items-center gap-2 text-slate-800">
+                        <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+                          <BarChart className="h-4 w-4 text-white"/>
+                        </div>
                         Agent Analysis
                     </CardTitle>
-                    <CardDescription>AI-powered insights for the selected transaction.</CardDescription>
+                    <CardDescription className="text-slate-600">AI-powered insights for the selected transaction.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow overflow-y-auto">
                     {selectedTxn ? (
                         <div className="space-y-6 flex flex-col justify-between h-full">
                             <div>
-                                <div className="mb-6">
-                                    <p className="text-sm text-muted-foreground">
+                                <div className="mb-6 p-4 bg-gradient-to-r from-slate-50 to-blue-50/50 rounded-xl border border-slate-200/50">
+                                    <p className="text-sm text-slate-500 font-medium mb-1">
                                         {format(new Date(selectedTxn.date), "EEEE, MMMM d, yyyy 'at' p")}
                                     </p>
-                                    <h3 className="text-xl font-semibold">{selectedTxn.merchant}</h3>
-                                    <p className="text-3xl font-bold mt-1">{currencyFormatter.format(selectedTxn.amount)}</p>
+                                    <h3 className="text-xl font-bold text-slate-800 mb-2">{selectedTxn.merchant}</h3>
+                                    <p className="text-3xl font-bold text-slate-900">{currencyFormatter.format(selectedTxn.amount)}</p>
                                 </div>
                                 <div className="space-y-4">
                                   {selectedTxn.policy_check && (
@@ -250,15 +306,21 @@ export function FinanceDashboard() {
                                   )}
                                 </div>
                             </div>
-                            <div className="flex justify-end space-x-2 pt-4 border-t">
-                                <Button variant="outline">Request Info</Button>
-                                <Button variant="destructive">Reject Expense</Button>
-                                <Button>Approve Exception</Button>
+                            <div className="flex justify-end space-x-3 pt-6 border-t border-slate-200/50">
+                                <Button variant="outline" className="font-medium hover:bg-slate-50 hover:border-slate-300 transition-colors">Request Info</Button>
+                                <Button variant="destructive" className="font-medium hover:shadow-lg transition-all">Reject Expense</Button>
+                                <Button className="font-medium bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all">Approve Exception</Button>
                             </div>
                         </div>
                     ) : (
-                        <div className="flex h-full items-center justify-center text-muted-foreground rounded-lg border-2 border-dashed">
-                            <p>Select an exception to view details</p>
+                        <div className="flex h-full items-center justify-center text-slate-500 rounded-lg border-2 border-dashed border-slate-300/50">
+                            <div className="text-center">
+                              <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
+                                <BarChart className="h-8 w-8 text-slate-400" />
+                              </div>
+                              <p className="font-medium">Select an exception to view details</p>
+                              <p className="text-sm text-slate-400 mt-1">Click on a transaction above to see AI analysis</p>
+                            </div>
                         </div>
                     )}
                 </CardContent>

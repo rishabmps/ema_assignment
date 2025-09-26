@@ -75,9 +75,9 @@ export function TransactionCard({
   return (
     <Card
       className={cn(
-        "overflow-hidden transition-all duration-300 rounded-xl bg-background shadow-sm",
-        isExpanded && "shadow-lg",
-        !cardIsClickable && "border-primary/50 ring-1 ring-primary/50 cursor-pointer"
+        "overflow-hidden transition-all duration-300 rounded-2xl bg-white/90 backdrop-blur-sm shadow-lg border border-slate-200/50 hover:shadow-xl hover:border-slate-300/50",
+        isExpanded && "shadow-2xl ring-4 ring-blue-100/50",
+        !cardIsClickable && "border-blue-300/70 ring-2 ring-blue-200/50 cursor-pointer hover:ring-blue-300/70"
       )}
       onClick={!cardIsClickable ? () => onToggleExpand(transaction.id) : undefined}
     >
@@ -96,29 +96,29 @@ export function TransactionCard({
              <AccordionTrigger
                 disabled={!cardIsClickable}
                 className={cn(
-                  "p-3 text-left hover:no-underline",
-                   !cardIsClickable && "cursor-pointer"
+                  "p-4 text-left hover:no-underline hover:bg-slate-50/50 transition-colors rounded-2xl",
+                   !cardIsClickable && "cursor-pointer hover:bg-blue-50/50"
                 )}
                 aria-label="Toggle details"
               >
                 <div className="flex items-center w-full">
-                    <div className="mr-4 flex h-11 w-11 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
+                    <div className="mr-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 text-slate-600 shadow-md">
                         {getIcon(transaction.merchant_logo)}
                     </div>
                     <div className="flex-grow">
-                        <p className="font-semibold text-foreground">{transaction.merchant}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="font-bold text-slate-800 text-base">{transaction.merchant}</p>
+                        <p className="text-sm text-slate-500 font-medium">
                         {format(new Date(transaction.date), "MMMM d, yyyy")}
                         </p>
                     </div>
                     <div className="text-right">
-                        <p className="text-lg font-bold text-foreground">
+                        <p className="text-xl font-bold text-slate-900 mb-1">
                         {currencyFormatter.format(transaction.amount)}
                         </p>
                         <StatusTag status={transaction.status} />
                     </div>
                      <div className={cn(
-                        "ml-2 w-auto p-1 text-muted-foreground rounded-md",
+                        "ml-3 w-auto p-1.5 text-slate-400 rounded-lg hover:bg-slate-100/50 transition-colors",
                         !cardIsClickable && "hidden"
                       )}>
                         <ChevronDown className="h-5 w-5 transition-transform duration-200" />
@@ -126,21 +126,26 @@ export function TransactionCard({
                 </div>
               </AccordionTrigger>
             <AccordionContent>
-              <div className="bg-secondary/50 px-4 py-4 border-t">
-                <h4 className="mb-3 text-sm font-semibold text-foreground">Automation Timeline</h4>
+              <div className="bg-gradient-to-r from-slate-50 to-blue-50/30 px-5 py-5 border-t border-slate-200/50">
+                <h4 className="mb-4 text-sm font-bold text-slate-800 flex items-center gap-2">
+                  <div className="w-5 h-5 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
+                    <Bot className="h-3 w-3 text-white" />
+                  </div>
+                  Automation Timeline
+                </h4>
                 <ul className="space-y-4">
                   {transaction.timeline.map((event, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-full bg-background ring-1 ring-border">
+                    <li key={index} className="flex items-start gap-4">
+                      <div className="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-md ring-2 ring-slate-100">
                         {getAgentIcon(event.agent)}
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-foreground">
+                      <div className="flex-1 bg-white/80 rounded-xl p-3 shadow-sm border border-slate-200/50">
+                        <p className="text-sm font-semibold text-slate-800 mb-1">
                           {event.agent ? `${event.agent} says:` : "System Update"}
                         </p>
-                        <p className="text-sm text-muted-foreground">{event.status}</p>
-                        <p className="mt-0.5 flex items-center text-xs text-muted-foreground/80">
-                          <Clock className="mr-1 h-3 w-3" />
+                        <p className="text-sm text-slate-600 mb-2 leading-relaxed">{event.status}</p>
+                        <p className="flex items-center text-xs text-slate-400 font-medium">
+                          <Clock className="mr-1.5 h-3 w-3" />
                           {format(new Date(event.time), "p")}
                         </p>
                       </div>
