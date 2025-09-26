@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { AgentActivityPanel, useAgentActivity } from "@/components/features/agent-activity";
+import { AgentActivityPanel, InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
 
 interface InAppNotification {
   id: string;
@@ -32,7 +32,6 @@ export function TravelerExpenseFeed() {
   const [receiptTxnId, setReceiptTxnId] = useState<string | null>(null);
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [notification, setNotification] = useState<InAppNotification | null>(null);
-  const [showAgentPanel, setShowAgentPanel] = useState(false);
 
   const { toast } = useToast();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -140,10 +139,9 @@ export function TravelerExpenseFeed() {
     // Find the transaction details for agent simulation
     const transaction = transactions.find(t => t.id === receiptTxnId);
     if (transaction) {
-      // Simulate agent activity for expense processing
+      // Simulate agent activity for expense processing - now shown inline!
       simulateExpenseFlow(transaction.amount, transaction.merchant);
-      // Also show the agent panel
-      setShowAgentPanel(true);
+      // No need to manually open the panel - it shows inline automatically
     }
 
     setTransactions((prev) =>
@@ -245,17 +243,6 @@ export function TravelerExpenseFeed() {
                 </div>
             </div>
             <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="hover:bg-slate-100/80 transition-colors relative"
-                  onClick={() => setShowAgentPanel(true)}
-                >
-                  <Bot className="h-5 w-5 text-slate-600" />
-                  {activities.length > 0 && (
-                    <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 rounded-full animate-pulse" />
-                  )}
-                </Button>
                 <Button variant="ghost" size="icon" className="hover:bg-slate-100/80 transition-colors">
                   <Bell className="h-5 w-5 text-slate-600" />
                 </Button>
@@ -295,6 +282,16 @@ export function TravelerExpenseFeed() {
           Simulate Client Lunch Purchase
         </Button>
       </div>
+
+      {/* Inline Agent Activity - shown seamlessly in the main flow */}
+      {activities.length > 0 && (
+        <div className="px-4 pb-3">
+          <InlineAgentActivity 
+            activities={activities} 
+            compact={true}
+          />
+        </div>
+      )}
 
       <div className="flex-1 space-y-3 overflow-y-auto px-4 pt-0 pb-4 relative z-10">
         {transactions.map((transaction) => (
@@ -338,17 +335,6 @@ export function TravelerExpenseFeed() {
           <canvas ref={canvasRef} className="hidden" />
         </DialogContent>
       </Dialog>
-
-      {/* Agent Activity Panel */}
-      <AgentActivityPanel
-        activities={activities}
-        isOpen={showAgentPanel}
-        onClose={() => setShowAgentPanel(false)}
-        title="Agent Activity"
-        flow="expense"
-        isMobile={true}
-        compact={true}
-      />
     </div>
   );
 }

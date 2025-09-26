@@ -26,7 +26,7 @@ import { Input } from "@/components/ui/input";
 import { VatReclaimView } from "@/components/features/finance/vat-reclaim-view";
 import { PolicyInsightView } from "@/components/features/finance/policy-insight-view";
 import { SustainabilityDashboard } from "@/components/features/finance/sustainability-dashboard";
-import { AgentActivityPanel, useAgentActivity } from "@/components/features/agent-activity";
+import { AgentActivityPanel, InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
 
 const users = usersData as User[];
 const transactions = transactionsData as Transaction[];
@@ -73,7 +73,6 @@ export function FinanceDashboard() {
   const exceptionTransactions = transactions.filter((t) => t.status === "Exception");
   const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(exceptionTransactions[0] || null);
   const [activeView, setActiveView] = useState("default");
-  const [showAgentPanel, setShowAgentPanel] = useState(false);
 
   const getUserForTxn = (txn: Transaction) => users.find(u => u.id === txn.user_id);
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
@@ -88,10 +87,10 @@ export function FinanceDashboard() {
   const handleTransactionSelect = (txn: Transaction) => {
     setSelectedTxn(txn);
     
-    // If it's an exception transaction, simulate the exception flow
+    // If it's an exception transaction, simulate the exception flow - now shown inline!
     if (txn.status === "Exception" && txn.policy_check) {
       simulateExceptionFlow(txn.policy_check.violation);
-      setShowAgentPanel(true);
+      // No need to manually open panel - it shows inline automatically
     }
   };
 
@@ -119,20 +118,6 @@ export function FinanceDashboard() {
           <div>
             <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Finance Operations</h1>
             <p className="text-slate-600 text-lg font-medium">Welcome back, Alex.</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg hover:bg-slate-50"
-              onClick={() => setShowAgentPanel(true)}
-            >
-              <Bot className="h-4 w-4 mr-2 text-slate-600" />
-              Agent Activity
-              {activities.length > 0 && (
-                <div className="ml-2 w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
-              )}
-            </Button>
           </div>
       </header>
 
@@ -310,6 +295,16 @@ export function FinanceDashboard() {
                     <CardDescription className="text-slate-600">AI-powered insights for the selected transaction.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow overflow-y-auto">
+                    {/* Inline Agent Activity - shown seamlessly in the main flow */}
+                    {activities.length > 0 && (
+                      <div className="mb-4">
+                        <InlineAgentActivity 
+                          activities={activities} 
+                          compact={false}
+                        />
+                      </div>
+                    )}
+                    
                     {selectedTxn ? (
                         <div className="space-y-6 flex flex-col justify-between h-full">
                             <div>
@@ -360,17 +355,6 @@ export function FinanceDashboard() {
             </Card>
         </TabsContent>
       </Tabs>
-
-      {/* Agent Activity Panel */}
-      <AgentActivityPanel
-        activities={activities}
-        isOpen={showAgentPanel}
-        onClose={() => setShowAgentPanel(false)}
-        title="Agent Activity"
-        flow="exception"
-        isMobile={false}
-        compact={false}
-      />
     </div>
   );
 }

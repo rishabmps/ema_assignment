@@ -15,7 +15,7 @@ import tripBudgetsData from "@/lib/data/trip_budgets.json";
 import { SendHorizonal, Bot, Sparkles, CheckCircle, Calendar } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BudgetCopilotWidget } from "@/components/common/budget-copilot-widget";
-import { AgentActivityPanel, useAgentActivity } from "@/components/features/agent-activity";
+import { AgentActivityPanel, InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
 
 type Message = {
   id: string;
@@ -44,7 +44,6 @@ export function TravelerBookingView() {
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const [showBudget, setShowBudget] = useState(false);
-  const [showAgentPanel, setShowAgentPanel] = useState(false);
   const { toast } = useToast();
   const chatEndRef = useRef<HTMLDivElement>(null);
   
@@ -71,9 +70,9 @@ export function TravelerBookingView() {
     setInput("");
     setIsTyping(true);
     
-    // Trigger agent activity simulation for trip booking
+    // Trigger agent activity simulation for trip booking - now shown inline!
     simulateTripBookingFlow(destination);
-    setShowAgentPanel(true);
+    // No need to manually open panel - it shows inline automatically
 
     setTimeout(() => {
       addMessage({ id: generateUniqueId(), sender: "agent", content: "Got it. Planning your trip to Boston...", type: "loading" });
@@ -149,29 +148,26 @@ export function TravelerBookingView() {
   return (
     <div className="flex h-full flex-col bg-background">
       <header className="p-4 bg-background/80 backdrop-blur-sm border-b z-10">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-              <Avatar><AvatarFallback>{traveler.initials}</AvatarFallback></Avatar>
-              <div>
-                  <p className="text-sm font-semibold">{traveler.name}</p>
-                  <p className="text-xs text-muted-foreground">{traveler.title}</p>
-              </div>
-          </div>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="hover:bg-slate-100/80 transition-colors relative"
-            onClick={() => setShowAgentPanel(true)}
-          >
-            <Bot className="h-5 w-5 text-slate-600" />
-            {activities.length > 0 && (
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-blue-600 rounded-full animate-pulse" />
-            )}
-          </Button>
+        <div className="flex items-center gap-3">
+            <Avatar><AvatarFallback>{traveler.initials}</AvatarFallback></Avatar>
+            <div>
+                <p className="text-sm font-semibold">{traveler.name}</p>
+                <p className="text-xs text-muted-foreground">{traveler.title}</p>
+            </div>
         </div>
       </header>
       
       {showBudget && <BudgetCopilotWidget budget={tripBudget.budget_usd} currentCost={0} />}
+
+      {/* Inline Agent Activity - shown seamlessly in the main flow */}
+      {activities.length > 0 && (
+        <div className="p-4 pb-2">
+          <InlineAgentActivity 
+            activities={activities} 
+            compact={true}
+          />
+        </div>
+      )}
 
       <div className="flex-1 space-y-4 overflow-y-auto p-4">
         <AnimatePresence initial={false}>
@@ -232,17 +228,6 @@ export function TravelerBookingView() {
           </Button>
         </form>
       </div>
-
-      {/* Agent Activity Panel */}
-      <AgentActivityPanel
-        activities={activities}
-        isOpen={showAgentPanel}
-        onClose={() => setShowAgentPanel(false)}
-        title="Agent Activity"
-        flow="trip"
-        isMobile={true}
-        compact={true}
-      />
     </div>
   );
 }
