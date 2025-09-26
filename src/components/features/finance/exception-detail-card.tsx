@@ -36,5 +36,3 @@ export function ExceptionDetailCard({
     </Card>
   );
 }
-
-    

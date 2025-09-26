@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { ItineraryCardV2 } from "@/components/demo/itinerary-card-v2";
+import { ItineraryCardV2 } from "@/components/features/traveler/itinerary-card-v2";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,7 +14,7 @@ import usersData from "@/lib/data/users.json";
 import tripBudgetsData from "@/lib/data/trip_budgets.json";
 import { SendHorizonal, Bot, Sparkles, CheckCircle, Calendar } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
-import { BudgetCopilotWidget } from "./budget-copilot-widget";
+import { BudgetCopilotWidget } from "@/components/common/budget-copilot-widget";
 
 type Message = {
   id: string;
@@ -209,7 +209,3 @@ export function TravelerBookingView() {
     </div>
   );
 }
-
-    
-
-    

@@ -33,5 +33,3 @@ export function BudgetCopilotWidget({ budget, currentCost }: BudgetCopilotWidget
     </div>
   );
 }
-
-    

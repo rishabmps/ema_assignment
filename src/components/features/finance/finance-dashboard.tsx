@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ExceptionDetailCard } from "@/components/demo/exception-detail-card";
+import { ExceptionDetailCard } from "@/components/features/finance/exception-detail-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import type { Transaction, User } from "@/types";
@@ -23,9 +23,9 @@ import policyExceptionsData from "@/lib/data/policy_exceptions.json";
 import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo, Lightbulb, HandCoins, Leaf } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
-import { VatReclaimView } from "@/components/demo/vat-reclaim-view";
-import { PolicyInsightView } from "./policy-insight-view";
-import { SustainabilityDashboard } from "./sustainability-dashboard";
+import { VatReclaimView } from "@/components/features/finance/vat-reclaim-view";
+import { PolicyInsightView } from "@/components/features/finance/policy-insight-view";
+import { SustainabilityDashboard } from "@/components/features/finance/sustainability-dashboard";
 
 const users = usersData as User[];
 const transactions = transactionsData as Transaction[];
@@ -268,7 +268,3 @@ export function FinanceDashboard() {
     </div>
   );
 }
-
-    
-
-    

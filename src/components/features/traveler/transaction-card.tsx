@@ -8,7 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card, CardContent } from "@/components/ui/card";
-import { StatusTag } from "@/components/demo/status-tag";
+import { StatusTag } from "@/components/common/status-tag";
 import { cn } from "@/lib/utils";
 import type { Transaction } from "@/types";
 import {
@@ -155,5 +155,3 @@ export function TransactionCard({
     </Card>
   );
 }
-
-    

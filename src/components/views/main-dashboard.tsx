@@ -3,9 +3,9 @@
 
 import { useState } from "react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { TravelerExpenseFeed } from "@/components/demo/traveler-expense-feed";
-import { TravelerBookingView } from "@/components/demo/traveler-booking-view";
-import { FinanceDashboard } from "@/components/demo/finance-dashboard";
+import { TravelerExpenseFeed } from "@/components/features/traveler/traveler-expense-feed";
+import { TravelerBookingView } from "@/components/features/traveler/traveler-booking-view";
+import { FinanceDashboard } from "@/components/features/finance/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
 import usersData from "@/lib/data/users.json";

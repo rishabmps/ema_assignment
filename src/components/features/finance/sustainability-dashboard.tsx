@@ -16,9 +16,9 @@ import { ArrowLeft, ArrowUpRight, CheckCircle, FileText, Leaf, XCircle } from "l
 import type { RecommendationLogEntry } from "@/types";
 import recommendationLog from "@/lib/data/recommendation_log.json";
 import sustainabilityTargets from "@/lib/data/sustainability_targets.json";
-import { Progress } from '../ui/progress';
-import { Badge } from '../ui/badge';
-import { ChartContainer } from '../ui/chart';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { ChartContainer } from '@/components/ui/chart';
 import { format } from "date-fns";
 import users from '@/lib/data/users.json';
 
@@ -159,5 +159,3 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
     </div>
   );
 }
-
-    

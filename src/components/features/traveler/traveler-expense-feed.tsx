@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { TransactionCard } from "@/components/demo/transaction-card";
+import { TransactionCard } from "@/components/features/traveler/transaction-card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import type { Transaction } from "@/types";
@@ -292,5 +292,3 @@ export function TravelerExpenseFeed() {
     </div>
   );
 }
-
-    
