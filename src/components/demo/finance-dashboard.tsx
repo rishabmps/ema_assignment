@@ -13,13 +13,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { ExceptionDetailCard } from "@/components/demo/exception-detail-card";
-import { StatusTag } from "@/components/demo/status-tag";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import type { Transaction, User } from "@/types";
 import transactionsData from "@/lib/data/transactions.json";
 import usersData from "@/lib/data/users.json";
-import { Activity, BarChart, CheckCircle, Clock, FileWarning, DollarSign, Search, Users, ExternalLink, LayoutGrid, ListTodo } from "lucide-react";
+import { Activity, BarChart, Clock, FileWarning, DollarSign, Search, ExternalLink, LayoutGrid, ListTodo } from "lucide-react";
 import { format } from "date-fns";
 import { Input } from "@/components/ui/input";
 

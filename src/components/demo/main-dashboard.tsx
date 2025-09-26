@@ -6,9 +6,8 @@ import { TravelerExpenseFeed } from "@/components/demo/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/demo/traveler-booking-view";
 import { FinanceDashboard } from "@/components/demo/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Bot, ChevronRight, Users, Plane, FileText } from "lucide-react";
+import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
 import usersData from "@/lib/data/users.json";
-import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 
 type Persona = "traveler" | "finance";
@@ -158,7 +157,7 @@ export default function MainDashboard() {
                 <div className="w-3 h-3 rounded-full bg-green-500"></div>
               </div>
             </div>
-            <div className="bg-background overflow-y-auto" style={{ height: 'calc(80vh - 2.5rem)', maxHeight: '700px'}}>
+            <div className="bg-background overflow-y-auto" style={{ height: 'calc(100vh - 4rem)', maxHeight: '720px'}}>
               <FinanceDashboard />
             </div>
           </div>
