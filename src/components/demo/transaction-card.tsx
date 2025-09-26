@@ -85,36 +85,45 @@ export function TransactionCard({
           type="single"
           collapsible
           value={isExpanded ? "item-1" : ""}
-          onValueChange={() => onToggleExpand(transaction.id)}
+          onValueChange={(value) => {
+            if (cardIsClickable) {
+              onToggleExpand(transaction.id)
+            }
+          }}
         >
           <AccordionItem value="item-1" className="border-b-0">
-            <div className={cn("flex items-center p-3", cardIsClickable && "cursor-pointer")}>
-              <div className="mr-4 flex h-11 w-11 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
-                {getIcon(transaction.merchant_logo)}
-              </div>
-              <div className="flex-grow">
-                <p className="font-semibold text-foreground">{transaction.merchant}</p>
-                <p className="text-sm text-muted-foreground">
-                  {format(new Date(transaction.date), "MMMM d, yyyy")}
-                </p>
-              </div>
-              <div className="text-right">
-                <p className="text-lg font-bold text-foreground">
-                  {currencyFormatter.format(transaction.amount)}
-                </p>
-                <StatusTag status={transaction.status} />
-              </div>
-              <AccordionTrigger
-                asChild
+             <AccordionTrigger
+                disabled={!cardIsClickable}
                 className={cn(
-                  "ml-2 w-auto p-1 text-muted-foreground hover:bg-secondary rounded-md",
-                  !cardIsClickable && "hidden"
+                  "p-3 text-left hover:no-underline",
+                   !cardIsClickable && "cursor-pointer"
                 )}
                 aria-label="Toggle details"
               >
-                  <div><ChevronDown className="h-5 w-5 transition-transform duration-200" /></div>
+                <div className="flex items-center w-full">
+                    <div className="mr-4 flex h-11 w-11 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
+                        {getIcon(transaction.merchant_logo)}
+                    </div>
+                    <div className="flex-grow">
+                        <p className="font-semibold text-foreground">{transaction.merchant}</p>
+                        <p className="text-sm text-muted-foreground">
+                        {format(new Date(transaction.date), "MMMM d, yyyy")}
+                        </p>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-lg font-bold text-foreground">
+                        {currencyFormatter.format(transaction.amount)}
+                        </p>
+                        <StatusTag status={transaction.status} />
+                    </div>
+                     <div className={cn(
+                        "ml-2 w-auto p-1 text-muted-foreground rounded-md",
+                        !cardIsClickable && "hidden"
+                      )}>
+                        <ChevronDown className="h-5 w-5 transition-transform duration-200" />
+                    </div>
+                </div>
               </AccordionTrigger>
-            </div>
             <AccordionContent>
               <div className="bg-secondary/50 px-4 py-4 border-t">
                 <h4 className="mb-3 text-sm font-semibold text-foreground">Automation Timeline</h4>
