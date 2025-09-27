@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
-import { FloatingAgentStatus } from "@/components/features/agent-activity";
+import { FloatingAgentDisplay } from "@/components/features/agent-activity";
 import { DemoAgentProvider, useDemoAgentContext } from "@/components/features/agent-activity/demo-agent-context";
 
 type Persona = "traveler" | "finance";
@@ -21,6 +21,9 @@ function MainDashboardContent() {
   const [persona, setPersona] = useState<Persona>("traveler");
   const [act, setAct] = useState<Act>("expense");
   const [step, setStep] = useState<Step>("persona");
+  
+  // Track current URL for finance dashboard
+  const [currentFinanceUrl, setCurrentFinanceUrl] = useState("agentic-te.demo/dashboard");
 
   const demoRef = useRef<HTMLDivElement>(null);
 
@@ -32,14 +35,28 @@ function MainDashboardContent() {
 
   useEffect(() => {
     if (step === 'demo') {
-      // Enhanced auto-scroll with a slight delay to ensure layout is complete
-      setTimeout(() => {
-        demoRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start',
-          inline: 'center'
-        });
-      }, 100);
+      // Enhanced auto-scroll with multiple attempts and viewport consideration
+      const scrollToDemo = () => {
+        if (demoRef.current) {
+          const rect = demoRef.current.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          
+          // Calculate optimal scroll position to center the demo content
+          const scrollTop = window.pageYOffset + rect.top - (viewportHeight * 0.1);
+          
+          window.scrollTo({ 
+            top: Math.max(0, scrollTop),
+            behavior: 'smooth' 
+          });
+        }
+      };
+
+      // Initial scroll with delay for layout stabilization
+      setTimeout(scrollToDemo, 150);
+      
+      // Additional scroll attempts to handle dynamic content loading
+      setTimeout(scrollToDemo, 500);
+      setTimeout(scrollToDemo, 1000);
     }
   }, [step, persona, act]);
 
@@ -47,13 +64,22 @@ function MainDashboardContent() {
   useEffect(() => {
     if (step === 'demo') {
       const observer = new ResizeObserver(() => {
+        // Debounce to avoid too many scroll calls
         setTimeout(() => {
-          demoRef.current?.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start',
-            inline: 'center'
-          });
-        }, 200);
+          if (demoRef.current) {
+            const rect = demoRef.current.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            
+            // Only scroll if demo content is not fully visible
+            if (rect.top < 0 || rect.bottom > viewportHeight) {
+              const scrollTop = window.pageYOffset + rect.top - (viewportHeight * 0.1);
+              window.scrollTo({ 
+                top: Math.max(0, scrollTop),
+                behavior: 'smooth' 
+              });
+            }
+          }
+        }, 300);
       });
 
       if (demoRef.current) {
@@ -156,7 +182,7 @@ function MainDashboardContent() {
                     </div>
                 </div>
                 <p className="text-slate-600 leading-relaxed mb-6">
-                  I'm on the go, making purchases and booking trips. I want everything to be fast and easy.
+                  I&apos;m on the go, making purchases and booking trips. I want everything to be fast and easy.
                 </p>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2 text-blue-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
@@ -521,12 +547,12 @@ function MainDashboardContent() {
                           <div className="flex-1 mx-8">
                             <div className="bg-slate-600 rounded-lg px-4 py-1 text-slate-300 text-sm font-mono flex items-center gap-2">
                               <div className="w-3 h-3 text-slate-400">🔒</div>
-                              agentic-te.demo/dashboard
+                              {currentFinanceUrl}
                             </div>
                           </div>
                         </div>
-                        <div className="bg-white" style={{ height: 'calc(100vh - 8rem)', maxHeight: '800px'}}>
-                          <FinanceDashboard />
+                        <div className="bg-white overflow-auto" style={{ height: 'calc(100vh - 8rem)', maxHeight: '800px'}}>
+                          <FinanceDashboard onUrlChange={setCurrentFinanceUrl} />
                         </div>
                       </div>
                       <motion.div 
@@ -547,11 +573,10 @@ function MainDashboardContent() {
         </div>
       </div>
 
-      {/* Floating Agent Status - only shown during demos */}
+      {/* Floating Agent Display - only shown during demos */}
       {step === 'demo' && (
-        <FloatingAgentStatus 
+        <FloatingAgentDisplay 
           activities={activities}
-          side="right"
         />
       )}
     </div>

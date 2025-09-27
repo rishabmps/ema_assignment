@@ -69,7 +69,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
             <ArrowLeft className="mr-2" /> Back to Dashboard
           </Button>
           <h1 className="text-2xl font-bold text-foreground">Sustainability Command Center</h1>
-          <p className="text-muted-foreground">Manage and report on your company's travel emissions with the CO2 Advisor.</p>
+          <p className="text-muted-foreground">Manage and report on your company&apos;s travel emissions with the CO2 Advisor.</p>
         </div>
         <Button>
           <FileText className="mr-2" />
@@ -100,7 +100,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                             Adoption Rate: {adoptionRate.toFixed(0)}%
                         </Badge>
                     </CardTitle>
-                    <CardDescription>Sales accounts for 65% of travel emissions but has the highest adoption rate of 'Greener Choice' recommendations.</CardDescription>
+                    <CardDescription>Sales accounts for 65% of travel emissions but has the highest adoption rate of &apos;Greener Choice&apos; recommendations.</CardDescription>
                 </CardHeader>
                 <CardContent>
                      <ChartContainer config={chartConfig} className="h-64 w-full">
