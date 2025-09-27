@@ -156,7 +156,7 @@ function MainDashboardContent() {
                     </div>
                 </div>
                 <p className="text-slate-600 leading-relaxed mb-6">
-                  I'm on the go, making purchases and booking trips. I want everything to be fast and easy.
+                  I&apos;m on the go, making purchases and booking trips. I want everything to be fast and easy.
                 </p>
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2 text-blue-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
