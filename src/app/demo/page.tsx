@@ -187,19 +187,7 @@ export default function DemoPage() {
 
       {/* Demo Section - Seamlessly Integrated */}
       <section id="demo" className="mx-auto max-w-7xl px-6 pb-20">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Interactive Demo Studio
-          </h2>
-          <p className="text-lg text-slate-300 max-w-3xl mx-auto">
-            Choose a persona and watch agents work in real-time. Every interaction you see is powered by the same AI that runs in production.
-          </p>
-        </div>
-
-        {/* Seamlessly integrated demo - no boxed restrictions */}
-        <div className="rounded-[40px] border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-6 sm:p-8 backdrop-blur-sm">
-          <MainDashboard />
-        </div>
+        <MainDashboard />
       </section>
 
       {/* Quick Guide Section */}

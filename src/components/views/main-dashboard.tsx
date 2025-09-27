@@ -506,20 +506,20 @@ function MainDashboardContent() {
             className="flex items-center justify-center gap-4 mb-6"
           >
             <div className="relative">
-              <Bot className="h-12 w-12 text-blue-600 animate-bounce-subtle" />
+              <Bot className="h-8 w-8 text-blue-600 animate-bounce-subtle" />
               <div className="absolute -inset-1 bg-blue-600 rounded-full opacity-20 animate-pulse-ring"></div>
             </div>
-            <h1 className="text-5xl font-bold tracking-tight text-gradient bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent animate-gradient-x leading-tight">
-              Agentic T&E Demo Command Center
-            </h1>
+            <h2 className="text-3xl font-bold tracking-tight text-gradient bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent animate-gradient-x leading-tight">
+              Interactive Demo Studio
+            </h2>
           </motion.div>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed"
+            className="text-lg text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed"
           >
-            Explore live agent orchestration for travelers and finance teams. Follow real decision logs, policy playbooks, and variance insights as they unfold.
+            Choose a persona and watch agents work in real-time. Every interaction is powered by the same AI that runs in production.
           </motion.p>
         </header>
 
