@@ -21,6 +21,9 @@ function MainDashboardContent() {
   const [persona, setPersona] = useState<Persona>("traveler");
   const [act, setAct] = useState<Act>("expense");
   const [step, setStep] = useState<Step>("persona");
+  
+  // Track current URL for finance dashboard
+  const [currentFinanceUrl, setCurrentFinanceUrl] = useState("agentic-te.demo/dashboard");
 
   const demoRef = useRef<HTMLDivElement>(null);
 
@@ -544,12 +547,12 @@ function MainDashboardContent() {
                           <div className="flex-1 mx-8">
                             <div className="bg-slate-600 rounded-lg px-4 py-1 text-slate-300 text-sm font-mono flex items-center gap-2">
                               <div className="w-3 h-3 text-slate-400">🔒</div>
-                              agentic-te.demo/dashboard
+                              {currentFinanceUrl}
                             </div>
                           </div>
                         </div>
-                        <div className="bg-white" style={{ height: 'calc(100vh - 8rem)', maxHeight: '800px'}}>
-                          <FinanceDashboard />
+                        <div className="bg-white overflow-auto" style={{ height: 'calc(100vh - 8rem)', maxHeight: '800px'}}>
+                          <FinanceDashboard onUrlChange={setCurrentFinanceUrl} />
                         </div>
                       </div>
                       <motion.div 

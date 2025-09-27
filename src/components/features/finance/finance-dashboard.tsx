@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -69,10 +69,17 @@ const kpiData = [
 const vatReclaimable = transactions.reduce((acc, txn) => acc + (txn.vat_reclaimable_usd || 0), 0);
 const policyInsightsCount = policyExceptionsData.recommendations.length;
 
-export function FinanceDashboard() {
+interface FinanceDashboardProps {
+  onUrlChange?: (url: string) => void;
+}
+
+export function FinanceDashboard({ onUrlChange }: FinanceDashboardProps) {
   const exceptionTransactions = transactions.filter((t) => t.status === "Exception");
   const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(exceptionTransactions[0] || null);
   const [activeView, setActiveView] = useState("default");
+  
+  // Current active tab within dashboard
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   const getUserForTxn = (txn: Transaction) => users.find(u => u.id === txn.user_id);
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
@@ -93,6 +100,48 @@ export function FinanceDashboard() {
       // No need to manually open panel - it shows inline automatically
     }
   };
+
+  // Generate current URL based on active view and tab
+  const getCurrentUrl = useCallback(() => {
+    if (activeView === "sustainability") return "agentic-te.demo/sustainability";
+    if (activeView === "vat_reclaim") return "agentic-te.demo/vat-reclaim";
+    if (activeView === "policy_insights") return "agentic-te.demo/policy-insights";
+    if (activeTab === "exceptions") return "agentic-te.demo/exceptions";
+    return "agentic-te.demo/dashboard";
+  }, [activeView, activeTab]);
+
+  // Handle Export Data with clear action
+  const handleExportData = () => {
+    // Simulate data export
+    const exportData = {
+      kpiData: {
+        spendAutomated: "95.2%",
+        avgTimeToClose: "2.1 Hours", 
+        openExceptions: 2,
+        productivitySavings: "$4,060"
+      },
+      transactions: transactions.length,
+      vatReclaim: vatReclaimable,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Create and download a JSON file
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `finance-dashboard-export-${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  // Update URL when view or tab changes
+  useEffect(() => {
+    const newUrl = getCurrentUrl();
+    onUrlChange?.(newUrl);
+  }, [getCurrentUrl, onUrlChange]);
 
 
   if (activeView === "vat_reclaim") {
@@ -122,31 +171,24 @@ export function FinanceDashboard() {
             </div>
           </div>
           
-          {/* Navigation Links */}
-          <div className="flex items-center gap-6">
-            <Button variant="ghost" className="font-medium text-slate-600 hover:text-slate-900">
-              <LayoutGrid className="h-4 w-4 mr-2" />
-              Dashboard
-            </Button>
-            <Button variant="ghost" className="font-medium text-slate-600 hover:text-slate-900" onClick={() => setActiveView('sustainability')}>
-              <Leaf className="h-4 w-4 mr-2" />
-              Sustainability
-            </Button>
-            <Button variant="ghost" className="font-medium text-slate-600 hover:text-slate-900" onClick={() => setActiveView('vat_reclaim')}>
-              <HandCoins className="h-4 w-4 mr-2" />
-              VAT Reclaim
-            </Button>
-            <Button variant="ghost" className="font-medium text-slate-600 hover:text-slate-900" onClick={() => setActiveView('policy_insights')}>
-              <Lightbulb className="h-4 w-4 mr-2" />
-              Policy Insights
-            </Button>
+          {/* Current URL Display */}
+          <div className="flex items-center gap-4">
+            <div className="bg-slate-700 rounded-lg px-4 py-2 text-slate-300 text-sm font-mono flex items-center gap-2">
+              <div className="w-3 h-3 text-slate-400">🔒</div>
+              {getCurrentUrl()}
+            </div>
           </div>
           
           {/* User Profile */}
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="border-slate-200 hover:bg-slate-50">
+            <Button 
+              variant="outline" 
+              className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
+              onClick={handleExportData}
+              title="Export dashboard data as JSON file"
+            >
               <ExternalLink className="h-4 w-4 mr-2" />
-              Export Data
+              Export Dashboard Data
             </Button>
             <div className="flex items-center gap-2">
               <Avatar className="w-8 h-8">
@@ -173,7 +215,7 @@ export function FinanceDashboard() {
             </div>
         </header>
 
-        <Tabs defaultValue="dashboard" className="space-y-6 flex flex-col flex-grow relative z-10">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 flex flex-col flex-grow relative z-10">
           <div className="flex-shrink-0 flex justify-between items-center">
               <TabsList className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
                    <TabsTrigger value="dashboard" className="flex items-center gap-2 font-medium">
