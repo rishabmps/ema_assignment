@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { AgentActivityPanel, InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
+import { InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
+import { useDemoAgentContext } from "@/components/features/agent-activity/demo-agent-context";
 
 interface InAppNotification {
   id: string;
@@ -25,7 +26,11 @@ interface InAppNotification {
   description: string;
 }
 
-export function TravelerExpenseFeed() {
+interface TravelerExpenseFeedProps {
+  hideInlineAgentActivity?: boolean;
+}
+
+export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: TravelerExpenseFeedProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
@@ -40,15 +45,22 @@ export function TravelerExpenseFeed() {
   
   const { 
     activities, 
-    simulateExpenseFlow, 
+    simulateExpenseFlow: simulateExpenseFlowLocal, 
     simulateExceptionFlow, 
     clearActivities 
   } = useAgentActivity();
 
+  const { simulateExpenseFlow: runGlobalExpenseFlow } = useDemoAgentContext();
+
   useEffect(() => {
+    const allowedStatuses = ["Needs Receipt", "Cleared", "Exception", "Processing"] as const;
     const initialTransactions = allTransactions
       .filter((t) => !t.id.startsWith("txn_101"))
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .map((t) => ({
+        ...t,
+        status: allowedStatuses.includes(t.status as any) ? t.status : "Needs Receipt"
+      }) as Transaction);
     setTransactions(initialTransactions);
   }, []);
 
@@ -99,7 +111,14 @@ export function TravelerExpenseFeed() {
   const handleSimulateTransaction = () => {
     const newTransaction = allTransactions.find((t) => t.id === "txn_101");
     if (newTransaction && !transactions.find(t => t.id === "txn_101")) {
-      setTransactions((prev) => [newTransaction, ...prev]);
+      const allowedStatuses = ["Needs Receipt", "Cleared", "Exception", "Processing"] as const;
+      setTransactions((prev) => [
+        {
+          ...newTransaction,
+          status: allowedStatuses.includes(newTransaction.status as any) ? newTransaction.status : "Needs Receipt"
+        } as Transaction,
+        ...prev
+      ]);
       setNotification({
         id: newTransaction.id,
         title: (
@@ -140,7 +159,8 @@ export function TravelerExpenseFeed() {
     const transaction = transactions.find(t => t.id === receiptTxnId);
     if (transaction) {
       // Simulate agent activity for expense processing - now shown inline!
-      simulateExpenseFlow(transaction.amount, transaction.merchant);
+  simulateExpenseFlowLocal(transaction.amount, transaction.merchant);
+  runGlobalExpenseFlow();
       // No need to manually open the panel - it shows inline automatically
     }
 
@@ -283,8 +303,8 @@ export function TravelerExpenseFeed() {
         </Button>
       </div>
 
-      {/* Inline Agent Activity - shown seamlessly in the main flow */}
-      {activities.length > 0 && (
+      {/* Inline Agent Activity - only show if not in full device view */}
+  {activities.length > 0 && !hideInlineAgentActivity && (
         <div className="px-4 pb-3">
           <InlineAgentActivity 
             activities={activities} 

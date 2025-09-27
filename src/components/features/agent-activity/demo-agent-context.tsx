@@ -1,7 +1,16 @@
 "use client";
 
 import React, { createContext, useContext, useReducer, useCallback } from 'react';
-import type { AgentActivity } from '@/components/features/agent-activity/types';
+import type { AgentActivity, AgentStatus } from '@/components/features/agent-activity/types';
+
+type FinanceScenario =
+  | 'finance-dashboard'
+  | 'finance-exceptions'
+  | 'finance-vat'
+  | 'finance-policy'
+  | 'finance-sustainability';
+
+type TravelerScenario = 'traveler-expense' | 'traveler-booking';
 
 interface DemoAgentContextType {
   activities: AgentActivity[];
@@ -11,6 +20,8 @@ interface DemoAgentContextType {
   simulateExpenseFlow: () => void;
   simulateBookingFlow: () => void;
   simulateFinanceFlow: () => void;
+  activateFinanceScenario: (scenario: FinanceScenario) => void;
+  activateTravelerScenario: (scenario: TravelerScenario) => void;
 }
 
 const DemoAgentContext = createContext<DemoAgentContextType | null>(null);
@@ -42,6 +53,17 @@ function agentReducer(state: AgentActivity[], action: AgentAction): AgentActivit
 
 export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
   const [activities, dispatch] = useReducer(agentReducer, []);
+
+  const makeActivity = useCallback(
+    (agentType: AgentActivity['agentType'], message: string, status: AgentStatus = 'active') => ({
+      id: `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      agentType,
+      status,
+      message,
+      timestamp: new Date()
+    }),
+    []
+  );
 
   const addActivity = useCallback((activityData: Omit<AgentActivity, 'id' | 'timestamp'>) => {
     const activity: AgentActivity = {
@@ -225,6 +247,65 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
     }, 2500);
   }, []);
 
+  const activateFinanceScenario = useCallback((scenario: FinanceScenario) => {
+    const scenarioActivities: AgentActivity[] = (() => {
+      switch (scenario) {
+        case 'finance-dashboard':
+          return [
+            makeActivity('expense-automator', '95% of expenses auto-posted in the last 30 days', 'completed'),
+            makeActivity('policy-engine', 'Monitoring policy drift across departments', 'processing'),
+            makeActivity('budget-copilot', 'Surfacing savings opportunities from automated spend', 'active')
+          ];
+        case 'finance-exceptions':
+          return [
+            makeActivity('fraud-sentinel', 'Prioritizing exception queue by risk score', 'processing'),
+            makeActivity('policy-engine', 'Summarizing policy violations for reviewer context', 'active'),
+            makeActivity('expense-automator', 'Routing cleared exceptions for ERP posting', 'completed')
+          ];
+        case 'finance-vat':
+          return [
+            makeActivity('budget-copilot', 'Reconciling reclaimable VAT across EMEA', 'processing'),
+            makeActivity('compliance-guardian', 'Validating supporting documents before submission', 'active')
+          ];
+        case 'finance-policy':
+          return [
+            makeActivity('policy-engine', 'Detecting new spend patterns that need policy updates', 'processing'),
+            makeActivity('expense-automator', 'Auto-distributing recommended changes to policy owners', 'active')
+          ];
+        case 'finance-sustainability':
+          return [
+            makeActivity('co2-advisor', 'Modeling FY25 carbon trajectory vs target', 'processing'),
+            makeActivity('budget-copilot', 'Forecasting cost impact of greener travel choices', 'active')
+          ];
+        default:
+          return [];
+      }
+    })();
+
+    dispatch({ type: 'SET_ACTIVITIES', activities: scenarioActivities });
+  }, [makeActivity]);
+
+  const activateTravelerScenario = useCallback((scenario: TravelerScenario) => {
+    const scenarioActivities: AgentActivity[] = (() => {
+      switch (scenario) {
+        case 'traveler-expense':
+          return [
+            makeActivity('receipt-concierge', 'Standing by to capture receipts from mobile upload', 'active'),
+            makeActivity('policy-engine', 'Pre-validating recent card transactions for compliance', 'processing')
+          ];
+        case 'traveler-booking':
+          return [
+            makeActivity('booking-orchestrator', 'Curating sustainable itineraries for upcoming trips', 'processing'),
+            makeActivity('co2-advisor', 'Highlighting the greenest door-to-door options', 'active')
+          ];
+        default:
+          return [];
+      }
+    })();
+
+    dispatch({ type: 'SET_ACTIVITIES', activities: scenarioActivities });
+  }, [makeActivity]);
+
   const contextValue: DemoAgentContextType = {
     activities,
     addActivity,
@@ -232,7 +313,9 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
     clearActivities,
     simulateExpenseFlow,
     simulateBookingFlow,
-    simulateFinanceFlow
+    simulateFinanceFlow,
+    activateFinanceScenario,
+    activateTravelerScenario
   };
 
   return (

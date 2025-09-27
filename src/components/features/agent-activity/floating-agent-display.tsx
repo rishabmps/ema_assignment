@@ -153,7 +153,7 @@ export function FloatingAgentDisplay({ activities, className }: FloatingAgentDis
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-medium text-slate-700 truncate">{agentDef.name}</p>
-                          <p className="text-xs text-slate-500 truncate">{activity.action}</p>
+                          <p className="text-xs text-slate-500 truncate">{activity.message}</p>
                         </div>
                         <div className="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center">
                           <div className="w-2 h-2 rounded-full bg-white"></div>

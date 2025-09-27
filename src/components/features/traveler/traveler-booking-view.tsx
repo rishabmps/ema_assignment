@@ -15,7 +15,8 @@ import tripBudgetsData from "@/lib/data/trip_budgets.json";
 import { SendHorizonal, Bot, Sparkles, CheckCircle, Calendar } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BudgetCopilotWidget } from "@/components/common/budget-copilot-widget";
-import { AgentActivityPanel, InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
+import { InlineAgentActivity, useAgentActivity } from "@/components/features/agent-activity";
+import { useDemoAgentContext } from "@/components/features/agent-activity/demo-agent-context";
 
 type Message = {
   id: string;
@@ -39,7 +40,11 @@ const initialAgentMessage: Message = {
   type: "text",
 };
 
-export function TravelerBookingView() {
+interface TravelerBookingViewProps {
+  hideInlineAgentActivity?: boolean;
+}
+
+export function TravelerBookingView({ hideInlineAgentActivity = false }: TravelerBookingViewProps) {
   const [messages, setMessages] = useState<Message[]>([initialAgentMessage]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -49,9 +54,11 @@ export function TravelerBookingView() {
   
   const { 
     activities, 
-    simulateTripBookingFlow, 
+    simulateTripBookingFlow: simulateTripBookingFlowLocal, 
     clearActivities 
   } = useAgentActivity();
+
+  const { simulateBookingFlow: runGlobalBookingFlow } = useDemoAgentContext();
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -71,7 +78,8 @@ export function TravelerBookingView() {
     setIsTyping(true);
     
     // Trigger agent activity simulation for trip booking - now shown inline!
-    simulateTripBookingFlow(destination);
+  simulateTripBookingFlowLocal(destination);
+  runGlobalBookingFlow();
     // No need to manually open panel - it shows inline automatically
 
     setTimeout(() => {
@@ -159,8 +167,8 @@ export function TravelerBookingView() {
       
       {showBudget && <BudgetCopilotWidget budget={tripBudget.budget_usd} currentCost={0} />}
 
-      {/* Inline Agent Activity - shown seamlessly in the main flow */}
-      {activities.length > 0 && (
+      {/* Inline Agent Activity - only show if not in full device view */}
+  {activities.length > 0 && !hideInlineAgentActivity && (
         <div className="p-4 pb-2">
           <InlineAgentActivity 
             activities={activities} 

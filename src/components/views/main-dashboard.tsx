@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { TravelerExpenseFeed } from "@/components/features/traveler/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/features/traveler/traveler-booking-view";
-import { FinanceDashboard } from "@/components/features/finance/finance-dashboard";
+import { FinanceDashboard, type FinanceSection } from "@/components/features/finance/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
 import usersData from "@/lib/data/users.json";
@@ -28,7 +28,35 @@ function MainDashboardContent() {
   const demoRef = useRef<HTMLDivElement>(null);
 
   // Use the shared agent context
-  const { activities, simulateFinanceFlow } = useDemoAgentContext();
+  const {
+    activities,
+    simulateFinanceFlow,
+    activateFinanceScenario,
+    activateTravelerScenario,
+    clearActivities,
+  } = useDemoAgentContext();
+
+  const getFinanceScenario = useCallback((section: FinanceSection): Parameters<typeof activateFinanceScenario>[0] => {
+    switch (section) {
+      case "exceptions":
+        return "finance-exceptions";
+      case "vat_reclaim":
+        return "finance-vat";
+      case "policy_insights":
+        return "finance-policy";
+      case "sustainability":
+        return "finance-sustainability";
+      case "dashboard":
+      default:
+        return "finance-dashboard";
+    }
+  }, []);
+
+  const getTravelerScenario = useCallback(
+    (selectedAct: Act): Parameters<typeof activateTravelerScenario>[0] =>
+      selectedAct === "expense" ? "traveler-expense" : "traveler-booking",
+    []
+  );
 
   const traveler = usersData.find(u => u.role === "Traveler");
   const finance = usersData.find(u => u.role === "Finance Operations");
@@ -109,6 +137,27 @@ function MainDashboardContent() {
     setAct(selectedAct);
     setStep('demo');
   };
+
+  useEffect(() => {
+    if (step !== 'demo') {
+      clearActivities();
+      return;
+    }
+
+    if (persona === 'traveler') {
+      activateTravelerScenario(getTravelerScenario(act));
+    }
+  }, [step, persona, act, activateTravelerScenario, clearActivities, getTravelerScenario]);
+
+  useEffect(() => {
+    if (step === 'demo' && persona === 'finance') {
+      activateFinanceScenario(getFinanceScenario("dashboard"));
+    }
+  }, [step, persona, activateFinanceScenario, getFinanceScenario]);
+
+  const handleFinanceSectionChange = useCallback((section: FinanceSection) => {
+    activateFinanceScenario(getFinanceScenario(section));
+  }, [activateFinanceScenario, getFinanceScenario]);
   
   const handleBack = () => {
     if (step === 'demo') {
@@ -465,7 +514,7 @@ function MainDashboardContent() {
                         <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
                           <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
                           <div className="h-full">
-                            <TravelerExpenseFeed />
+                            <TravelerExpenseFeed hideInlineAgentActivity={true} />
                           </div>
                         </div>
                       </div>
@@ -504,7 +553,7 @@ function MainDashboardContent() {
                         <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
                           <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
                           <div className="h-full">
-                            <TravelerBookingView />
+                            <TravelerBookingView hideInlineAgentActivity={true} />
                           </div>
                         </div>
                       </div>
@@ -552,7 +601,11 @@ function MainDashboardContent() {
                           </div>
                         </div>
                         <div className="bg-white overflow-auto" style={{ height: 'calc(100vh - 8rem)', maxHeight: '800px'}}>
-                          <FinanceDashboard onUrlChange={setCurrentFinanceUrl} />
+                          <FinanceDashboard 
+                            onUrlChange={setCurrentFinanceUrl}
+                            hideInlineAgentActivity={true}
+                            onSectionChange={handleFinanceSectionChange}
+                          />
                         </div>
                       </div>
                       <motion.div 
