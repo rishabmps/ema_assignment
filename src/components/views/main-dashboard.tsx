@@ -1,13 +1,13 @@
 
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
 import { TravelerExpenseFeed } from "@/components/features/traveler/traveler-expense-feed";
 import { TravelerBookingView } from "@/components/features/traveler/traveler-booking-view";
 import { FinanceDashboard, type FinanceSection } from "@/components/features/finance/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
+import { Bot, ChevronRight, Plane, FileText, Sparkles, ShieldCheck, Check } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
 import { FloatingAgentDisplay } from "@/components/features/agent-activity";
@@ -60,6 +60,69 @@ function MainDashboardContent() {
 
   const traveler = usersData.find(u => u.role === "Traveler");
   const finance = usersData.find(u => u.role === "Finance Operations");
+
+  const scenarioDetails = useMemo(() => {
+    if (step !== "demo") return null;
+
+    if (persona === "traveler" && act === "expense") {
+      return {
+        label: "Traveler • Act I",
+        headline: "Sarah captures a stack of receipts in seconds",
+        description:
+          "Trigger the Receipt Concierge agent from the mobile view. Watch it extract totals, match the corporate card swipe, and nudge Sarah only if something looks off.",
+        callout: "Pro tip: tap “Simulate” to add a new expense and follow the floating agent feed as policies fire in sequence.",
+        highlights: [
+          "Full compliance reasoning for every approval inside the agent feed.",
+          "Automated mileage, per diem, and VAT handling without manual edits.",
+          "Real-time reimbursement status—no spreadsheets or email chains.",
+        ],
+        metrics: [
+          { label: "Time to reimbursement", value: "35 seconds", sublabel: "from receipt capture to approval" },
+          { label: "Policy confidence", value: "99.2%", sublabel: "based on configured travel program" },
+        ],
+      };
+    }
+
+    if (persona === "traveler" && act === "booking") {
+      return {
+        label: "Traveler • Act II",
+        headline: "Sarah plans a climate-smart trip with concierge guidance",
+        description:
+          "Use the conversational panel to co-create an itinerary. Agents weigh CO₂ impact, traveler preferences, negotiated rates, and duty of care before presenting options.",
+        callout: "Notice how the trip budget and carbon metrics update as you accept recommendations.",
+        highlights: [
+          "Door-to-door itineraries balanced between time, cost, and emissions.",
+          "Automatic documentation of approvals and policy exceptions.",
+          "Budget Copilot keeps stakeholders informed on spend impact.",
+        ],
+        metrics: [
+          { label: "CO₂ reduction", value: "42%", sublabel: "versus the default itinerary" },
+          { label: "Negotiated savings", value: "$1,280", sublabel: "captured before traveler checkout" },
+        ],
+      };
+    }
+
+    if (persona === "finance") {
+      return {
+        label: "Finance Ops",
+        headline: "Alex oversees policy, cash, and risk in one console",
+        description:
+          "Navigate the laptop view to see Budget Copilot, Policy Engine, and Fraud Sentinel collaborate. Every decision is explainable, auditable, and export-ready.",
+        callout: `Currently exploring: ${currentFinanceUrl}. Change sections in the nav to see agent scenarios adapt instantly.`,
+        highlights: [
+          "Exception queue prioritized by AI risk scoring and urgency.",
+          "Policy playbooks trigger automated approvals with human-in-the-loop when thresholds are crossed.",
+          "Real-time variance tracking ties directly into your ERP and forecasting models.",
+        ],
+        metrics: [
+          { label: "Exceptions automated", value: "92%", sublabel: "with explainable outcomes" },
+          { label: "Close acceleration", value: "7× faster", sublabel: "month-end close across pilots" },
+        ],
+      };
+    }
+
+    return null;
+  }, [step, persona, act, currentFinanceUrl]);
 
   useEffect(() => {
     if (step === 'demo') {
@@ -159,18 +222,6 @@ function MainDashboardContent() {
     activateFinanceScenario(getFinanceScenario(section));
   }, [activateFinanceScenario, getFinanceScenario]);
   
-  const handleBack = () => {
-    if (step === 'demo') {
-      if (persona === 'traveler') {
-        setStep('act');
-      } else {
-        setStep('persona');
-      }
-    } else if (step === 'act') {
-      setStep('persona');
-    }
-  }
-
   const renderPersonaSelector = () => (
     <motion.div
       key="persona"
@@ -459,16 +510,16 @@ function MainDashboardContent() {
               <div className="absolute -inset-1 bg-blue-600 rounded-full opacity-20 animate-pulse-ring"></div>
             </div>
             <h1 className="text-5xl font-bold tracking-tight text-gradient bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent animate-gradient-x leading-tight">
-              Agentic T&E
+              Agentic T&E Demo Command Center
             </h1>
           </motion.div>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl text-slate-600 font-medium max-w-2xl mx-auto leading-relaxed"
+            className="text-xl text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed"
           >
-            The future of Travel & Expense management is invisible.
+            Explore live agent orchestration for travelers and finance teams. Follow real decision logs, policy playbooks, and variance insights as they unfold.
           </motion.p>
         </header>
 
@@ -482,6 +533,62 @@ function MainDashboardContent() {
             {getBreadcrumb()}
           </div>
         </motion.div>
+
+        {scenarioDetails && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.6 }}
+            className="mx-auto mb-10 max-w-6xl px-4"
+          >
+            <div className="grid gap-6 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,0.35fr)]">
+              <div className="relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white/80 p-6 shadow-xl backdrop-blur">
+                <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600">
+                  <Sparkles className="h-3.5 w-3.5" /> {scenarioDetails.label}
+                </span>
+                <h2 className="mt-4 text-2xl font-semibold text-slate-900">
+                  {scenarioDetails.headline}
+                </h2>
+                <p className="mt-3 text-sm text-slate-600">{scenarioDetails.description}</p>
+                <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50/60 p-4 text-sm text-blue-700">
+                  {scenarioDetails.callout}
+                </div>
+                <ul className="mt-5 space-y-2 text-sm text-slate-600">
+                  {scenarioDetails.highlights.map((item) => (
+                    <li key={item} className="flex items-start gap-2">
+                      <Check className="mt-0.5 h-4 w-4 text-emerald-500" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="grid gap-4">
+                {scenarioDetails.metrics.map((metric) => (
+                  <div
+                    key={metric.label}
+                    className="flex flex-col gap-2 rounded-3xl border border-slate-200/60 bg-white/80 p-5 shadow-lg backdrop-blur"
+                  >
+                    <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                      {metric.label}
+                    </div>
+                    <div className="text-3xl font-bold text-slate-900">{metric.value}</div>
+                    <div className="text-sm text-slate-500">{metric.sublabel}</div>
+                  </div>
+                ))}
+                <div className="rounded-3xl border border-slate-200/60 bg-slate-50/80 p-5 text-sm text-slate-600 shadow-lg">
+                  <div className="flex items-center gap-2 text-slate-700">
+                    <ShieldCheck className="h-4 w-4 text-blue-500" />
+                    Always-on agent transparency
+                  </div>
+                  <p className="mt-2">
+                    Follow the floating agent feed on the right to inspect decision rationale, supporting data, and escalation paths.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         <div ref={demoRef} className="pb-16">
           <AnimatePresence mode="wait">

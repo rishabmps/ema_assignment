@@ -54,8 +54,7 @@ export function TravelerBookingView({ hideInlineAgentActivity = false }: Travele
   
   const { 
     activities, 
-    simulateTripBookingFlow: simulateTripBookingFlowLocal, 
-    clearActivities 
+    simulateTripBookingFlow: simulateTripBookingFlowLocal
   } = useAgentActivity();
 
   const { simulateBookingFlow: runGlobalBookingFlow } = useDemoAgentContext();
@@ -78,8 +77,8 @@ export function TravelerBookingView({ hideInlineAgentActivity = false }: Travele
     setIsTyping(true);
     
     // Trigger agent activity simulation for trip booking - now shown inline!
-  simulateTripBookingFlowLocal(destination);
-  runGlobalBookingFlow();
+    simulateTripBookingFlowLocal(destination);
+    runGlobalBookingFlow();
     // No need to manually open panel - it shows inline automatically
 
     setTimeout(() => {

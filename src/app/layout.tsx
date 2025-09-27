@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 // import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
+import SiteHeader from "@/components/layout/site-header";
+import SiteFooter from "@/components/layout/site-footer";
 import "./globals.css";
 
 // const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
@@ -18,7 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="font-body antialiased font-inter" suppressHydrationWarning>
-        {children}
+        <div className="flex min-h-screen flex-col">
+          <SiteHeader />
+          <div className="flex-1">{children}</div>
+          <SiteFooter />
+        </div>
         <Toaster />
       </body>
     </html>

@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import type { Transaction } from "@/types";
 import allTransactions from "@/lib/data/transactions.json";
-import { Camera, Receipt, Settings, Bell, PlusCircle, Bot } from "lucide-react";
+import { Camera, Receipt, Settings, Bell, PlusCircle } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -30,6 +30,12 @@ interface TravelerExpenseFeedProps {
   hideInlineAgentActivity?: boolean;
 }
 
+const allowedStatuses = ["Needs Receipt", "Cleared", "Exception", "Processing"] as const;
+type AllowedStatus = (typeof allowedStatuses)[number];
+
+const isAllowedStatus = (status: string): status is AllowedStatus =>
+  (allowedStatuses as readonly string[]).includes(status);
+
 export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: TravelerExpenseFeedProps) {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -45,21 +51,18 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
   
   const { 
     activities, 
-    simulateExpenseFlow: simulateExpenseFlowLocal, 
-    simulateExceptionFlow, 
-    clearActivities 
+    simulateExpenseFlow: simulateExpenseFlowLocal
   } = useAgentActivity();
 
   const { simulateExpenseFlow: runGlobalExpenseFlow } = useDemoAgentContext();
 
   useEffect(() => {
-    const allowedStatuses = ["Needs Receipt", "Cleared", "Exception", "Processing"] as const;
     const initialTransactions = allTransactions
       .filter((t) => !t.id.startsWith("txn_101"))
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
       .map((t) => ({
         ...t,
-        status: allowedStatuses.includes(t.status as any) ? t.status : "Needs Receipt"
+        status: isAllowedStatus(t.status) ? t.status : "Needs Receipt"
       }) as Transaction);
     setTransactions(initialTransactions);
   }, []);
@@ -111,11 +114,10 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
   const handleSimulateTransaction = () => {
     const newTransaction = allTransactions.find((t) => t.id === "txn_101");
     if (newTransaction && !transactions.find(t => t.id === "txn_101")) {
-      const allowedStatuses = ["Needs Receipt", "Cleared", "Exception", "Processing"] as const;
       setTransactions((prev) => [
         {
           ...newTransaction,
-          status: allowedStatuses.includes(newTransaction.status as any) ? newTransaction.status : "Needs Receipt"
+          status: isAllowedStatus(newTransaction.status) ? newTransaction.status : "Needs Receipt"
         } as Transaction,
         ...prev
       ]);
@@ -159,8 +161,8 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
     const transaction = transactions.find(t => t.id === receiptTxnId);
     if (transaction) {
       // Simulate agent activity for expense processing - now shown inline!
-  simulateExpenseFlowLocal(transaction.amount, transaction.merchant);
-  runGlobalExpenseFlow();
+      simulateExpenseFlowLocal(transaction.amount, transaction.merchant);
+      runGlobalExpenseFlow();
       // No need to manually open the panel - it shows inline automatically
     }
 
