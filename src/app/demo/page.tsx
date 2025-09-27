@@ -2,238 +2,253 @@ import Link from "next/link";
 import MainDashboard from "@/components/views/main-dashboard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Receipt, Shield, FileCheck, Calculator } from "lucide-react";
+import { ArrowRight, User, Briefcase, Receipt, Plane, BarChart3, Shield, Zap, Leaf } from "lucide-react";
 
 export const metadata = {
-  title: "Agentic T&E Demo Studio",
+  title: "Demo Studio – Live Experience",
   description:
-    "Experience the agentic travel & expense platform through interactive personas, live agent activity, and guided walkthroughs.",
+    "Experience live agent orchestration as Sarah (Traveler) and Alex (Finance Ops) through immersive demo acts. No slides, just software.",
 };
-
-// Highlighted agents for the demo
-const featuredAgents = [
-  {
-    name: "Receipt Concierge",
-    description: "Intelligently captures and matches receipts to transactions",
-    icon: Receipt,
-    color: "from-purple-500 to-purple-600",
-    status: "Processing 23 receipts"
-  },
-  {
-    name: "Policy Engine", 
-    description: "Enforces compliance rules and validates expense policies",
-    icon: FileCheck,
-    color: "from-blue-500 to-blue-600",
-    status: "Monitoring 156 transactions"
-  },
-  {
-    name: "Fraud Sentinel",
-    description: "Detects suspicious patterns and protects against fraud",
-    icon: Shield,
-    color: "from-red-500 to-red-600",
-    status: "Scanning for anomalies"
-  },
-  {
-    name: "Budget Copilot",
-    description: "Tracks spending and optimizes budget allocation",
-    icon: Calculator,
-    color: "from-emerald-500 to-emerald-600",
-    status: "Analyzing budget variance"
-  }
-];
-
-const agentCapabilities = [
-  {
-    title: "Real-time Processing",
-    description: "All agents work simultaneously to process transactions as they happen",
-    agents: ["Receipt Concierge", "Policy Engine", "Fraud Sentinel"]
-  },
-  {
-    title: "Smart Decision Making",
-    description: "AI agents collaborate to make optimal decisions about bookings and expenses",
-    agents: ["Booking Orchestrator", "Budget Copilot", "CO2 Advisor"]
-  },
-  {
-    title: "Compliance Automation",
-    description: "Ensures every transaction meets company policies and regulatory requirements",
-    agents: ["Policy Engine", "Compliance Guardian", "Expense Automator"]
-  }
-];
-
-const trustSignals = ["SOC 2 Type II", "ISO 27001", "GDPR", "24/7 global support"];
 
 export default function DemoPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
-      {/* Hero Section - Agent Focused */}
-      <section className="mx-auto flex w-full max-w-6xl flex-col items-center gap-8 px-6 pb-16 pt-16 text-center">
-        <Badge className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-100 border border-blue-400/20">
-          Live Demo • 8 AI Agents
-        </Badge>
-        <h1 className="text-balance text-5xl font-bold tracking-tight text-white sm:text-6xl">
-          Watch AI agents work in{" "}
-          <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
-            real-time
-          </span>
-        </h1>
-        <p className="max-w-3xl text-lg text-slate-300 sm:text-xl">
-          Experience live agent orchestration as they process expenses, enforce policies, detect fraud, and optimize every decision—just like in production.
-        </p>
-        
-        <div className="flex flex-col gap-4 sm:flex-row">
-          <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-200 shadow-lg" asChild>
-            <Link href="#demo" className="flex items-center gap-2">
-              Jump to live demo
-              <ArrowRight className="h-5 w-5" />
+      {/* Navigation */}
+      <nav className="mx-auto max-w-6xl px-6 py-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-8">
+            <Link href="/" className="text-slate-300 hover:text-white transition-colors">
+              Home
             </Link>
-          </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            className="border-white/30 text-white hover:bg-white/10"
-            asChild
-          >
-            <Link href="mailto:hello@agenticte.com?subject=Guided%20demo" className="flex items-center gap-2">
-              Get guided walkthrough
+            <span className="text-white font-semibold">Demo Studio</span>
+          </div>
+          <Button size="sm" asChild>
+            <Link href="#demo" className="flex items-center gap-2">
+              Try Live
               <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
         </div>
+      </nav>
 
-        <div className="flex flex-wrap items-center justify-center gap-3 text-xs font-medium uppercase tracking-wide text-slate-400">
-          {trustSignals.map((signal) => (
-            <span key={signal} className="rounded-full border border-white/10 bg-white/5 px-4 py-2">
-              {signal}
-            </span>
-          ))}
-        </div>
+      {/* Welcome Section */}
+      <section className="mx-auto max-w-6xl px-6 pt-8 pb-16 text-center">
+        <Badge className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-100 border border-blue-400/20 mb-6">
+          Live Demo Studio
+        </Badge>
+        <h1 className="text-balance text-5xl font-bold tracking-tight text-white sm:text-6xl mb-6">
+          Welcome to the Agentic T&E{" "}
+          <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+            Demo Studio
+          </span>
+        </h1>
+        <p className="max-w-4xl mx-auto text-lg text-slate-300 sm:text-xl leading-relaxed">
+          Leave the marketing behind—step into the product. Experience how real AI agents orchestrate and automate travel and expense management in the shoes of <strong>Sarah</strong> (a busy traveler) and <strong>Alex</strong> (a finance operations lead).
+        </p>
+        <p className="max-w-4xl mx-auto text-lg text-slate-400 mt-4">
+          Choose your journey, trigger actions, and watch agents work in real-time—no slides, just software.
+        </p>
       </section>
 
-      {/* Featured Agents Section */}
+      {/* Persona Selection Section */}
       <section className="mx-auto max-w-6xl px-6 pb-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Meet the agents you&apos;ll see in action
-          </h2>
-          <p className="text-lg text-slate-300 max-w-2xl mx-auto">
-            These AI agents work together seamlessly to handle every aspect of travel and expense management
-          </p>
+          <h2 className="text-3xl font-bold text-white mb-4">Choose a Persona</h2>
+          <p className="text-lg text-slate-300">Who are you in this story?</p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {featuredAgents.map((agent) => {
-            const IconComponent = agent.icon;
-            return (
-              <div
-                key={agent.name}
-                className="group rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-6 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:scale-105"
-              >
-                <div className={`inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${agent.color} shadow-lg mb-4`}>
-                  <IconComponent className="h-6 w-6 text-white" />
-                </div>
-                
-                <h3 className="text-lg font-semibold text-white mb-2">
-                  {agent.name}
-                </h3>
-                
-                <p className="text-sm text-slate-300 mb-4">
-                  {agent.description}
-                </p>
-                
-                <div className="flex items-center gap-2 text-xs font-medium text-emerald-400">
-                  <div className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                  {agent.status}
-                </div>
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Sarah - Traveler */}
+          <div className="group rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:scale-105">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+                <User className="h-6 w-6 text-white" />
               </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Agent Capabilities Section */}
-      <section className="mx-auto max-w-6xl px-6 pb-16">
-        <div className="grid gap-8 sm:grid-cols-3">
-          {agentCapabilities.map((capability, index) => (
-            <div
-              key={capability.title}
-              className="rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-8 backdrop-blur-sm"
-            >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 shadow-lg mb-6">
-                <span className="text-lg font-bold text-white">{index + 1}</span>
-              </div>
-              
-              <h3 className="text-xl font-semibold text-white mb-3">
-                {capability.title}
-              </h3>
-              
-              <p className="text-slate-300 mb-4">
-                {capability.description}
-              </p>
-              
-              <div className="flex flex-wrap gap-2">
-                {capability.agents.map((agentName) => (
-                  <span
-                    key={agentName}
-                    className="px-3 py-1 rounded-full bg-white/10 text-xs font-medium text-slate-200 border border-white/20"
-                  >
-                    {agentName}
-                  </span>
-                ))}
+              <div>
+                <h3 className="text-2xl font-semibold text-white">👩‍💼 Sarah – Traveler</h3>
               </div>
             </div>
-          ))}
+            
+            <div className="space-y-6">
+              {/* Act I */}
+              <div className="border-l-2 border-blue-400 pl-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Receipt className="h-5 w-5 text-blue-400" />
+                  <h4 className="text-lg font-semibold text-white">Act I: The Receipt Rush</h4>
+                </div>
+                <p className="text-slate-300 mb-3">
+                  Sarah lands after a trip, her phone full of receipts.
+                </p>
+                <p className="text-sm text-slate-400 italic mb-2">
+                  *Trigger the Receipt Concierge by snapping a stack of receipts. Watch as it extracts totals, matches to card transactions, and only pings Sarah if something looks off.*
+                </p>
+                <div className="flex items-center gap-4 text-xs">
+                  <span className="text-emerald-400 font-medium">Time to reimbursement: 35 seconds</span>
+                  <span className="text-blue-400 font-medium">Policy confidence: 99.2%</span>
+                </div>
+              </div>
+
+              {/* Act II */}
+              <div className="border-l-2 border-emerald-400 pl-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Plane className="h-5 w-5 text-emerald-400" />
+                  <h4 className="text-lg font-semibold text-white">Act II: The Smart Booking</h4>
+                </div>
+                <p className="text-slate-300 mb-3">
+                  A new project awaits. Sarah opens the booking panel.
+                </p>
+                <p className="text-sm text-slate-400 italic mb-2">
+                  *Co-create an itinerary with the agent. See how it weighs CO₂ impact, preferences, rates, and duty of care before surfacing options.*
+                </p>
+                <div className="flex items-center gap-4 text-xs">
+                  <span className="text-emerald-400 font-medium">CO₂ reduction: 42%</span>
+                  <span className="text-blue-400 font-medium">Negotiated savings: $1,280</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Alex - Finance Ops */}
+          <div className="group rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:scale-105">
+            <div className="flex items-center gap-4 mb-6">
+              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
+                <Briefcase className="h-6 w-6 text-white" />
+              </div>
+              <div>
+                <h3 className="text-2xl font-semibold text-white">🧑‍💼 Alex – Finance Ops</h3>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              {/* Act I */}
+              <div className="border-l-2 border-red-400 pl-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="h-5 w-5 text-red-400" />
+                  <h4 className="text-md font-semibold text-white">Act I: Exception Handling</h4>
+                </div>
+                <p className="text-sm text-slate-300 mb-1">
+                  Alex reviews the dashboard as exception queues update in real time.
+                </p>
+                <p className="text-xs text-slate-400 italic mb-1">
+                  *See how the Policy Engine and Fraud Sentinel prioritize exceptions by AI scoring and urgency.*
+                </p>
+                <span className="text-xs text-red-400 font-medium">Exceptions automated: 92%</span>
+              </div>
+
+              {/* Act II */}
+              <div className="border-l-2 border-yellow-400 pl-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <BarChart3 className="h-5 w-5 text-yellow-400" />
+                  <h4 className="text-md font-semibold text-white">Act II: VAT Reclaim</h4>
+                </div>
+                <p className="text-sm text-slate-300 mb-1">
+                  Alex heads to the VAT Reclaim tab for end-of-quarter close.
+                </p>
+                <p className="text-xs text-slate-400 italic mb-1">
+                  *The agents automatically surface reclaimable VAT from transactions worldwide.*
+                </p>
+                <span className="text-xs text-yellow-400 font-medium">Average reclaim per quarter: $4,060</span>
+              </div>
+
+              {/* Act III */}
+              <div className="border-l-2 border-blue-400 pl-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Zap className="h-5 w-5 text-blue-400" />
+                  <h4 className="text-md font-semibold text-white">Act III: Policy Insights & Improvement</h4>
+                </div>
+                <p className="text-sm text-slate-300 mb-1">
+                  Alex consults the Policy Insights panel.
+                </p>
+                <p className="text-xs text-slate-400 italic mb-1">
+                  *The Policy Engine analyzes spending patterns, surfacing real recommendations for improving policy effectiveness.*
+                </p>
+                <span className="text-xs text-blue-400 font-medium">1+ new policy recommendations per review</span>
+              </div>
+
+              {/* Act IV */}
+              <div className="border-l-2 border-emerald-400 pl-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Leaf className="h-5 w-5 text-emerald-400" />
+                  <h4 className="text-md font-semibold text-white">Act IV: Sustainability Monitoring</h4>
+                </div>
+                <p className="text-sm text-slate-300 mb-1">
+                  Alex checks the Sustainability Dashboard.
+                </p>
+                <p className="text-xs text-slate-400 italic mb-1">
+                  *Monitor CO₂ emissions across bookings, surface climate-friendly alternatives, and generate compliance reports.*
+                </p>
+                <span className="text-xs text-emerald-400 font-medium">CO₂ tracking coverage: 100%</span>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Demo Section - Seamlessly Integrated */}
-      <section id="demo" className="mx-auto max-w-7xl px-6 pb-20">
-        <MainDashboard />
-      </section>
+      {/* How to Explore Section */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold text-white mb-4">How to Explore the Demo</h2>
+        </div>
 
-      {/* Quick Guide Section */}
-      <section className="mx-auto max-w-6xl px-6 pb-24">
-        <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-emerald-500/20 p-8 sm:p-12 backdrop-blur-sm">
-          <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-white mb-4">
-              How to explore the demo
-            </h2>
-            <p className="text-slate-300">
-              Follow these steps to get the most out of your demo experience
+        <div className="grid gap-8 sm:grid-cols-3">
+          <div className="text-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg mb-4">
+              <span className="text-lg font-bold text-white">1</span>
+            </div>
+            <h3 className="font-semibold text-white mb-2">Pick a persona</h3>
+            <p className="text-sm text-slate-300">
+              Start as Sarah or Alex.
             </p>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-3">
-            <div className="text-center">
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg mb-4">
-                <span className="text-lg font-bold text-white">1</span>
-              </div>
-              <h3 className="font-semibold text-white mb-2">Pick a persona</h3>
-              <p className="text-sm text-slate-300">
-                Switch between traveler and finance views to see how agents serve different roles
-              </p>
+          <div className="text-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg mb-4">
+              <span className="text-lg font-bold text-white">2</span>
             </div>
+            <h3 className="font-semibold text-white mb-2">Trigger actions</h3>
+            <p className="text-sm text-slate-300">
+              Upload receipts, book travel, process expenses, review exceptions, reclaim VAT, improve policies, or explore dashboards.
+            </p>
+          </div>
 
-            <div className="text-center">
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg mb-4">
-                <span className="text-lg font-bold text-white">2</span>
-              </div>
-              <h3 className="font-semibold text-white mb-2">Trigger actions</h3>
-              <p className="text-sm text-slate-300">
-                Upload receipts, book travel, or process expenses and watch agents respond
-              </p>
+          <div className="text-center">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg mb-4">
+              <span className="text-lg font-bold text-white">3</span>
             </div>
-
-            <div className="text-center">
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg mb-4">
-                <span className="text-lg font-bold text-white">3</span>
-              </div>
-              <h3 className="font-semibold text-white mb-2">Inspect reasoning</h3>
-              <p className="text-sm text-slate-300">
-                View agent notes, policy citations, and decision logic behind every action
-              </p>
-            </div>
+            <h3 className="font-semibold text-white mb-2">Inspect reasoning</h3>
+            <p className="text-sm text-slate-300">
+              See agent notes, policy citations, and decision logic for every action.
+            </p>
           </div>
         </div>
+      </section>
+
+      {/* Try it Live Section */}
+      <section className="mx-auto max-w-6xl px-6 pb-16">
+        <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-emerald-500/20 p-8 sm:p-12 backdrop-blur-sm text-center">
+          <h2 className="text-3xl font-bold text-white mb-4">Try it Live</h2>
+          <p className="text-xl text-slate-300 mb-6">Jump to live demo</p>
+          <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-200 shadow-lg mb-4" asChild>
+            <Link href="#demo" className="flex items-center gap-2">
+              Start Demo
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+          </Button>
+          <p className="text-sm text-slate-400 italic">
+            (Or select a persona above)
+          </p>
+        </div>
+      </section>
+
+      {/* Live Demo Section */}
+      <section id="demo" className="mx-auto max-w-7xl px-6 pb-20">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4">Live Demo Experience</h2>
+          <p className="text-lg text-slate-300 max-w-4xl mx-auto mb-2">
+            Every interaction here is powered by the same AI that runs in production. No mockups—just real agent workflows.
+          </p>
+        </div>
+        <MainDashboard />
       </section>
     </main>
   );
