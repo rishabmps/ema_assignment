@@ -107,37 +107,85 @@ export function FinanceDashboard() {
 
 
   return (
-    <div className="w-full space-y-6 p-6 md:p-8 flex flex-col h-full bg-gradient-to-br from-slate-50 to-blue-50 relative">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 right-10 w-32 h-32 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse"></div>
-        <div className="absolute bottom-10 left-10 w-24 h-24 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-pulse" style={{animationDelay: '2s'}}></div>
-      </div>
-      
-      <header className="flex-shrink-0 flex items-start justify-between relative z-10">
-          <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Finance Operations</h1>
-            <p className="text-slate-600 text-lg font-medium">Welcome back, Alex.</p>
+    <div className="w-full h-full bg-white flex flex-col">
+      {/* Top Navigation Bar */}
+      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo and Company */}
+          <div className="flex items-center gap-4">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">AT</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-lg font-semibold text-slate-900">Agentic T&E</span>
+              <span className="text-xs text-slate-500">Enterprise Finance</span>
+            </div>
           </div>
-      </header>
-
-      <Tabs defaultValue="dashboard" className="space-y-6 flex flex-col flex-grow relative z-10">
-        <div className="flex-shrink-0 flex justify-between items-center">
-            <TabsList className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
-                 <TabsTrigger value="dashboard" className="flex items-center gap-2 font-medium">
-                    <LayoutGrid className="h-4 w-4" />
-                    Dashboard
-                </TabsTrigger>
-                <TabsTrigger value="exceptions" className="flex items-center gap-2 font-medium">
-                    <ListTodo className="h-4 w-4" />
-                    Exception Queue
-                </TabsTrigger>
-            </TabsList>
-            <Button variant="outline" className="bg-white/80 backdrop-blur-sm border-slate-200/50 shadow-lg hover:bg-white/90 hover:shadow-xl transition-all duration-300 flex items-center gap-2">
-              <ExternalLink className="h-4 w-4" />
+          
+          {/* Navigation Links */}
+          <div className="flex items-center gap-6">
+            <Button variant="ghost" className="font-medium text-slate-600 hover:text-slate-900">
+              <LayoutGrid className="h-4 w-4 mr-2" />
+              Dashboard
+            </Button>
+            <Button variant="ghost" className="font-medium text-slate-600 hover:text-slate-900" onClick={() => setActiveView('sustainability')}>
+              <Leaf className="h-4 w-4 mr-2" />
+              Sustainability
+            </Button>
+            <Button variant="ghost" className="font-medium text-slate-600 hover:text-slate-900" onClick={() => setActiveView('vat_reclaim')}>
+              <HandCoins className="h-4 w-4 mr-2" />
+              VAT Reclaim
+            </Button>
+            <Button variant="ghost" className="font-medium text-slate-600 hover:text-slate-900" onClick={() => setActiveView('policy_insights')}>
+              <Lightbulb className="h-4 w-4 mr-2" />
+              Policy Insights
+            </Button>
+          </div>
+          
+          {/* User Profile */}
+          <div className="flex items-center gap-3">
+            <Button variant="outline" className="border-slate-200 hover:bg-slate-50">
+              <ExternalLink className="h-4 w-4 mr-2" />
               Export Data
             </Button>
+            <div className="flex items-center gap-2">
+              <Avatar className="w-8 h-8">
+                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-sm">AJ</AvatarFallback>
+              </Avatar>
+              <span className="text-sm font-medium text-slate-700">Alex Johnson</span>
+            </div>
+          </div>
         </div>
+      </nav>
+      
+      {/* Main Content Area */}
+      <div className="flex-1 bg-gradient-to-br from-slate-50 to-blue-50/50 p-6 overflow-auto">
+        {/* Background decoration */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 right-20 w-32 h-32 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
+          <div className="absolute bottom-20 left-20 w-24 h-24 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" style={{animationDelay: '2s'}}></div>
+        </div>
+        
+        <header className="flex-shrink-0 mb-8 relative z-10">
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Finance Operations</h1>
+              <p className="text-slate-600 text-lg font-medium">Welcome back, Alex.</p>
+            </div>
+        </header>
+
+        <Tabs defaultValue="dashboard" className="space-y-6 flex flex-col flex-grow relative z-10">
+          <div className="flex-shrink-0 flex justify-between items-center">
+              <TabsList className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
+                   <TabsTrigger value="dashboard" className="flex items-center gap-2 font-medium">
+                      <LayoutGrid className="h-4 w-4" />
+                      Dashboard
+                  </TabsTrigger>
+                  <TabsTrigger value="exceptions" className="flex items-center gap-2 font-medium">
+                      <ListTodo className="h-4 w-4" />
+                      Exception Queue
+                  </TabsTrigger>
+              </TabsList>
+          </div>
         
         <TabsContent value="dashboard" className="space-y-6 flex-grow">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -380,6 +428,7 @@ export function FinanceDashboard() {
             </Card>
         </TabsContent>
       </Tabs>
+      </div>
     </div>
   );
 }

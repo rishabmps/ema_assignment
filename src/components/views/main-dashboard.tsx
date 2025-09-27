@@ -10,7 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
-import { FloatingAgentStatus } from "@/components/features/agent-activity";
+import { FloatingAgentDisplay } from "@/components/features/agent-activity";
 import { DemoAgentProvider, useDemoAgentContext } from "@/components/features/agent-activity/demo-agent-context";
 
 type Persona = "traveler" | "finance";
@@ -32,14 +32,28 @@ function MainDashboardContent() {
 
   useEffect(() => {
     if (step === 'demo') {
-      // Enhanced auto-scroll with a slight delay to ensure layout is complete
-      setTimeout(() => {
-        demoRef.current?.scrollIntoView({ 
-          behavior: 'smooth', 
-          block: 'start',
-          inline: 'center'
-        });
-      }, 100);
+      // Enhanced auto-scroll with multiple attempts and viewport consideration
+      const scrollToDemo = () => {
+        if (demoRef.current) {
+          const rect = demoRef.current.getBoundingClientRect();
+          const viewportHeight = window.innerHeight;
+          
+          // Calculate optimal scroll position to center the demo content
+          const scrollTop = window.pageYOffset + rect.top - (viewportHeight * 0.1);
+          
+          window.scrollTo({ 
+            top: Math.max(0, scrollTop),
+            behavior: 'smooth' 
+          });
+        }
+      };
+
+      // Initial scroll with delay for layout stabilization
+      setTimeout(scrollToDemo, 150);
+      
+      // Additional scroll attempts to handle dynamic content loading
+      setTimeout(scrollToDemo, 500);
+      setTimeout(scrollToDemo, 1000);
     }
   }, [step, persona, act]);
 
@@ -47,13 +61,22 @@ function MainDashboardContent() {
   useEffect(() => {
     if (step === 'demo') {
       const observer = new ResizeObserver(() => {
+        // Debounce to avoid too many scroll calls
         setTimeout(() => {
-          demoRef.current?.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start',
-            inline: 'center'
-          });
-        }, 200);
+          if (demoRef.current) {
+            const rect = demoRef.current.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            
+            // Only scroll if demo content is not fully visible
+            if (rect.top < 0 || rect.bottom > viewportHeight) {
+              const scrollTop = window.pageYOffset + rect.top - (viewportHeight * 0.1);
+              window.scrollTo({ 
+                top: Math.max(0, scrollTop),
+                behavior: 'smooth' 
+              });
+            }
+          }
+        }, 300);
       });
 
       if (demoRef.current) {
@@ -547,11 +570,10 @@ function MainDashboardContent() {
         </div>
       </div>
 
-      {/* Floating Agent Status - only shown during demos */}
+      {/* Floating Agent Display - only shown during demos */}
       {step === 'demo' && (
-        <FloatingAgentStatus 
+        <FloatingAgentDisplay 
           activities={activities}
-          side="right"
         />
       )}
     </div>
