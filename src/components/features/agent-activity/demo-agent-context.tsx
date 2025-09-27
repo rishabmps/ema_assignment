@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useReducer, useCallback } from 'react';
-import type { AgentActivity, AgentType, AutomationFlow } from '@/components/features/agent-activity/types';
+import type { AgentActivity } from '@/components/features/agent-activity/types';
 
 interface DemoAgentContextType {
   activities: AgentActivity[];

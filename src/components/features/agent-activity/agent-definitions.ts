@@ -1,18 +1,12 @@
 import { 
-  Bot, 
   Receipt, 
   Shield, 
   MapPin, 
-  DollarSign, 
-  Leaf, 
-  Zap, 
   FileCheck,
-  Sparkles,
-  AlertTriangle,
   CheckCircle2,
-  Calendar,
   Calculator,
-  Trees
+  Trees,
+  Zap
 } from 'lucide-react';
 import type { AgentDefinition, AgentType } from './types';
 

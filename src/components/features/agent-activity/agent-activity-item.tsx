@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { getAgentDefinition } from './agent-definitions';
-import type { AgentActivity, AutomationFlow } from './types';
+import type { AgentActivity } from './types';
 
 interface AgentActivityItemProps {
   activity: AgentActivity;
