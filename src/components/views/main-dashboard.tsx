@@ -10,21 +10,22 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
-import { FloatingAgentStatus, useAgentActivity } from "@/components/features/agent-activity";
+import { FloatingAgentStatus } from "@/components/features/agent-activity";
+import { DemoAgentProvider, useDemoAgentContext } from "@/components/features/agent-activity/demo-agent-context";
 
 type Persona = "traveler" | "finance";
 type Act = "expense" | "booking";
 type Step = "persona" | "act" | "demo";
 
-export default function MainDashboard() {
+function MainDashboardContent() {
   const [persona, setPersona] = useState<Persona>("traveler");
   const [act, setAct] = useState<Act>("expense");
   const [step, setStep] = useState<Step>("persona");
 
   const demoRef = useRef<HTMLDivElement>(null);
 
-  // Agent activity for finance dashboard
-  const { activities: financeActivities } = useAgentActivity();
+  // Use the shared agent context
+  const { activities, simulateFinanceFlow } = useDemoAgentContext();
 
   const traveler = usersData.find(u => u.role === "Traveler");
   const finance = usersData.find(u => u.role === "Finance Operations");
@@ -69,6 +70,10 @@ export default function MainDashboard() {
     if (selectedPersona === 'finance') {
       setAct('expense'); // Finance persona only has one main view for this demo
       setStep('demo');
+      // Trigger finance flow simulation
+      setTimeout(() => {
+        simulateFinanceFlow();
+      }, 1000);
     } else {
       setStep('act');
     }
@@ -545,10 +550,18 @@ export default function MainDashboard() {
       {/* Floating Agent Status - only shown during demos */}
       {step === 'demo' && (
         <FloatingAgentStatus 
-          activities={persona === 'finance' ? financeActivities : []}
+          activities={activities}
           side="right"
         />
       )}
     </div>
+  );
+}
+
+export default function MainDashboard() {
+  return (
+    <DemoAgentProvider>
+      <MainDashboardContent />
+    </DemoAgentProvider>
   );
 }
