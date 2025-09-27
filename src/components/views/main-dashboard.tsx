@@ -10,6 +10,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, ChevronRight, Plane, FileText } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
+import { FloatingAgentStatus, useAgentActivity } from "@/components/features/agent-activity";
 
 type Persona = "traveler" | "finance";
 type Act = "expense" | "booking";
@@ -22,14 +23,45 @@ export default function MainDashboard() {
 
   const demoRef = useRef<HTMLDivElement>(null);
 
+  // Agent activity for finance dashboard
+  const { activities: financeActivities } = useAgentActivity();
+
   const traveler = usersData.find(u => u.role === "Traveler");
   const finance = usersData.find(u => u.role === "Finance Operations");
 
   useEffect(() => {
     if (step === 'demo') {
-      demoRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Enhanced auto-scroll with a slight delay to ensure layout is complete
+      setTimeout(() => {
+        demoRef.current?.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start',
+          inline: 'center'
+        });
+      }, 100);
     }
-  }, [step]);
+  }, [step, persona, act]);
+
+  // Additional effect to ensure devices are always visible when content changes
+  useEffect(() => {
+    if (step === 'demo') {
+      const observer = new ResizeObserver(() => {
+        setTimeout(() => {
+          demoRef.current?.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'center'
+          });
+        }, 200);
+      });
+
+      if (demoRef.current) {
+        observer.observe(demoRef.current);
+      }
+
+      return () => observer.disconnect();
+    }
+  }, [step, persona, act]);
 
 
   const handlePersonaSelect = (selectedPersona: Persona) => {
@@ -371,15 +403,15 @@ export default function MainDashboard() {
           </div>
         </motion.div>
 
-        <div ref={demoRef}>
+        <div ref={demoRef} className="pb-16">
           <AnimatePresence mode="wait">
             {step === "persona" && (
-              <motion.div key="persona-selector" className="w-full flex justify-center">
+              <motion.div key="persona-selector" className="w-full flex justify-center px-4">
                 {renderPersonaSelector()}
               </motion.div>
             )}
             {step === "act" && (
-              <motion.div key="act-selector" className="w-full flex justify-center">
+              <motion.div key="act-selector" className="w-full flex justify-center px-4">
                 {renderActSelector()}
               </motion.div>
             )}
@@ -391,10 +423,10 @@ export default function MainDashboard() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="w-full flex justify-center"
+                className="w-full flex justify-center px-4 min-h-[80vh] items-center"
               >
-                <div className="relative">
-                  <div className="w-full max-w-sm relative">
+                <div className="relative my-8">
+                  <div className="w-full max-w-sm relative mx-auto">
                     <div className="absolute inset-0 bg-slate-900 rounded-[2.5rem] transform rotate-1 scale-105 opacity-20 blur-xl"></div>
                     <div className="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-3 rounded-[2.5rem] shadow-2xl">
                       <div className="bg-black p-1 rounded-[2rem]">
@@ -430,10 +462,10 @@ export default function MainDashboard() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="w-full flex justify-center"
+                className="w-full flex justify-center px-4 min-h-[80vh] items-center"
               >
-                <div className="relative">
-                  <div className="w-full max-w-sm relative">
+                <div className="relative my-8">
+                  <div className="w-full max-w-sm relative mx-auto">
                     <div className="absolute inset-0 bg-slate-900 rounded-[2.5rem] transform rotate-1 scale-105 opacity-20 blur-xl"></div>
                     <div className="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-3 rounded-[2.5rem] shadow-2xl">
                       <div className="bg-black p-1 rounded-[2rem]">
@@ -469,10 +501,10 @@ export default function MainDashboard() {
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="w-full flex justify-center"
+                className="w-full flex justify-center px-4"
               >
-                <div className="w-full max-w-7xl relative">
-                    <div className="relative">
+                <div className="w-full max-w-7xl relative my-8">
+                    <div className="relative mx-auto">
                       <div className="absolute inset-0 bg-slate-800 rounded-2xl transform rotate-1 scale-105 opacity-20 blur-2xl"></div>
                       <div className="relative bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 rounded-2xl shadow-2xl overflow-hidden">
                         <div className="h-12 bg-gradient-to-r from-slate-700 to-slate-600 border-b border-slate-600 flex items-center px-6">
@@ -509,6 +541,14 @@ export default function MainDashboard() {
           </AnimatePresence>
         </div>
       </div>
+
+      {/* Floating Agent Status - only shown during demos */}
+      {step === 'demo' && (
+        <FloatingAgentStatus 
+          activities={persona === 'finance' ? financeActivities : []}
+          side="right"
+        />
+      )}
     </div>
   );
 }

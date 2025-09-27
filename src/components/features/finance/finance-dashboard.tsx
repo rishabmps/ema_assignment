@@ -144,21 +144,22 @@ export function FinanceDashboard() {
             {kpiData.map((kpi, index) => (
               <Card 
                 key={kpi.title} 
-                className={`bg-gradient-to-br ${kpi.bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm relative overflow-hidden`}
+                className={`bg-gradient-to-br ${kpi.bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm relative overflow-hidden group cursor-default`}
                 style={{ animationDelay: `${index * 100}ms` }}
               >
-                <div className="absolute inset-0 bg-white/60 backdrop-blur-sm"></div>
+                <div className="absolute inset-0 bg-white/80 backdrop-blur-sm"></div>
                 <div className="relative z-10">
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                    <CardTitle className="text-sm font-semibold text-slate-700">{kpi.title}</CardTitle>
-                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg`}>
+                    <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors">{kpi.title}</CardTitle>
+                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}>
                       <kpi.icon className="h-5 w-5 text-white" />
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold text-slate-800 mb-1">{kpi.value}</div>
-                    <p className="text-sm text-slate-600 font-medium">{kpi.description}</p>
+                    <div className="text-3xl font-bold text-slate-800 mb-1 group-hover:text-slate-900 transition-colors">{kpi.value}</div>
+                    <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors">{kpi.description}</p>
                   </CardContent>
+                  <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-gradient-to-br from-slate-200/20 to-slate-300/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10"></div>
                 </div>
               </Card>
             ))}
@@ -170,6 +171,11 @@ export function FinanceDashboard() {
                 className="cursor-pointer hover:border-emerald-300 transition-all duration-300 bg-gradient-to-br from-white to-emerald-50/30 hover:shadow-xl hover:scale-105 transform border-2 border-transparent backdrop-blur-sm group relative overflow-hidden col-span-1"
               >
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="w-6 h-6 rounded-full bg-emerald-500 flex items-center justify-center">
+                      <span className="text-white text-xs">→</span>
+                    </div>
+                  </div>
                   <div className="relative z-10">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                         <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-emerald-700 transition-colors">Automated VAT Reclaim</CardTitle>
@@ -180,6 +186,9 @@ export function FinanceDashboard() {
                     <CardContent>
                         <div className="text-3xl font-bold text-slate-800 mb-1">{currencyFormatter.format(vatReclaimable)}</div>
                         <p className="text-sm text-slate-600 font-medium">Identified in the last 30 days</p>
+                        <div className="mt-3 text-xs text-emerald-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                          Click to view details
+                        </div>
                     </CardContent>
                   </div>
               </Card>
@@ -189,6 +198,11 @@ export function FinanceDashboard() {
                 className="cursor-pointer hover:border-amber-300 transition-all duration-300 bg-gradient-to-br from-white to-amber-50/30 hover:shadow-xl hover:scale-105 transform border-2 border-transparent backdrop-blur-sm group relative overflow-hidden col-span-1"
               >
                   <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center">
+                      <span className="text-white text-xs">→</span>
+                    </div>
+                  </div>
                   <div className="relative z-10">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                         <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-amber-700 transition-colors">Policy Insights</CardTitle>
@@ -199,6 +213,9 @@ export function FinanceDashboard() {
                     <CardContent>
                         <div className="text-3xl font-bold text-slate-800 mb-1">{policyInsightsCount} New Recommendation</div>
                         <p className="text-sm text-slate-600 font-medium">Data-driven suggestions to improve efficiency</p>
+                        <div className="mt-3 text-xs text-amber-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                          Click to view details
+                        </div>
                     </CardContent>
                   </div>
               </Card>
@@ -208,6 +225,11 @@ export function FinanceDashboard() {
                 className="cursor-pointer hover:border-green-300 transition-all duration-300 bg-gradient-to-br from-white to-green-50/30 hover:shadow-xl hover:scale-105 transform border-2 border-transparent backdrop-blur-sm group relative overflow-hidden col-span-1"
               >
                   <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+                      <span className="text-white text-xs">→</span>
+                    </div>
+                  </div>
                   <div className="relative z-10">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                         <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-green-700 transition-colors">Sustainability</CardTitle>
@@ -218,6 +240,9 @@ export function FinanceDashboard() {
                     <CardContent>
                         <div className="text-3xl font-bold text-slate-800 mb-1">45.2 tons</div>
                         <p className="text-sm text-slate-600 font-medium">Quarterly CO2e on track to meet goal</p>
+                        <div className="mt-3 text-xs text-green-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                          Click to view details
+                        </div>
                     </CardContent>
                   </div>
               </Card>
