@@ -7,6 +7,40 @@
     "departure_time": "08:00",
     "arrival_time": "11:40",
     "price": 179,
-    "co2_kg": 30
+    "co2_kg": 30,
+    "context": "High-speed rail from NYC to Boston. Includes WiFi, power outlets, and comfortable seating. Arrives in time for afternoon meetings. Most sustainable option with 92% lower carbon footprint than flying."
+  },
+  {
+    "id": "tr_502_bos",
+    "carrier": "Amtrak Regional",
+    "from": "NYP", 
+    "to": "BOS",
+    "departure_time": "06:30",
+    "arrival_time": "12:15",
+    "price": 89,
+    "co2_kg": 25,
+    "context": "Standard Amtrak service with longer travel time but significant cost savings. Includes WiFi and comfortable seating. Early departure allows for full day in Boston."
+  },
+  {
+    "id": "tr_601_london",
+    "carrier": "Eurostar",
+    "from": "PAR",
+    "to": "LON",
+    "departure_time": "09:31",
+    "arrival_time": "10:31",
+    "price": 95,
+    "co2_kg": 15,
+    "context": "High-speed rail from Paris to London. 2h20m journey through the Channel Tunnel. Includes WiFi, power outlets, and refreshments. Most sustainable option for European travel."
+  },
+  {
+    "id": "tr_701_frankfurt",
+    "carrier": "Deutsche Bahn ICE",
+    "from": "FRA",
+    "to": "PAR",
+    "departure_time": "08:15",
+    "arrival_time": "12:45",
+    "price": 120,
+    "co2_kg": 20,
+    "context": "German high-speed rail connecting Frankfurt to Paris. 4h30m journey with excellent onboard amenities. Includes WiFi, dining car, and spacious seating."
   }
 ]

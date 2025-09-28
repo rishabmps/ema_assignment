@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -13,6 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, CheckCircle, FileText, XCircle } from "lucide-react";
+import { DemoModal } from "@/components/ui/demo-modal";
 import type { RecommendationLogEntry } from "@/types";
 import recommendationLog from "@/lib/data/recommendation_log.json";
 import sustainabilityTargets from "@/lib/data/sustainability_targets.json";
@@ -61,6 +63,27 @@ const getUserById = (id: string) => users.find(u => u.id === id);
 export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: "info" | "confirm" | "success";
+    onConfirm?: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info"
+  });
+
+  const showModal = (title: string, message: string, type: "info" | "confirm" | "success" = "info", onConfirm?: () => void) => {
+    setModalState({ isOpen: true, title, message, type, onConfirm });
+  };
+
+  const closeModal = () => {
+    setModalState(prev => ({ ...prev, isOpen: false }));
+  };
+
   return (
     <div className="h-full overflow-hidden">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 h-full">
@@ -105,7 +128,11 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                       document.body.removeChild(a);
                       URL.revokeObjectURL(url);
                       
-                      alert(`ESG sustainability report exported successfully! Current emissions: ${totalEmissions.toFixed(1)} tons CO2e (${progress.toFixed(1)}% of budget)`);
+                      showModal(
+                        "ESG Report Exported",
+                        `ESG sustainability report exported successfully! Current emissions: ${totalEmissions.toFixed(1)} tons CO2e (${progress.toFixed(1)}% of budget)`,
+                        "success"
+                      );
                     }}
                   >
                     <FileText className="mr-1 h-3 w-3" />
@@ -184,6 +211,17 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
             </CardContent>
         </Card>
       </div>
+      
+      <DemoModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+        onConfirm={modalState.onConfirm}
+        confirmText="OK"
+        cancelText="Cancel"
+      />
     </div>
   );
 }

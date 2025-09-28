@@ -1,13 +1,15 @@
+"use client";
+
 import Link from "next/link";
+import { useToggle } from "@/components/layout/toggle-context";
+import { Shield, Award, Lock, Globe } from "lucide-react";
 
 const solutionLinks = [
-  { label: "Buyer & seller value", href: "/#personas" },
-  { label: "How it works", href: "/#how" },
-  { label: "Proof points", href: "/#proof" },
+  { label: "Home", href: "/" },
 ];
 
 const resourceLinks = [
-  { label: "Demo studio", href: "/demo" },
+  { label: "Try Demo", href: "/demo", isDemo: true },
   { label: "Product session", href: "mailto:hello@agenticte.com?subject=Product%20session" },
   { label: "Security brief", href: "mailto:hello@agenticte.com?subject=Security%20overview" },
 ];
@@ -20,6 +22,12 @@ const companyLinks = [
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
+  const { setIsDemo } = useToggle();
+
+  const handleDemoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsDemo(true);
+  };
 
   return (
     <footer className="border-t border-white/10 bg-slate-950 text-slate-300">
@@ -35,10 +43,22 @@ export function SiteFooter() {
             Agentic copilots align finance buyers and travel sellers with shared visibility, automated controls, and happier travelers.
           </p>
           <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">SOC 2 Type II</span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">ISO 27001</span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">GDPR Ready</span>
-            <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1">24/7 Global Support</span>
+            <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              <Shield className="h-3 w-3 text-emerald-400" />
+              SOC 2 Type II
+            </span>
+            <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              <Award className="h-3 w-3 text-blue-400" />
+              ISO 27001
+            </span>
+            <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              <Lock className="h-3 w-3 text-purple-400" />
+              GDPR Ready
+            </span>
+            <span className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1">
+              <Globe className="h-3 w-3 text-orange-400" />
+              24/7 Global Support
+            </span>
           </div>
         </div>
         <div className="grid gap-10 sm:grid-cols-3">
@@ -59,9 +79,18 @@ export function SiteFooter() {
             <ul className="mt-4 space-y-3 text-sm">
               {resourceLinks.map((link) => (
                 <li key={link.label}>
-                  <Link href={link.href} className="transition-colors hover:text-white">
-                    {link.label}
-                  </Link>
+                  {link.isDemo ? (
+                    <button 
+                      onClick={handleDemoClick}
+                      className="transition-colors hover:text-white text-left"
+                    >
+                      {link.label}
+                    </button>
+                  ) : (
+                    <Link href={link.href} className="transition-colors hover:text-white">
+                      {link.label}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>

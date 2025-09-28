@@ -1,4 +1,3 @@
-
 [
   {
     "id": "txn_101",
@@ -16,7 +15,8 @@
       }
     ],
     "policy_check": null,
-    "fraud_check": null
+    "fraud_check": null,
+    "context": "Client dinner with Acme Corp executives to discuss Q4 partnership opportunities. Sarah hosted 3 clients at this upscale steakhouse in downtown Boston."
   },
   {
     "id": "txn_102",
@@ -28,126 +28,266 @@
     "status": "Cleared",
     "category": "Meals & Refreshments",
     "timeline": [
-      { "time": "2024-07-21T08:34:10Z", "status": "Transaction received." },
-      { "time": "2024-07-21T08:34:12Z", "agent": "Policy Engine", "status": "No receipt required (under $25)." },
-      { "time": "2024-07-21T08:34:15Z", "agent": "Policy Engine", "status": "Policy check passed." },
-      { "time": "2024-07-21T08:35:00Z", "status": "Expense cleared for ERP posting. No further action needed." }
+      {
+        "time": "2024-07-21T08:34:10Z",
+        "status": "Transaction received from card provider."
+      },
+      {
+        "time": "2024-07-21T08:35:22Z",
+        "status": "Receipt automatically matched via OCR."
+      },
+      {
+        "time": "2024-07-21T08:35:45Z",
+        "status": "Policy compliance check passed."
+      },
+      {
+        "time": "2024-07-21T08:36:01Z",
+        "status": "Transaction approved and cleared."
+      }
     ],
-    "policy_check": null,
-    "fraud_check": null
+    "policy_check": {
+      "status": "passed",
+      "details": "Meal expense within $15 daily limit for Boston location."
+    },
+    "fraud_check": {
+      "status": "passed",
+      "score": 0.02,
+      "details": "Low risk transaction - typical merchant pattern."
+    },
+    "context": "Morning coffee before client meeting at Boston Financial District. Sarah grabbed a grande latte and breakfast sandwich while preparing for her 9 AM presentation."
   },
   {
     "id": "txn_103",
-    "merchant": "Hyatt Regency NYC",
-    "merchant_logo": "building",
-    "amount": 410.00,
-    "date": "2024-07-19T14:20:00Z",
-    "user_id": "user_sarah",
-    "status": "Exception",
-    "category": "Lodging",
-    "timeline": [
-      { "time": "2024-07-19T14:20:00Z", "status": "Transaction received." },
-      { "time": "2024-07-19T14:20:05Z", "agent": "Receipt Concierge", "status": "E-receipt automatically matched." },
-      { "time": "2024-07-19T14:20:10Z", "agent": "Policy Engine", "status": "Policy violation detected. Flagged for review." }
-    ],
-    "policy_check": {
-      "violation": "Exceeds Hotel Max Rate",
-      "details": "Expense amount of $410.00 exceeds the 'New York' limit of $350.",
-      "rule_id": "hotels.max_rate.high_cost_cities.New York"
-    },
-    "fraud_check": null,
-    "co2_kg": 25
-  },
-  {
-    "id": "txn_104",
-    "merchant": "Marriott Marquis SF",
-    "merchant_logo": "building",
-    "amount": 370.00,
-    "date": "2024-07-15T22:05:12Z",
-    "user_id": "user_sarah",
-    "status": "Cleared",
-    "category": "Lodging",
-    "timeline": [
-      { "time": "2024-07-15T22:05:12Z", "status": "Transaction received." },
-      { "time": "2024-07-15T22:05:18Z", "agent": "Receipt Concierge", "status": "E-receipt automatically matched." },
-      { "time": "2024-07-15T22:05:25Z", "agent": "Policy Engine", "status": "Policy check passed (within 'San Francisco' per-diem)." },
-      { "time": "2024-07-15T22:06:00Z", "status": "Expense cleared for ERP posting. No further action needed." }
-    ],
-    "policy_check": null,
-    "fraud_check": null,
-    "co2_kg": 22
-  },
-  {
-    "id": "txn_105",
     "merchant": "Blue Bottle Coffee",
     "merchant_logo": "coffee",
     "amount": 12.50,
-    "date": "2024-07-20T15:05:00Z",
+    "date": "2024-07-20T14:22:33Z",
     "user_id": "user_sarah",
     "status": "Exception",
     "category": "Meals & Refreshments",
     "timeline": [
-      { "time": "2024-07-20T15:05:00Z", "status": "Transaction received." },
-      { "time": "2024-07-20T15:05:10Z", "agent": "Fraud Sentinel", "status": "Potential duplicate transaction detected. Flagged for review." }
+      {
+        "time": "2024-07-20T14:22:33Z",
+        "status": "Transaction received from card provider."
+      },
+      {
+        "time": "2024-07-20T14:23:15Z",
+        "status": "Receipt automatically matched via OCR."
+      },
+      {
+        "time": "2024-07-20T14:23:28Z",
+        "status": "Policy compliance check failed - amount exceeds $10 limit."
+      },
+      {
+        "time": "2024-07-20T14:23:45Z",
+        "status": "Exception flagged for manual review."
+      }
     ],
-    "policy_check": null,
+    "policy_check": {
+      "status": "failed",
+      "details": "Coffee expense of $12.50 exceeds $10 daily limit for San Francisco location.",
+      "violation": "daily_meal_limit_exceeded"
+    },
     "fraud_check": {
-      "alert": "Potential Duplicate Transaction",
-      "details": "This transaction is similar in amount and merchant to another transaction (ID: txn_106) submitted by the same employee on the same day.",
-      "recommendation": "Review both transactions to ensure they are for separate business purposes."
-    }
+      "status": "passed",
+      "score": 0.01,
+      "details": "Low risk transaction - verified merchant."
+    },
+    "context": "Afternoon coffee meeting with potential client at Blue Bottle Coffee in SOMA. Sarah ordered specialty drinks for herself and the client while discussing their upcoming project requirements."
+  },
+  {
+    "id": "txn_104",
+    "merchant": "Hyatt Regency NYC",
+    "merchant_logo": "hotel",
+    "amount": 410.00,
+    "date": "2024-07-19T15:45:12Z",
+    "user_id": "user_sarah",
+    "status": "Exception",
+    "category": "Accommodation",
+    "timeline": [
+      {
+        "time": "2024-07-19T15:45:12Z",
+        "status": "Transaction received from card provider."
+      },
+      {
+        "time": "2024-07-19T15:46:33Z",
+        "status": "Receipt automatically matched via OCR."
+      },
+      {
+        "time": "2024-07-19T15:46:45Z",
+        "status": "Policy compliance check failed - rate exceeds NYC limit."
+      },
+      {
+        "time": "2024-07-19T15:47:02Z",
+        "status": "Exception flagged for manual review."
+      }
+    ],
+    "policy_check": {
+      "status": "failed",
+      "details": "Hotel rate of $410/night exceeds $350 limit for New York City.",
+      "violation": "hotel_rate_limit_exceeded"
+    },
+    "fraud_check": {
+      "status": "passed",
+      "score": 0.03,
+      "details": "Low risk transaction - verified hotel chain."
+    },
+    "context": "Business trip to NYC for quarterly board meeting. Sarah stayed at Hyatt Regency near Grand Central Station due to last-minute booking during peak conference season. The higher rate was necessary due to limited availability."
+  },
+  {
+    "id": "txn_105",
+    "merchant": "Marriott Marquis SF",
+    "merchant_logo": "hotel",
+    "amount": 370.00,
+    "date": "2024-07-16T11:30:45Z",
+    "user_id": "user_sarah",
+    "status": "Cleared",
+    "category": "Accommodation",
+    "timeline": [
+      {
+        "time": "2024-07-16T11:30:45Z",
+        "status": "Transaction received from card provider."
+      },
+      {
+        "time": "2024-07-16T11:31:22Z",
+        "status": "Receipt automatically matched via OCR."
+      },
+      {
+        "time": "2024-07-16T11:31:35Z",
+        "status": "Policy compliance check passed."
+      },
+      {
+        "time": "2024-07-16T11:31:48Z",
+        "status": "Transaction approved and cleared."
+      }
+    ],
+    "policy_check": {
+      "status": "passed",
+      "details": "Hotel rate within $400 limit for San Francisco location."
+    },
+    "fraud_check": {
+      "status": "passed",
+      "score": 0.02,
+      "details": "Low risk transaction - verified hotel chain."
+    },
+    "context": "3-day business trip to San Francisco for TechCrunch Disrupt conference. Sarah stayed at Marriott Marquis in downtown SF, which was conveniently located near the Moscone Center where the conference was held."
   },
   {
     "id": "txn_106",
     "merchant": "The Savoy, London",
-    "user_id": "user_sarah",
-    "date": "2024-07-10T19:30:00Z",
-    "merchant_logo": "building",
+    "merchant_logo": "hotel",
     "amount": 450.00,
-    "currency": "GBP",
-    "amount_usd": 560.00,
-    "category": "Lodging",
+    "date": "2024-07-11T09:15:30Z",
+    "user_id": "user_sarah",
     "status": "Cleared",
+    "category": "Accommodation",
+    "timeline": [
+      {
+        "time": "2024-07-11T09:15:30Z",
+        "status": "Transaction received from card provider."
+      },
+      {
+        "time": "2024-07-11T09:16:12Z",
+        "status": "Receipt automatically matched via OCR."
+      },
+      {
+        "time": "2024-07-11T09:16:25Z",
+        "status": "Policy compliance check passed."
+      },
+      {
+        "time": "2024-07-11T09:16:38Z",
+        "status": "Transaction approved and cleared."
+      }
+    ],
+    "policy_check": {
+      "status": "passed",
+      "details": "Hotel rate within $500 limit for London location."
+    },
+    "fraud_check": {
+      "status": "passed",
+      "score": 0.01,
+      "details": "Low risk transaction - verified luxury hotel."
+    },
+    "context": "International business trip to London for partnership negotiations with European clients. Sarah stayed at The Savoy, a historic luxury hotel in Covent Garden, chosen for its prestigious location and client entertainment facilities.",
     "vat_reclaimable_usd": 93.33,
-    "country_code": "GB",
-    "timeline": [],
-    "policy_check": null,
-    "fraud_check": null,
-    "co2_kg": 35
+    "country": "GB"
   },
   {
     "id": "txn_107",
     "merchant": "Sixt Paris",
-    "user_id": "user_sarah",
-    "date": "2024-07-08T12:15:00Z",
     "merchant_logo": "car",
     "amount": 120.00,
-    "currency": "EUR",
-    "amount_usd": 135.00,
-    "category": "Ground Transport",
+    "date": "2024-07-08T14:20:15Z",
+    "user_id": "user_sarah",
     "status": "Cleared",
+    "category": "Transportation",
+    "timeline": [
+      {
+        "time": "2024-07-08T14:20:15Z",
+        "status": "Transaction received from card provider."
+      },
+      {
+        "time": "2024-07-08T14:21:33Z",
+        "status": "Receipt automatically matched via OCR."
+      },
+      {
+        "time": "2024-07-08T14:21:45Z",
+        "status": "Policy compliance check passed."
+      },
+      {
+        "time": "2024-07-08T14:21:58Z",
+        "status": "Transaction approved and cleared."
+      }
+    ],
+    "policy_check": {
+      "status": "passed",
+      "details": "Car rental within $150 daily limit for Paris location."
+    },
+    "fraud_check": {
+      "status": "passed",
+      "score": 0.02,
+      "details": "Low risk transaction - verified car rental company."
+    },
+    "context": "Car rental in Paris for client site visits across the city. Sarah rented a compact car from Sixt to visit multiple client locations in Paris suburbs, as public transportation would have been too time-consuming for the tight schedule.",
     "vat_reclaimable_usd": 22.50,
-    "country_code": "FR",
-    "timeline": [],
-    "policy_check": null,
-    "fraud_check": null,
-    "co2_kg": 40
+    "country": "FR"
   },
   {
     "id": "txn_108",
     "merchant": "Lufthansa",
-    "user_id": "user_sarah",
-    "date": "2024-07-05T09:00:00Z",
     "merchant_logo": "plane",
     "amount": 950.00,
-    "currency": "USD",
-    "amount_usd": 950.00,
-    "category": "Airfare",
+    "date": "2024-07-05T16:45:22Z",
+    "user_id": "user_sarah",
     "status": "Cleared",
-    "vat_reclaimable_usd": 0,
-     "timeline": [],
-    "policy_check": null,
-    "fraud_check": null,
-    "co2_kg": 1200
+    "category": "Transportation",
+    "timeline": [
+      {
+        "time": "2024-07-05T16:45:22Z",
+        "status": "Transaction received from card provider."
+      },
+      {
+        "time": "2024-07-05T16:46:15Z",
+        "status": "Receipt automatically matched via OCR."
+      },
+      {
+        "time": "2024-07-05T16:46:28Z",
+        "status": "Policy compliance check passed."
+      },
+      {
+        "time": "2024-07-05T16:46:41Z",
+        "status": "Transaction approved and cleared."
+      }
+    ],
+    "policy_check": {
+      "status": "passed",
+      "details": "International flight within $1000 limit for business class."
+    },
+    "fraud_check": {
+      "status": "passed",
+      "score": 0.01,
+      "details": "Low risk transaction - verified airline."
+    },
+    "context": "Business class flight from Frankfurt to San Francisco after European client meetings. Sarah upgraded to business class due to the 11-hour flight duration and need to work during the journey for an important presentation the next day."
   }
 ]

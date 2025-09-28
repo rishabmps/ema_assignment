@@ -3,9 +3,60 @@
         {
             "id": "rec_001",
             "rule_id": "hotels.max_rate.high_cost_cities.New York",
-            "insight": "The hotel rate cap for New York City ($350) was flagged as an exception on 32 compliant trips in the last 90 days. 95% of these exceptions were manually approved.",
+            "insight": "The hotel rate cap for New York City ($350) was flagged as an exception on 32 compliant trips in the last 90 days. 95% of these exceptions were manually approved due to conference season pricing.",
             "recommendation": "Consider increasing the NYC hotel cap to $375 to reduce exception handling by an estimated 28%.",
-            "impact": "Reduces manual exception reviews, saving an estimated 5 hours of administrative work per month."
+            "impact": "Reduces manual exception reviews, saving an estimated 5 hours of administrative work per month.",
+            "context": "Peak conference season in NYC (Q3-Q4) consistently drives hotel rates above current policy limits. Most exceptions are legitimate business needs for client-facing meetings.",
+            "risk_assessment": "Low risk - historical approval rate suggests policy is too restrictive for market conditions",
+            "savings_potential": "$2,400 annually in reduced administrative overhead"
+        },
+        {
+            "id": "rec_002", 
+            "rule_id": "meals.daily_limit.San Francisco",
+            "insight": "Coffee expenses in San Francisco exceed the $10 daily limit 67% of the time, primarily due to client entertainment and specialty coffee meetings.",
+            "recommendation": "Increase SF coffee/meeting allowance to $15/day or create separate 'client entertainment' category.",
+            "impact": "Eliminates 23 exception reviews per month, improving traveler experience.",
+            "context": "SF's premium coffee culture and client meeting expectations drive higher coffee expenses. Current policy doesn't account for client entertainment needs.",
+            "risk_assessment": "Medium risk - need to distinguish between personal and client entertainment expenses",
+            "savings_potential": "$1,800 annually in reduced processing time"
+        },
+        {
+            "id": "rec_003",
+            "rule_id": "transportation.car_rental.International",
+            "insight": "International car rentals in Paris exceed policy limits 45% of the time due to automatic transmission requirements and insurance add-ons.",
+            "recommendation": "Create separate policy tier for international rentals with higher limits and mandatory insurance coverage.",
+            "impact": "Reduces international travel friction while maintaining cost controls.",
+            "context": "European car rentals often require automatic transmission upgrades and comprehensive insurance, driving costs above standard policy limits.",
+            "risk_assessment": "Low risk - international travel has different cost structures and requirements",
+            "savings_potential": "$3,200 annually in improved traveler satisfaction and reduced delays"
+        }
+    ],
+    "exception_scenarios": [
+        {
+            "id": "exc_001",
+            "employee": "Sarah Chen",
+            "transaction_id": "txn_104",
+            "merchant": "Hyatt Regency NYC",
+            "amount": 410.00,
+            "policy_violation": "hotel_rate_limit_exceeded",
+            "violation_details": "Rate of $410/night exceeds NYC limit of $350 by $60",
+            "business_justification": "Last-minute booking during peak conference season. Limited availability required premium location near Grand Central for client meetings.",
+            "approval_recommendation": "Approve - legitimate business need with documented client meeting requirements",
+            "risk_score": 0.15,
+            "auto_approve_threshold": 0.20
+        },
+        {
+            "id": "exc_002",
+            "employee": "Sarah Chen", 
+            "transaction_id": "txn_103",
+            "merchant": "Blue Bottle Coffee",
+            "amount": 12.50,
+            "policy_violation": "daily_meal_limit_exceeded",
+            "violation_details": "Coffee expense of $12.50 exceeds SF limit of $10 by $2.50",
+            "business_justification": "Client meeting at Blue Bottle Coffee in SOMA. Ordered specialty drinks for client discussion of upcoming project requirements.",
+            "approval_recommendation": "Approve - client entertainment expense with business purpose",
+            "risk_score": 0.05,
+            "auto_approve_threshold": 0.20
         }
     ]
 }

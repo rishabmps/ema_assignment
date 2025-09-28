@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Bot, Sparkles, ChevronDown, ChevronUp, Minimize2, Maximize2 } from 'lucide-react';
@@ -18,7 +18,7 @@ interface FloatingAgentDisplayProps {
   };
 }
 
-export function FloatingAgentDisplay({ activities, className, context }: FloatingAgentDisplayProps) {
+export const FloatingAgentDisplay = memo(function FloatingAgentDisplay({ activities, className, context }: FloatingAgentDisplayProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentActivityId, setCurrentActivityId] = useState<string | null>(null);
@@ -38,12 +38,18 @@ export function FloatingAgentDisplay({ activities, className, context }: Floatin
     }
   }, [activities]);
 
-  const activeAgents = activities.filter(a => a.status === 'active' || a.status === 'processing');
-  const completedAgents = activities.filter(a => a.status === 'completed');
+  const activeAgents = useMemo(() => 
+    activities.filter(a => a.status === 'active' || a.status === 'processing'), 
+    [activities]
+  );
+  const completedAgents = useMemo(() => 
+    activities.filter(a => a.status === 'completed'), 
+    [activities]
+  );
   const hasActivity = activities.length > 0;
 
   // Get contextual information based on current demo
-  const getContextualInfo = () => {
+  const getContextualInfo = useCallback(() => {
     if (!context?.persona || !context?.demoType) {
       return { title: 'AI Agents', subtitle: 'Monitoring activity' };
     }
@@ -78,7 +84,7 @@ export function FloatingAgentDisplay({ activities, className, context }: Floatin
     }
 
     return { title: 'AI Agents', subtitle: 'Monitoring activity' };
-  };
+  }, [context]);
 
   const contextInfo = getContextualInfo();
 
@@ -291,4 +297,4 @@ export function FloatingAgentDisplay({ activities, className, context }: Floatin
       )}
     </motion.div>
   );
-}
+});

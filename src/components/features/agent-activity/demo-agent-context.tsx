@@ -22,6 +22,10 @@ interface DemoAgentContextType {
   simulateFinanceFlow: () => void;
   activateFinanceScenario: (scenario: FinanceScenario) => void;
   activateTravelerScenario: (scenario: TravelerScenario) => void;
+  triggerTransactionReaction: (transactionType: 'expense' | 'booking', transactionData?: any) => void;
+  clearTransactionReaction: () => void;
+  resetToListeningMode: () => void;
+  completeAgentProcessing: (transactionType: 'expense' | 'booking', transactionData?: any) => void;
 }
 
 const DemoAgentContext = createContext<DemoAgentContextType | null>(null);
@@ -83,8 +87,7 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const simulateExpenseFlow = useCallback(() => {
-    // Clear existing activities first
-    dispatch({ type: 'CLEAR_ACTIVITIES' });
+    // Don't clear activities here since we want to build upon initial activities
     
     // Receipt extraction
     const receiptActivityId = `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -148,13 +151,35 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
               status: 'completed'
             }
           });
+
+          // Final step - ERP posting
+          const erpActivityId = `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          const erpActivity: AgentActivity = {
+            id: erpActivityId,
+            agentType: 'expense-automator',
+            message: 'Posting to ERP system...',
+            status: 'processing',
+            timestamp: new Date()
+          };
+          dispatch({ type: 'ADD_ACTIVITY', activity: erpActivity });
+
+          setTimeout(() => {
+            dispatch({ 
+              type: 'UPDATE_ACTIVITY', 
+              id: erpActivityId, 
+              updates: {
+                message: 'Successfully posted to SAP - Expense #EXP-2024-001',
+                status: 'completed'
+              }
+            });
+          }, 1200);
         }, 1500);
       }, 1000);
     }, 2000);
   }, []);
 
   const simulateBookingFlow = useCallback(() => {
-    dispatch({ type: 'CLEAR_ACTIVITIES' });
+    // Don't clear activities here since we want to build upon initial activities
 
     const travelActivityId = `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const travelActivity: AgentActivity = {
@@ -195,6 +220,28 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
             status: 'completed'
           }
         });
+
+        // Final step - Booking confirmation
+        const confirmationActivityId = `activity_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+        const confirmationActivity: AgentActivity = {
+          id: confirmationActivityId,
+          agentType: 'booking-orchestrator',
+          message: 'Confirming booking with travel provider...',
+          status: 'processing',
+          timestamp: new Date()
+        };
+        dispatch({ type: 'ADD_ACTIVITY', activity: confirmationActivity });
+
+        setTimeout(() => {
+          dispatch({ 
+            type: 'UPDATE_ACTIVITY', 
+            id: confirmationActivityId, 
+            updates: {
+              message: 'Booking confirmed - Confirmation #BK-2024-001',
+              status: 'completed'
+            }
+          });
+        }, 1500);
       }, 2000);
     }, 1500);
   }, []);
@@ -218,7 +265,7 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
         type: 'UPDATE_ACTIVITY', 
         id: vatActivityId, 
         updates: {
-          message: 'Found $115.83 in reclaimable VAT',
+          message: 'Found $115.83 in reclaimable VAT from 2 international transactions',
           status: 'completed'
         }
       });
@@ -239,7 +286,7 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
           type: 'UPDATE_ACTIVITY', 
           id: insightsActivityId, 
           updates: {
-            message: 'Generated 1 new policy recommendation',
+            message: 'Generated 3 new policy recommendations based on spending patterns',
             status: 'completed'
           }
         });
@@ -252,24 +299,24 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
       switch (scenario) {
         case 'finance-dashboard':
           return [
-            makeActivity('expense-automator', '95% of expenses auto-posted in the last 30 days', 'completed'),
+            makeActivity('expense-automator', '95.2% of expenses auto-posted in the last 30 days', 'completed'),
             makeActivity('policy-engine', 'Monitoring policy drift across departments', 'processing'),
-            makeActivity('budget-copilot', 'Surfacing savings opportunities from automated spend', 'active')
+            makeActivity('budget-copilot', 'Surfacing $4,060 in productivity savings from 70 automated reports', 'active')
           ];
         case 'finance-exceptions':
           return [
-            makeActivity('fraud-sentinel', 'Prioritizing exception queue by risk score', 'processing'),
+            makeActivity('fraud-sentinel', 'Prioritizing 2 exception items by risk score (avg. 0.10)', 'processing'),
             makeActivity('policy-engine', 'Summarizing policy violations for reviewer context', 'active'),
             makeActivity('expense-automator', 'Routing cleared exceptions for ERP posting', 'completed')
           ];
         case 'finance-vat':
           return [
-            makeActivity('budget-copilot', 'Reconciling reclaimable VAT across EMEA', 'processing'),
+            makeActivity('budget-copilot', 'Identified $115.83 in reclaimable VAT from 2 international transactions', 'processing'),
             makeActivity('compliance-guardian', 'Validating supporting documents before submission', 'active')
           ];
         case 'finance-policy':
           return [
-            makeActivity('policy-engine', 'Detecting new spend patterns that need policy updates', 'processing'),
+            makeActivity('policy-engine', 'Generated 3 new policy recommendations based on spending patterns', 'processing'),
             makeActivity('expense-automator', 'Auto-distributing recommended changes to policy owners', 'active')
           ];
         case 'finance-sustainability':
@@ -286,25 +333,135 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
   }, [makeActivity]);
 
   const activateTravelerScenario = useCallback((scenario: TravelerScenario) => {
-    const scenarioActivities: AgentActivity[] = (() => {
+    // Clear existing activities first
+    dispatch({ type: 'CLEAR_ACTIVITIES' });
+    
+    // Set agents in listening mode - they'll react when transactions are added
+    const listeningActivities: AgentActivity[] = (() => {
       switch (scenario) {
         case 'traveler-expense':
           return [
-            makeActivity('receipt-concierge', 'Standing by to capture receipts from mobile upload', 'active'),
-            makeActivity('policy-engine', 'Pre-validating recent card transactions for compliance', 'processing')
+            makeActivity('receipt-concierge', 'Listening for receipt uploads...', 'active'),
+            makeActivity('policy-engine', 'Monitoring for new transactions...', 'active'),
+            makeActivity('fraud-sentinel', 'Standing by for anomaly detection...', 'active')
           ];
         case 'traveler-booking':
           return [
-            makeActivity('booking-orchestrator', 'Curating sustainable itineraries for upcoming trips', 'processing'),
-            makeActivity('co2-advisor', 'Highlighting the greenest door-to-door options', 'active')
+            makeActivity('booking-orchestrator', 'Ready to assist with travel requests...', 'active'),
+            makeActivity('co2-advisor', 'Monitoring for booking opportunities...', 'active'),
+            makeActivity('budget-copilot', 'Tracking travel budget allocations...', 'active')
           ];
         default:
           return [];
       }
     })();
 
-    dispatch({ type: 'SET_ACTIVITIES', activities: scenarioActivities });
+    dispatch({ type: 'SET_ACTIVITIES', activities: listeningActivities });
   }, [makeActivity]);
+
+  // Contextual reaction when transactions are added
+  const triggerTransactionReaction = useCallback((transactionType: 'expense' | 'booking', transactionData?: any) => {
+    if (transactionType === 'expense') {
+      // Update existing agents to processing state
+      const currentActivities = activities;
+      const updatedActivities = currentActivities.map(activity => {
+        if (activity.agentType === 'receipt-concierge') {
+          return { ...activity, status: 'processing' as const, message: 'Processing uploaded receipt...' };
+        }
+        if (activity.agentType === 'policy-engine') {
+          return { ...activity, status: 'processing' as const, message: 'Validating expense against policy...' };
+        }
+        if (activity.agentType === 'fraud-sentinel') {
+          return { ...activity, status: 'processing' as const, message: 'Scanning for suspicious patterns...' };
+        }
+        return activity;
+      });
+      
+      dispatch({ type: 'SET_ACTIVITIES', activities: updatedActivities });
+
+      // Don't automatically complete - wait for transaction to be marked as cleared
+      // The completion will be triggered by the transaction clearing process
+    } else if (transactionType === 'booking') {
+      // Update existing agents to processing state
+      const currentActivities = activities;
+      const updatedActivities = currentActivities.map(activity => {
+        if (activity.agentType === 'booking-orchestrator') {
+          return { ...activity, status: 'processing' as const, message: 'Searching for travel options...' };
+        }
+        if (activity.agentType === 'co2-advisor') {
+          return { ...activity, status: 'processing' as const, message: 'Calculating carbon footprint...' };
+        }
+        if (activity.agentType === 'budget-copilot') {
+          return { ...activity, status: 'processing' as const, message: 'Checking budget allocation...' };
+        }
+        return activity;
+      });
+      
+      dispatch({ type: 'SET_ACTIVITIES', activities: updatedActivities });
+
+      // Don't automatically complete - wait for booking confirmation
+      // The completion will be triggered by the booking confirmation process
+    }
+  }, [activities]);
+
+  // Complete agent processing when transaction is cleared
+  const completeAgentProcessing = useCallback((transactionType: 'expense' | 'booking', transactionData?: any) => {
+    const currentActivities = activities;
+    const completedActivities = currentActivities.map(activity => {
+      if (transactionType === 'expense') {
+        if (activity.agentType === 'receipt-concierge') {
+          const amount = transactionData?.amount ? `$${transactionData.amount.toFixed(2)}` : '$47.50';
+          return { ...activity, status: 'completed' as const, message: `Receipt processed - ${amount} extracted` };
+        }
+        if (activity.agentType === 'policy-engine') {
+          const merchant = transactionData?.merchant || 'restaurant';
+          const amount = transactionData?.amount || 47.50;
+          const limit = amount > 50 ? 'exceeds $50 limit' : 'within $50 limit';
+          return { ...activity, status: 'completed' as const, message: `Policy compliant - ${limit}` };
+        }
+        if (activity.agentType === 'fraud-sentinel') {
+          return { ...activity, status: 'completed' as const, message: 'No anomalies detected' };
+        }
+      } else if (transactionType === 'booking') {
+        if (activity.agentType === 'booking-orchestrator') {
+          const destination = transactionData?.destination || 'destination';
+          return { ...activity, status: 'completed' as const, message: `Found 3 compliant options for ${destination}` };
+        }
+        if (activity.agentType === 'co2-advisor') {
+          const co2Savings = transactionData?.co2Savings || '2.3';
+          return { ...activity, status: 'completed' as const, message: `Train option saves ${co2Savings} tons CO2` };
+        }
+        if (activity.agentType === 'budget-copilot') {
+          const budget = transactionData?.budget || 'Q4';
+          return { ...activity, status: 'completed' as const, message: `Within ${budget} travel budget` };
+        }
+      }
+      return activity;
+    });
+    dispatch({ type: 'SET_ACTIVITIES', activities: completedActivities });
+  }, [activities]);
+
+  // Reset agents to listening mode (only used when switching scenarios)
+  const resetToListeningMode = useCallback(() => {
+    const listeningActivities = activities.map(activity => ({
+      ...activity,
+      status: 'active' as const,
+      message: activity.agentType === 'receipt-concierge' ? 'Listening for receipt uploads...' :
+               activity.agentType === 'policy-engine' ? 'Monitoring for new transactions...' :
+               activity.agentType === 'fraud-sentinel' ? 'Standing by for anomaly detection...' :
+               activity.agentType === 'booking-orchestrator' ? 'Ready to assist with travel requests...' :
+               activity.agentType === 'co2-advisor' ? 'Monitoring for booking opportunities...' :
+               activity.agentType === 'budget-copilot' ? 'Tracking travel budget allocations...' :
+               activity.message
+    }));
+    dispatch({ type: 'SET_ACTIVITIES', activities: listeningActivities });
+  }, [activities]);
+
+  // Clear transaction reaction - return to listening mode (deprecated - agents now stay completed)
+  const clearTransactionReaction = useCallback(() => {
+    // Agents now remain in completed state after processing
+    // This function is kept for backward compatibility but does nothing
+  }, []);
 
   const contextValue: DemoAgentContextType = {
     activities,
@@ -315,7 +472,11 @@ export function DemoAgentProvider({ children }: { children: React.ReactNode }) {
     simulateBookingFlow,
     simulateFinanceFlow,
     activateFinanceScenario,
-    activateTravelerScenario
+    activateTravelerScenario,
+    triggerTransactionReaction,
+    clearTransactionReaction,
+    resetToListeningMode,
+    completeAgentProcessing
   };
 
   return (

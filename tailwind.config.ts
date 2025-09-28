@@ -79,6 +79,11 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      scale: {
+        '102': '1.02',
+        '105': '1.05',
+        '110': '1.10',
+      },
       keyframes: {
         'accordion-down': {
           from: {

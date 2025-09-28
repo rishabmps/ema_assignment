@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ExceptionDetailCard } from "@/components/features/finance/exception-detail-card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { DemoModal } from "@/components/ui/demo-modal";
 import { cn } from "@/lib/utils";
 import type { Transaction, User } from "@/types";
 import transactionsData from "@/lib/data/transactions.json";
@@ -25,7 +26,6 @@ import {
   FileWarning,
   DollarSign,
   Search,
-  ExternalLink,
   LayoutGrid,
   ListTodo,
   Lightbulb,
@@ -108,12 +108,14 @@ interface FinanceDashboardProps {
   onUrlChange?: (url: string) => void;
   hideInlineAgentActivity?: boolean;
   onSectionChange?: (section: FinanceSection) => void;
+  initialSection?: FinanceSection;
 }
 
 export function FinanceDashboard({
   onUrlChange,
   hideInlineAgentActivity = false,
   onSectionChange,
+  initialSection = "dashboard",
 }: FinanceDashboardProps) {
   const exceptionTransactions = useMemo(
     () => transactions.filter((t) => t.status === "Exception"),
@@ -122,7 +124,28 @@ export function FinanceDashboard({
   const [selectedTxn, setSelectedTxn] = useState<Transaction | null>(
     exceptionTransactions[0] || null
   );
-  const [activeSection, setActiveSection] = useState<FinanceSection>("dashboard");
+  const [activeSection, setActiveSection] = useState<FinanceSection>(initialSection);
+
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: "info" | "confirm" | "success";
+    onConfirm?: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info"
+  });
+
+  const showModal = (title: string, message: string, type: "info" | "confirm" | "success" = "info", onConfirm?: () => void) => {
+    setModalState({ isOpen: true, title, message, type, onConfirm });
+  };
+
+  const closeModal = () => {
+    setModalState(prev => ({ ...prev, isOpen: false }));
+  };
 
   const { activities, simulateExceptionFlow } = useAgentActivity();
 
@@ -132,33 +155,6 @@ export function FinanceDashboard({
     currency: "USD",
   });
 
-  const handleExportData = () => {
-    const exportData = {
-      kpiData: {
-        spendAutomated: "95.2%",
-        avgTimeToClose: "2.1 Hours",
-        openExceptions: exceptionTransactions.length,
-        productivitySavings: "$4,060",
-      },
-      transactions: transactions.length,
-      vatReclaim: vatReclaimable,
-      timestamp: new Date().toISOString(),
-    };
-
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-      type: "application/json",
-    });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `finance-dashboard-export-${new Date()
-      .toISOString()
-      .split("T")[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
 
   const handleTransactionSelect = (txn: Transaction) => {
     setSelectedTxn(txn);
@@ -175,6 +171,11 @@ export function FinanceDashboard({
   useEffect(() => {
     onSectionChange?.(activeSection);
   }, [activeSection, onSectionChange]);
+
+  // Update activeSection when initialSection prop changes
+  useEffect(() => {
+    setActiveSection(initialSection);
+  }, [initialSection]);
 
   useEffect(() => {
     if (activeSection === "exceptions" && !selectedTxn && exceptionTransactions.length) {
@@ -447,7 +448,11 @@ export function FinanceDashboard({
                     className="font-medium text-xs hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 h-7 px-3"
                     onClick={() => {
                       if (selectedTxn) {
-                        alert(`Request additional information for ${selectedTxn.merchant} transaction of ${currencyFormatter.format(selectedTxn.amount)}`);
+                        showModal(
+                          "Information Request Sent",
+                          `Request additional information for ${selectedTxn.merchant} transaction of ${currencyFormatter.format(selectedTxn.amount)}`,
+                          "info"
+                        );
                       }
                     }}
                   >
@@ -459,10 +464,18 @@ export function FinanceDashboard({
                     className="font-medium text-xs hover:shadow-lg transition-all duration-200 h-7 px-3"
                     onClick={() => {
                       if (selectedTxn) {
-                        const confirmed = confirm(`Are you sure you want to reject the ${selectedTxn.merchant} expense of ${currencyFormatter.format(selectedTxn.amount)}?`);
-                        if (confirmed) {
-                          alert(`Expense rejected and employee notified. Transaction ID: ${selectedTxn.id}`);
-                        }
+                        showModal(
+                          "Confirm Expense Rejection",
+                          `Are you sure you want to reject the ${selectedTxn.merchant} expense of ${currencyFormatter.format(selectedTxn.amount)}?`,
+                          "confirm",
+                          () => {
+                            showModal(
+                              "Expense Rejected",
+                              `Expense rejected and employee notified. Transaction ID: ${selectedTxn.id}`,
+                              "success"
+                            );
+                          }
+                        );
                       }
                     }}
                   >
@@ -473,10 +486,18 @@ export function FinanceDashboard({
                     className="font-medium text-xs bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all duration-200 h-7 px-3"
                     onClick={() => {
                       if (selectedTxn) {
-                        const confirmed = confirm(`Approve the ${selectedTxn.merchant} exception for ${currencyFormatter.format(selectedTxn.amount)}?`);
-                        if (confirmed) {
-                          alert(`Exception approved! Transaction has been processed and employee notified.`);
-                        }
+                        showModal(
+                          "Confirm Exception Approval",
+                          `Approve the ${selectedTxn.merchant} exception for ${currencyFormatter.format(selectedTxn.amount)}?`,
+                          "confirm",
+                          () => {
+                            showModal(
+                              "Exception Approved",
+                              `Exception approved! Transaction has been processed and employee notified.`,
+                              "success"
+                            );
+                          }
+                        );
                       }
                     }}
                   >
@@ -534,8 +555,8 @@ export function FinanceDashboard({
 
   return (
     <div className="w-full h-full bg-white flex flex-col">
-      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-4 py-2">
-        <div className="flex items-center justify-between gap-4">
+      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-6 py-3">
+        <div className="flex items-center justify-between gap-6">
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
               <span className="text-white font-bold text-xs">AT</span>
@@ -546,7 +567,7 @@ export function FinanceDashboard({
             </div>
           </div>
 
-          <div className="flex items-center gap-1 flex-1 justify-center min-w-0">
+          <div className="flex items-center gap-2 flex-1 justify-center min-w-0 max-w-2xl">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -555,14 +576,14 @@ export function FinanceDashboard({
                   type="button"
                   onClick={() => setActiveSection(item.id)}
                   className={cn(
-                    "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap",
-                    "border border-transparent shadow-sm",
+                    "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all whitespace-nowrap",
+                    "border border-transparent shadow-sm hover:shadow-md",
                     isActive
-                      ? "bg-slate-900 text-white shadow-lg"
-                      : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                      ? "bg-slate-900 text-white shadow-lg scale-105"
+                      : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50 hover:scale-105"
                   )}
                 >
-                  <item.icon className="h-3 w-3" />
+                  <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                 </button>
               );
@@ -570,29 +591,13 @@ export function FinanceDashboard({
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-xs h-7 px-2"
-              onClick={handleExportData}
-              title={
-                activeSection === "dashboard" 
-                  ? "Export dashboard overview data" 
-                  : activeSection === "sustainability" 
-                    ? "Export ESG sustainability report"
-                    : `Export ${activeSection} data`
-              }
-            >
-              <ExternalLink className="h-3 w-3 mr-1" />
-              {activeSection === "sustainability" ? "Export ESG" : "Export Data"}
-            </Button>
-            <div className="flex items-center gap-1.5">
-              <Avatar className="w-6 h-6">
-                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-xs">
+            <div className="flex items-center gap-2">
+              <Avatar className="w-7 h-7">
+                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-sm">
                   AJ
                 </AvatarFallback>
               </Avatar>
-              <span className="text-xs font-medium text-slate-700">Alex Johnson</span>
+              <span className="text-sm font-medium text-slate-700">Alex Johnson</span>
             </div>
           </div>
         </div>
@@ -607,10 +612,21 @@ export function FinanceDashboard({
           />
         </div>
 
-        <div className="relative z-10 h-full overflow-hidden">
+        <div className={`relative z-10 ${activeSection === 'policy_insights' ? 'h-full overflow-y-auto' : 'h-full overflow-hidden'}`}>
           {renderContent()}
         </div>
       </div>
+      
+      <DemoModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+        onConfirm={modalState.onConfirm}
+        confirmText={modalState.type === "confirm" ? "Yes, Confirm" : "OK"}
+        cancelText="Cancel"
+      />
     </div>
   );
 }

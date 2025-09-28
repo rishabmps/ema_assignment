@@ -8,6 +8,72 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+/* Smooth page transitions */
+.page-transition {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Prevent white flash during transitions */
+main {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+  min-height: 100vh;
+}
+
+/* Smooth infinite scroll optimizations */
+.infinite-scroll {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.infinite-scroll * {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes scroll-right {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 60s linear infinite;
+  will-change: transform;
+  display: flex;
+  width: fit-content;
+}
+
+.animate-scroll-right {
+  animation: scroll-right 60s linear infinite;
+  will-change: transform;
+  display: flex;
+  width: fit-content;
+}
+
+/* Ensure content doesn't compress during animation */
+.animate-scroll-left > div,
+.animate-scroll-right > div {
+  flex-shrink: 0;
+  width: 50%;
+}
+
 /* Enhanced gradients and animations for a more dynamic feel */
 @keyframes gradient-shift {
   0%, 100% { background-position: 0% 50%; }

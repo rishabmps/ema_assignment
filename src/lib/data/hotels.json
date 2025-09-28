@@ -1,4 +1,3 @@
-
 [
   {
     "id": "htl_301",
@@ -9,7 +8,8 @@
     "market_rate": 475,
     "preferred_brand": false,
     "compliant": false,
-    "reason": "Exceeds max rate for Chicago ($250)."
+    "reason": "Exceeds max rate for Chicago ($250).",
+    "context": "Luxury hotel in Chicago's Gold Coast. Client entertainment facility with private dining rooms and meeting spaces. Chosen for high-profile client meetings requiring prestigious location."
   },
   {
     "id": "htl_302",
@@ -20,17 +20,55 @@
     "market_rate": 265,
     "preferred_brand": true,
     "compliant": true,
-    "reason": null
+    "reason": null,
+    "context": "Historic hotel in Chicago's Loop district. Preferred brand with corporate rates. Convenient location near business district and public transportation."
   },
   {
-    "id": "htl_303",
-    "name": "The Peninsula Chicago",
-    "image": "hotelPeninsula",
-    "address": "108 E Superior St, Chicago, IL 60611",
-    "price_per_night": 600,
-    "market_rate": 620,
+    "id": "htl_401_bos",
+    "name": "The Langham, Boston",
+    "image": "hotelLangham",
+    "address": "250 Franklin St, Boston, MA 02110",
+    "price_per_night": 320,
+    "market_rate": 350,
+    "preferred_brand": true,
+    "compliant": true,
+    "reason": null,
+    "context": "Luxury hotel in Boston's Financial District. Preferred brand with corporate rates. Walking distance to client offices and conference venues. Includes business center and meeting rooms."
+  },
+  {
+    "id": "htl_402_bos",
+    "name": "Boston Marriott Copley Place",
+    "image": "hotelMarriott",
+    "address": "110 Huntington Ave, Boston, MA 02116",
+    "price_per_night": 285,
+    "market_rate": 310,
+    "preferred_brand": true,
+    "compliant": true,
+    "reason": null,
+    "context": "Modern hotel in Boston's Back Bay. Preferred brand with excellent corporate rates. Connected to shopping and dining complex. Includes fitness center and business amenities."
+  },
+  {
+    "id": "htl_501_london",
+    "name": "The Savoy, London",
+    "image": "hotelSavoy",
+    "address": "Strand, London WC2R 0EU, UK",
+    "price_per_night": 450,
+    "market_rate": 500,
     "preferred_brand": false,
-    "compliant": false,
-    "reason": "Not a preferred brand and exceeds max rate for Chicago ($250)."
+    "compliant": true,
+    "reason": null,
+    "context": "Historic luxury hotel in Covent Garden. Chosen for prestigious location and client entertainment facilities. Walking distance to business district and cultural attractions."
+  },
+  {
+    "id": "htl_601_sf",
+    "name": "Marriott Marquis San Francisco",
+    "image": "hotelMarriottSF",
+    "address": "780 Mission St, San Francisco, CA 94103",
+    "price_per_night": 370,
+    "market_rate": 395,
+    "preferred_brand": true,
+    "compliant": true,
+    "reason": null,
+    "context": "Modern hotel in San Francisco's SOMA district. Preferred brand with corporate rates. Convenient location near Moscone Center and tech companies. Includes business center and meeting facilities."
   }
 ]

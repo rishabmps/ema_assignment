@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, FileUp, HandCoins } from "lucide-react";
+import { DemoModal } from "@/components/ui/demo-modal";
 import type { Transaction } from "@/types";
 import { format } from "date-fns";
 
@@ -24,6 +26,27 @@ interface VatReclaimViewProps {
 export function VatReclaimView({ onBack, transactions, totalReclaimable }: VatReclaimViewProps) {
   const reclaimableTransactions = transactions.filter(t => t.vat_reclaimable_usd && t.vat_reclaimable_usd > 0);
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+
+  const [modalState, setModalState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: "info" | "confirm" | "success";
+    onConfirm?: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    type: "info"
+  });
+
+  const showModal = (title: string, message: string, type: "info" | "confirm" | "success" = "info", onConfirm?: () => void) => {
+    setModalState({ isOpen: true, title, message, type, onConfirm });
+  };
+
+  const closeModal = () => {
+    setModalState(prev => ({ ...prev, isOpen: false }));
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6">
@@ -67,7 +90,11 @@ export function VatReclaimView({ onBack, transactions, totalReclaimable }: VatRe
               document.body.removeChild(a);
               URL.revokeObjectURL(url);
               
-              alert(`VAT reclaim data exported successfully! ${reclaimableTransactions.length} transactions totaling ${currencyFormatter.format(totalReclaimable)} in reclaimable VAT.`);
+              showModal(
+                "Export Successful",
+                `VAT reclaim data exported successfully! ${reclaimableTransactions.length} transactions totaling ${currencyFormatter.format(totalReclaimable)} in reclaimable VAT.`,
+                "success"
+              );
             }}
           >
             <FileUp className="mr-2 h-5 w-5" />
@@ -108,6 +135,17 @@ export function VatReclaimView({ onBack, transactions, totalReclaimable }: VatRe
           </div>
         </CardContent>
       </Card>
+      
+      <DemoModal
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        title={modalState.title}
+        message={modalState.message}
+        type={modalState.type}
+        onConfirm={modalState.onConfirm}
+        confirmText="OK"
+        cancelText="Cancel"
+      />
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TransactionCard } from "@/components/features/traveler/transaction-card";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
+import { useMobileToast } from "@/components/ui/mobile-toast";
 import type { Transaction } from "@/types";
 import allTransactions from "@/lib/data/transactions.json";
 import { Camera, Receipt, Settings, Bell, PlusCircle } from "lucide-react";
@@ -44,7 +44,7 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
   const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
   const [notification, setNotification] = useState<InAppNotification | null>(null);
 
-  const { toast } = useToast();
+  const { showToast, removeToast, clearAllToasts } = useMobileToast();
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const notificationTimer = useRef<NodeJS.Timeout>();
@@ -54,7 +54,7 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
     simulateExpenseFlow: simulateExpenseFlowLocal
   } = useAgentActivity();
 
-  const { simulateExpenseFlow: runGlobalExpenseFlow } = useDemoAgentContext();
+  const { triggerTransactionReaction, clearTransactionReaction, completeAgentProcessing } = useDemoAgentContext();
 
   useEffect(() => {
     const initialTransactions = allTransactions
@@ -135,6 +135,12 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
 
   const handleReceiptNeededClick = (transactionId: string) => {
     setNotification(null);
+    
+    // Prevent multiple camera sessions for the same transaction
+    if (receiptTxnId === transactionId && showCamera) {
+      return;
+    }
+    
     setReceiptTxnId(transactionId);
     setShowCamera(true);
   };
@@ -151,19 +157,24 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
     
     setShowCamera(false);
     
-    toast({
+    // Show toast - duplicate prevention is handled globally in useMobileToast
+    showToast({
       title: "Receipt Uploaded",
       description: "Receipt Concierge is analyzing it...",
+      type: "success",
       duration: 2000,
     });
 
     // Find the transaction details for agent simulation
     const transaction = transactions.find(t => t.id === receiptTxnId);
     if (transaction) {
-      // Simulate agent activity for expense processing - now shown inline!
-      simulateExpenseFlowLocal(transaction.amount, transaction.merchant);
-      runGlobalExpenseFlow();
-      // No need to manually open the panel - it shows inline automatically
+      // Trigger contextual agent reaction with actual transaction data
+      triggerTransactionReaction('expense', {
+        amount: transaction.amount,
+        merchant: transaction.merchant,
+        category: transaction.category,
+        date: transaction.date
+      });
     }
 
     setTransactions((prev) =>
@@ -233,16 +244,34 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
         })
       );
       setReceiptTxnId(null);
+      
+      // Complete agent processing when transaction is cleared
+      const transaction = transactions.find(t => t.id === receiptTxnId);
+      if (transaction) {
+        completeAgentProcessing('expense', {
+          amount: transaction.amount,
+          merchant: transaction.merchant,
+          category: transaction.category,
+          date: transaction.date
+        });
+      }
     }, 5000);
   };
   
   const handleToggleExpand = (transactionId: string) => {
-    const transaction = transactions.find(t => t.id === transactionId);
-    if (transaction?.status === 'Needs Receipt') {
-      handleReceiptNeededClick(transactionId);
-    } else {
-      setExpandedId(currentId => currentId === transactionId ? null : transactionId);
+    // Always just toggle expand/collapse, don't trigger receipt upload
+    setExpandedId(currentId => currentId === transactionId ? null : transactionId);
+    
+    // Clear any existing notifications when toggling expand/collapse
+    if (notification) {
+      setNotification(null);
+      if (notificationTimer.current) {
+        clearTimeout(notificationTimer.current);
+      }
     }
+    
+    // Clear all toast notifications
+    clearAllToasts();
   };
 
   return (
@@ -253,23 +282,23 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
         <div className="absolute bottom-20 left-4 w-12 h-12 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse" style={{animationDelay: '1s'}}></div>
       </div>
       
-      <header className="p-4 bg-white/90 backdrop-blur-md border-b border-slate-200/50 shadow-sm relative z-10">
+      <header className="px-3 py-2 bg-white/95 backdrop-blur-md border-b border-slate-200/50 shadow-sm relative z-10">
         <div className="flex justify-between items-center">
-            <div className="flex items-center gap-3">
-                <Avatar className="ring-2 ring-blue-100">
-                  <AvatarFallback className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold">SC</AvatarFallback>
+            <div className="flex items-center gap-2">
+                <Avatar className="ring-2 ring-blue-100 h-8 w-8">
+                  <AvatarFallback className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold text-xs">SC</AvatarFallback>
                 </Avatar>
                 <div>
                     <p className="text-sm font-bold text-slate-800">Sarah Chen</p>
                     <p className="text-xs text-slate-500 font-medium">Sales Director</p>
                 </div>
             </div>
-            <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" className="hover:bg-slate-100/80 transition-colors">
-                  <Bell className="h-5 w-5 text-slate-600" />
+            <div className="flex items-center gap-1">
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-slate-100/80 transition-colors">
+                  <Bell className="h-3 w-3 text-slate-600" />
                 </Button>
-                <Button variant="ghost" size="icon" className="hover:bg-slate-100/80 transition-colors">
-                  <Settings className="h-5 w-5 text-slate-600" />
+                <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-slate-100/80 transition-colors">
+                  <Settings className="h-3 w-3 text-slate-600" />
                 </Button>
             </div>
         </div>
@@ -282,32 +311,32 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="absolute top-20 left-4 right-4 z-20"
+            className="absolute top-16 left-3 right-3 z-20"
           >
             <div
               onClick={() => handleReceiptNeededClick(notification.id)}
-              className="rounded-2xl bg-white/95 backdrop-blur-md p-4 shadow-xl cursor-pointer border border-blue-200/50 hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+              className="rounded-xl bg-white/95 backdrop-blur-md p-3 shadow-lg cursor-pointer border border-blue-200/50 hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02]"
             >
                 <h4 className="text-sm text-blue-600 font-semibold">{notification.title}</h4>
-                <p className="text-sm text-slate-700 font-medium">{notification.description}</p>
+                <p className="text-xs text-slate-700 font-medium mt-1">{notification.description}</p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <div className="p-4 flex-shrink-0 relative z-10">
+      <div className="px-3 py-1.5 flex-shrink-0 relative z-10">
         <Button 
           onClick={handleSimulateTransaction} 
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-medium py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-2.5 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-[1.02] text-xs"
         >
-          <PlusCircle className="mr-2 h-5 w-5" />
+          <PlusCircle className="mr-1.5 h-3.5 w-3.5" />
           Simulate Client Lunch Purchase
         </Button>
       </div>
 
       {/* Inline Agent Activity - only show if not in full device view */}
-  {activities.length > 0 && !hideInlineAgentActivity && (
-        <div className="px-4 pb-3">
+      {activities.length > 0 && !hideInlineAgentActivity && (
+        <div className="px-3 pb-2">
           <InlineAgentActivity 
             activities={activities} 
             compact={true}
@@ -315,7 +344,7 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
         </div>
       )}
 
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 pt-0 pb-4 relative z-10">
+      <div className="flex-1 space-y-1.5 overflow-y-auto px-3 pt-0 pb-3 relative z-10">
         {transactions.map((transaction) => (
           <TransactionCard
             key={transaction.id}
@@ -328,14 +357,14 @@ export function TravelerExpenseFeed({ hideInlineAgentActivity = false }: Travele
 
       <Dialog open={showCamera} onOpenChange={setShowCamera}>
         <DialogContent className="max-w-sm p-0 bg-white/95 backdrop-blur-md border border-slate-200/50 shadow-2xl">
-          <DialogHeader className="p-6 pb-0">
-            <DialogTitle className="text-slate-800 font-bold">Capture Receipt</DialogTitle>
+          <DialogHeader className="p-4 pb-2">
+            <DialogTitle className="text-slate-800 font-bold text-base">Capture Receipt</DialogTitle>
           </DialogHeader>
-          <div className="p-6 space-y-4">
-            <div className="relative w-full aspect-video bg-slate-900 rounded-2xl overflow-hidden shadow-inner">
+          <div className="p-4 space-y-3">
+            <div className="relative w-full aspect-video bg-slate-900 rounded-xl overflow-hidden shadow-inner">
                 <video ref={videoRef} className="w-full h-full object-cover" autoPlay playsInline muted />
-                <div className="absolute inset-4 border-4 border-dashed border-white/70 rounded-xl" />
-                <div className="absolute top-4 left-4 right-4 bottom-4 rounded-xl bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
+                <div className="absolute inset-3 border-2 border-dashed border-white/70 rounded-lg" />
+                <div className="absolute top-3 left-3 right-3 bottom-3 rounded-lg bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
             </div>
             {hasCameraPermission === false && (
                 <Alert variant="destructive" className="border-red-200 bg-red-50">
