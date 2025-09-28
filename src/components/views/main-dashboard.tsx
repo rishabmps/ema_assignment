@@ -3,15 +3,45 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { TravelerExpenseFeed } from "@/components/features/traveler/traveler-expense-feed";
-import { TravelerBookingView } from "@/components/features/traveler/traveler-booking-view";
-import { FinanceDashboard, type FinanceSection } from "@/components/features/finance/finance-dashboard";
+import { lazy, Suspense } from "react";
+
+// Dynamic imports for code splitting
+const TravelerExpenseFeed = lazy(() => 
+  import("@/components/features/traveler/traveler-expense-feed").then(module => ({ default: module.TravelerExpenseFeed }))
+);
+const TravelerBookingView = lazy(() => 
+  import("@/components/features/traveler/traveler-booking-view").then(module => ({ default: module.TravelerBookingView }))
+);
+const FinanceDashboard = lazy(() => 
+  import("@/components/features/finance/finance-dashboard").then(module => ({ default: module.FinanceDashboard }))
+);
+
+// Import the type separately for static analysis
+import type { FinanceSection } from "@/components/features/finance/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bot, ChevronRight, Plane, FileText, Sparkles, ShieldCheck, Check, Receipt } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
 import { FloatingAgentDisplay } from "@/components/features/agent-activity";
 import { DemoAgentProvider, useDemoAgentContext } from "@/components/features/agent-activity/demo-agent-context";
+
+// Loading skeleton component for better perceived performance
+const DemoLoadingSkeleton = ({ type }: { type: "mobile" | "chat" | "dashboard" }) => (
+  <div className={`flex justify-center px-4 ${type === "dashboard" ? "min-h-[60vh]" : "min-h-[80vh]"} items-center`} role="status" aria-label="Loading demo">
+    <div className="relative my-8">
+      <div className={`${type === "dashboard" ? "w-full max-w-4xl" : "w-full max-w-sm"} relative mx-auto`}>
+        <div className="bg-slate-900/50 rounded-3xl p-8 border border-slate-700/50">
+          <div className="animate-pulse space-y-4">
+            <div className="h-4 bg-slate-700/50 rounded w-3/4"></div>
+            <div className="h-4 bg-slate-700/50 rounded w-1/2"></div>
+            <div className="h-32 bg-slate-700/50 rounded"></div>
+            <div className="h-4 bg-slate-700/50 rounded w-2/3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 type Persona = "traveler" | "finance";
 type Act = "expense" | "booking";
@@ -222,14 +252,14 @@ function MainDashboardContent() {
     activateFinanceScenario(getFinanceScenario(section));
   }, [activateFinanceScenario, getFinanceScenario]);
   
-  const renderPersonaSelector = () => (
+  const renderDemoSelector = () => (
     <motion.div
-      key="persona"
+      key="demo-selector"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
       transition={{ duration: 0.6 }}
-      className="max-w-6xl w-full"
+      className="max-w-7xl w-full"
     >
       <div className="text-center mb-16">
         <motion.h2 
@@ -238,116 +268,224 @@ function MainDashboardContent() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl font-bold text-white mb-6"
         >
-          Choose Your Experience
+          Experience AI in Action
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-slate-300 text-xl max-w-2xl mx-auto"
+          className="text-slate-300 text-xl max-w-3xl mx-auto"
         >
-          Select a persona to experience AI-powered travel and expense management from their perspective
+          Jump directly into live AI workflows. Watch real agents handle expenses, bookings, and finance operations.
         </motion.p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Receipt Magic Demo Card */}
         <motion.div
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           <div
-            onClick={() => handlePersonaSelect("traveler")}
-            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/5 via-transparent to-blue-500/5 border border-blue-500/10 p-1 hover:border-blue-500/30 transition-all duration-500 hover:scale-105"
+            onClick={() => {
+              setPersona("traveler");
+              setAct("expense");
+              setStep("demo");
+              // Auto-trigger demo after brief delay for smooth transition
+              setTimeout(() => {
+                activateTravelerScenario("traveler-expense");
+              }, 500);
+            }}
+            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-purple-500/5 border border-blue-500/20 hover:border-blue-400/40 transition-all duration-500 hover:scale-105"
           >
-            <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 h-full">
-              <div className="flex items-center gap-6 mb-8">
-                <div className="relative">
-                  <Avatar className="h-20 w-20 ring-4 ring-blue-500/20 group-hover:ring-blue-500/40 transition-all">
-                    <AvatarFallback className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold text-xl">
-                      {traveler?.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full border-4 border-slate-900 flex items-center justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  </div>
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 h-full">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+                  <Receipt className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl font-bold text-white group-hover:text-blue-300 transition-colors mb-2">
-                    👩‍💼 {traveler?.name}
-                  </CardTitle>
-                  <CardDescription className="text-blue-300 font-medium text-base">
-                    {traveler?.title} • Mobile-First Experience
-                  </CardDescription>
-                </div>
-              </div>
-              
-              <p className="text-slate-300 text-lg leading-relaxed mb-8">
-                "I'm constantly traveling for deals. I need expense management that works as fast as I do—no friction, just results."
-              </p>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 text-blue-300 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <Sparkles className="h-5 w-5" />
-                  <span className="font-semibold">Experience Sarah's Journey</span>
-                </div>
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-full group-hover:from-blue-600 group-hover:to-blue-700 transition-all transform group-hover:scale-110 shadow-lg">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">Start Demo</span>
-                    <ChevronRight className="h-5 w-5" />
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-blue-300 transition-colors">
+                    📸 Receipt Magic
+                  </h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                    <span className="text-blue-300 text-sm font-medium">LIVE • Sarah's Mobile</span>
                   </div>
                 </div>
+              </div>
+
+              <p className="text-slate-300 text-lg mb-6 leading-relaxed">
+                Watch AI agents instantly capture receipts, match transactions, and approve expenses in 35 seconds.
+              </p>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Instant receipt capture & extraction</span>
+                </div>
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Auto policy compliance checking</span>
+                </div>
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Real-time approval workflow</span>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mb-6">
+                <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-sm border border-emerald-500/20">
+                  ⚡ 35 sec approval
+                </div>
+                <div className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm border border-blue-500/20">
+                  🎯 99.2% accuracy
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-2xl group-hover:from-blue-600 group-hover:to-blue-700 transition-all text-center font-semibold">
+                Experience Receipt Magic →
               </div>
             </div>
           </div>
         </motion.div>
 
+        {/* Smart Booking Demo Card */}
         <motion.div
-          initial={{ opacity: 0, x: 30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <div
-            onClick={() => handlePersonaSelect("finance")}
-            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-500/5 via-transparent to-purple-500/5 border border-purple-500/10 p-1 hover:border-purple-500/30 transition-all duration-500 hover:scale-105"
+            onClick={() => {
+              setPersona("traveler");
+              setAct("booking");
+              setStep("demo");
+              // Auto-trigger demo after brief delay for smooth transition
+              setTimeout(() => {
+                activateTravelerScenario("traveler-booking");
+              }, 500);
+            }}
+            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-teal-500/5 border border-emerald-500/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105"
           >
-            <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 h-full">
-              <div className="flex items-center gap-6 mb-8">
-                <div className="relative">
-                  <Avatar className="h-20 w-20 ring-4 ring-purple-500/20 group-hover:ring-purple-500/40 transition-all">
-                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold text-xl">
-                      {finance?.initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full border-4 border-slate-900 flex items-center justify-center">
-                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  </div>
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-600/10 to-teal-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 h-full">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+                  <Plane className="h-8 w-8 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl font-bold text-white group-hover:text-purple-300 transition-colors mb-2">
-                    🧑‍💼 {finance?.name}
-                  </CardTitle>
-                  <CardDescription className="text-purple-300 font-medium text-base">
-                    {finance?.title} • Desktop Dashboard
-                  </CardDescription>
-                </div>
-              </div>
-              
-              <p className="text-slate-300 text-lg leading-relaxed mb-8">
-                "I oversee spend for 200+ employees. I need visibility, control, and automation that scales—with full audit trails."
-              </p>
-              
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 text-purple-300 opacity-0 group-hover:opacity-100 transition-all duration-300">
-                  <Sparkles className="h-5 w-5" />
-                  <span className="font-semibold">Experience Alex's Dashboard</span>
-                </div>
-                <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-full group-hover:from-purple-600 group-hover:to-purple-700 transition-all transform group-hover:scale-110 shadow-lg">
-                  <div className="flex items-center gap-2">
-                    <span className="font-semibold">Start Demo</span>
-                    <ChevronRight className="h-5 w-5" />
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-emerald-300 transition-colors">
+                    ✈️ Smart Booking
+                  </h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                    <span className="text-emerald-300 text-sm font-medium">LIVE • AI Conversation</span>
                   </div>
                 </div>
+              </div>
+
+              <p className="text-slate-300 text-lg mb-6 leading-relaxed">
+                Co-create optimal itineraries with AI that balances cost, time, compliance, and sustainability.
+              </p>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Natural conversation with booking AI</span>
+                </div>
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Policy & sustainability optimization</span>
+                </div>
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Negotiated rate discovery</span>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mb-6">
+                <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-sm border border-emerald-500/20">
+                  🌱 42% CO₂ saved
+                </div>
+                <div className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm border border-blue-500/20">
+                  💰 $1,280 saved
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-2xl group-hover:from-emerald-600 group-hover:to-emerald-700 transition-all text-center font-semibold">
+                Experience Smart Booking →
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Finance Command Demo Card */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          <div
+            onClick={() => {
+              setPersona("finance");
+              setAct("expense");
+              setStep("demo");
+              // Auto-trigger demo after brief delay for smooth transition
+              setTimeout(() => {
+                simulateFinanceFlow();
+              }, 500);
+            }}
+            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-pink-500/5 border border-purple-500/20 hover:border-purple-400/40 transition-all duration-500 hover:scale-105"
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600/10 to-pink-600/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div className="relative bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 h-full">
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+                  <ShieldCheck className="h-8 w-8 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors">
+                    💼 Finance Command
+                  </h3>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                    <span className="text-purple-300 text-sm font-medium">LIVE • Alex's Dashboard</span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-slate-300 text-lg mb-6 leading-relaxed">
+                Navigate the strategic finance hub with AI-powered exception handling, VAT reclaim, and policy insights.
+              </p>
+
+              <div className="space-y-3 mb-6">
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>AI-prioritized exception queue</span>
+                </div>
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Automated VAT reclaim identification</span>
+                </div>
+                <div className="flex items-center gap-3 text-slate-300">
+                  <Check className="h-4 w-4 text-emerald-400" />
+                  <span>Real-time compliance monitoring</span>
+                </div>
+              </div>
+
+              <div className="flex gap-3 mb-6">
+                <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-sm border border-emerald-500/20">
+                  🚀 92% automated
+                </div>
+                <div className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full text-sm border border-blue-500/20">
+                  ⚡ 7× faster close
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-2xl group-hover:from-purple-600 group-hover:to-purple-700 transition-all text-center font-semibold">
+                Experience Finance Command →
               </div>
             </div>
           </div>
@@ -527,7 +665,7 @@ function MainDashboardContent() {
   );
   
   const getBreadcrumb = () => {
-    if (step === 'persona') return "Select Persona";
+    if (step === 'persona') return "Choose Your Experience";
 
     let path = <span className="cursor-pointer hover:text-blue-300 transition-colors font-medium text-slate-400" onClick={() => setStep('persona')}>Select Persona</span>;
     
@@ -639,13 +777,8 @@ function MainDashboardContent() {
         <div ref={demoRef} className="pb-16">
           <AnimatePresence mode="wait">
             {step === "persona" && (
-              <motion.div key="persona-selector" className="w-full flex justify-center px-4">
-                {renderPersonaSelector()}
-              </motion.div>
-            )}
-            {step === "act" && (
-              <motion.div key="act-selector" className="w-full flex justify-center px-4">
-                {renderActSelector()}
+              <motion.div key="demo-selector" className="w-full flex justify-center px-4">
+                {renderDemoSelector()}
               </motion.div>
             )}
             
@@ -667,7 +800,9 @@ function MainDashboardContent() {
                         <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
                           <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
                           <div className="h-full">
-                            <TravelerExpenseFeed hideInlineAgentActivity={true} />
+                            <Suspense fallback={<DemoLoadingSkeleton type="mobile" />}>
+                              <TravelerExpenseFeed hideInlineAgentActivity={true} />
+                            </Suspense>
                           </div>
                         </div>
                       </div>
@@ -706,7 +841,9 @@ function MainDashboardContent() {
                         <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
                           <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
                           <div className="h-full">
-                            <TravelerBookingView hideInlineAgentActivity={true} />
+                            <Suspense fallback={<DemoLoadingSkeleton type="chat" />}>
+                              <TravelerBookingView hideInlineAgentActivity={true} />
+                            </Suspense>
                           </div>
                         </div>
                       </div>
@@ -754,11 +891,13 @@ function MainDashboardContent() {
                           </div>
                         </div>
                         <div className="bg-white overflow-auto" style={{ height: 'calc(100vh - 8rem)', maxHeight: '800px'}}>
-                          <FinanceDashboard 
-                            onUrlChange={setCurrentFinanceUrl}
-                            hideInlineAgentActivity={true}
-                            onSectionChange={handleFinanceSectionChange}
-                          />
+                          <Suspense fallback={<DemoLoadingSkeleton type="dashboard" />}>
+                            <FinanceDashboard 
+                              onUrlChange={setCurrentFinanceUrl}
+                              hideInlineAgentActivity={true}
+                              onSectionChange={handleFinanceSectionChange}
+                            />
+                          </Suspense>
                         </div>
                       </div>
                       <motion.div 

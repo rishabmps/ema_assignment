@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, ChevronRight, Receipt, Shield, MapPin, FileCheck, Calculator, Trees, Zap, CheckCircle2 } from "lucide-react";
+import { ArrowRight, ChevronRight, Receipt, Shield, MapPin, FileCheck, Calculator, Trees, Zap, CheckCircle2, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 
 const metrics = [
@@ -60,7 +60,23 @@ const agentShowcase = [
 
 export function MarketingPage() {
   return (
-    <div className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+    <div className="bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100 relative">
+      {/* Persistent Sticky CTA */}
+      <motion.div
+        initial={{ y: 100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ delay: 3, duration: 0.8 }}
+        className="fixed bottom-6 right-6 z-50"
+      >
+        <Link
+          href="/demo"
+          className="group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 transition-all hover:scale-105 backdrop-blur-sm border border-white/20"
+        >
+          <Sparkles className="h-5 w-5 group-hover:rotate-12 transition-transform" />
+          <span className="font-semibold">Watch Demo</span>
+          <ChevronRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </motion.div>
       {/* Hero Section - Agent Focused */}
       <header className="mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 pb-20 pt-20 text-center">
         <motion.div 
@@ -234,51 +250,162 @@ export function MarketingPage() {
         </motion.div>
       </section>
 
-      {/* Social Proof */}
+      {/* Enhanced Social Proof with ROI Metrics */}
       <section className="mx-auto max-w-6xl px-6 pb-20">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-16"
         >
           <h2 className="text-3xl font-bold text-white mb-4">
-            Trusted by forward-thinking finance teams
+            Proven ROI. Real Results. Scale Fast.
           </h2>
+          <p className="text-slate-300 text-lg">
+            Join forward-thinking finance teams already seeing transformational results
+          </p>
+        </motion.div>
+
+        {/* ROI Metrics Grid */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: true }}
+          className="grid gap-6 sm:grid-cols-3 mb-16"
+        >
+          <div className="rounded-3xl border border-emerald-500/20 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-6 text-center backdrop-blur-sm">
+            <div className="text-3xl font-bold text-emerald-400 mb-2">$847K</div>
+            <div className="text-sm text-slate-300">Average annual savings per 500 employees</div>
+          </div>
+          <div className="rounded-3xl border border-blue-500/20 bg-gradient-to-br from-blue-500/10 to-blue-500/5 p-6 text-center backdrop-blur-sm">
+            <div className="text-3xl font-bold text-blue-400 mb-2">68%</div>
+            <div className="text-sm text-slate-300">Reduction in finance team manual work</div>
+          </div>
+          <div className="rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-500/10 to-purple-500/5 p-6 text-center backdrop-blur-sm">
+            <div className="text-3xl font-bold text-purple-400 mb-2">3 weeks</div>
+            <div className="text-sm text-slate-300">Typical implementation timeline</div>
+          </div>
         </motion.div>
         
-        <div className="grid gap-6 sm:grid-cols-2">
-          <motion.blockquote
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
+        <div className="relative">
+          {/* Rotating Social Proof Carousel */}
+          <motion.div
+            className="overflow-hidden"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8 backdrop-blur-sm"
           >
-            <p className="text-lg text-slate-100 mb-6">
-              &ldquo;Exception backlog dropped 90% and investors loved the clarity.&rdquo;
-            </p>
-            <footer className="text-sm text-slate-400">
-              <strong className="text-white">Priya Desai</strong>, VP Finance
-            </footer>
-          </motion.blockquote>
-
-          <motion.blockquote
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8 backdrop-blur-sm"
-          >
-            <p className="text-lg text-slate-100 mb-6">
-              &ldquo;Travelers rave while controllers get instant context.&rdquo;
-            </p>
-            <footer className="text-sm text-slate-400">
-              <strong className="text-white">Marcus Leung</strong>, Corporate Controller
-            </footer>
-          </motion.blockquote>
+            <motion.div
+              className="flex gap-6"
+              animate={{ x: [0, -100, -200, 0] }}
+              transition={{
+                duration: 12,
+                repeat: Infinity,
+                ease: "linear"
+              }}
+            >
+              {[...Array(2)].map((_, setIndex) => (
+                <div key={setIndex} className="flex gap-6 min-w-full">
+                  <div className="flex-1 min-w-[300px] rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8 backdrop-blur-sm">
+                    <p className="text-lg text-slate-100 mb-6">
+                      &ldquo;Exception backlog dropped 90% and investors loved the clarity.&rdquo;
+                    </p>
+                    <footer className="text-sm text-slate-400">
+                      <strong className="text-white">Priya Desai</strong>, VP Finance • Series B SaaS
+                    </footer>
+                  </div>
+                  
+                  <div className="flex-1 min-w-[300px] rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8 backdrop-blur-sm">
+                    <p className="text-lg text-slate-100 mb-6">
+                      &ldquo;Finance close went from 8 days to 2 days. Game changer.&rdquo;
+                    </p>
+                    <footer className="text-sm text-slate-400">
+                      <strong className="text-white">Marcus Leung</strong>, Corporate Controller • 1,200 employees
+                    </footer>
+                  </div>
+                  
+                  <div className="flex-1 min-w-[300px] rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 to-white/5 p-8 backdrop-blur-sm">
+                    <p className="text-lg text-slate-100 mb-6">
+                      &ldquo;Our travelers love it. Zero expense report complaints.&rdquo;
+                    </p>
+                    <footer className="text-sm text-slate-400">
+                      <strong className="text-white">Sarah Chen</strong>, Head of People • Remote-first
+                    </footer>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </motion.div>
         </div>
+      </section>
+
+      {/* Competitive Differentiation Section */}
+      <section className="mx-auto max-w-6xl px-6 pb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="rounded-[40px] border border-white/10 bg-gradient-to-br from-white/10 via-white/5 to-transparent p-8 sm:p-12 backdrop-blur-sm"
+        >
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">
+              Beyond traditional T&E platforms
+            </h2>
+            <p className="text-lg text-slate-300">
+              See why finance teams choose us over legacy solutions
+            </p>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-2">
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-6">Traditional platforms (SAP Concur, Navan)</h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded border border-red-500 flex items-center justify-center text-red-500 text-xs mt-0.5">✕</div>
+                  <span className="text-slate-300">Manual exception handling</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded border border-red-500 flex items-center justify-center text-red-500 text-xs mt-0.5">✕</div>
+                  <span className="text-slate-300">Limited policy automation</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded border border-red-500 flex items-center justify-center text-red-500 text-xs mt-0.5">✕</div>
+                  <span className="text-slate-300">Basic sustainability insights</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-5 h-5 rounded border border-red-500 flex items-center justify-center text-red-500 text-xs mt-0.5">✕</div>
+                  <span className="text-slate-300">Reactive compliance monitoring</span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold text-white mb-6">Agentic T&E Intelligence</h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-400 mt-0.5" />
+                  <span className="text-slate-300">AI-powered exception resolution (92% automated)</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-400 mt-0.5" />
+                  <span className="text-slate-300">Deep policy engine with real-time learning</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-400 mt-0.5" />
+                  <span className="text-slate-300">Carbon optimization in every booking decision</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-emerald-400 mt-0.5" />
+                  <span className="text-slate-300">Proactive fraud detection & prevention</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* CTA Section */}

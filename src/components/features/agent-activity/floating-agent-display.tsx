@@ -44,9 +44,14 @@ export function FloatingAgentDisplay({ activities, className }: FloatingAgentDis
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 50 }}
       className={cn(
-        "fixed right-6 top-1/2 -translate-y-1/2 z-40",
+        // Desktop positioning
+        "lg:fixed lg:right-6 lg:top-1/2 lg:-translate-y-1/2 lg:z-40 lg:w-80",
+        // Mobile positioning - bottom sheet style with safe areas
+        "fixed bottom-20 left-4 right-4 z-30 md:bottom-4",
         "bg-white/95 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl",
-        "w-80 max-h-[80vh] overflow-hidden",
+        "lg:max-h-[80vh] max-h-[50vh] overflow-hidden",
+        // Mobile specific styles
+        "block",
         className
       )}
     >
@@ -71,7 +76,7 @@ export function FloatingAgentDisplay({ activities, className }: FloatingAgentDis
             </motion.div>
             <div>
               <h3 className="font-semibold text-sm">AI Agents</h3>
-              <p className="text-xs text-blue-100">
+              <p className="text-xs text-blue-100" title="Real-time AI agent activity feed">
                 {activeAgents.length > 0 ? `${activeAgents.length} working` : `${completedAgents.length} completed`}
               </p>
             </div>
