@@ -131,7 +131,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                   <CardDescription className="text-xs text-slate-600 leading-relaxed">Sales accounts for 65% of travel emissions but has the highest adoption rate of &apos;Greener Choice&apos; recommendations.</CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
-                   <ChartContainer config={chartConfig} className="h-48 w-full">
+                   <ChartContainer config={chartConfig} className="h-64 w-full">
                       <BarChart data={chartData} accessibilityLayer>
                           <CartesianGrid vertical={false} />
                           <XAxis dataKey="department" tickLine={false} tickMargin={10} axisLine={false} fontSize={12} />
