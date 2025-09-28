@@ -13,57 +13,45 @@ interface PolicyInsightViewProps {
 
 export function PolicyInsightView({ onBack, recommendations }: PolicyInsightViewProps) {
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-slate-50">
-      <header className="flex-shrink-0 flex items-center justify-between">
-        <div>
-          <Button variant="ghost" onClick={onBack} className="mb-2 -ml-4">
-            <ArrowLeft className="mr-2" /> Back to Dashboard
-          </Button>
-          <h1 className="text-2xl font-bold text-foreground">Policy Insights</h1>
-          <p className="text-muted-foreground">Data-driven recommendations from your AI Policy Agent.</p>
-        </div>
-      </header>
-      
-      <div className="flex-grow overflow-y-auto space-y-6 -mr-6 pr-6">
-        {recommendations.map((rec, index) => (
-          <Card key={index} className="bg-background">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                  <Lightbulb className="h-5 w-5 text-yellow-500" />
-                  Self-Healing Policy Recommendation
-              </CardTitle>
-              <CardDescription>{rec.rule_id}</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                      <h4 className="font-semibold mb-2">Insight</h4>
-                      <p className="text-muted-foreground">{rec.insight}</p>
-                  </div>
-                   <div>
-                      <h4 className="font-semibold mb-2">Recommendation</h4>
-                      <p className="text-muted-foreground">{rec.recommendation}</p>
-                  </div>
-              </div>
-              <Card className="bg-secondary/50">
-                  <CardHeader>
-                      <CardTitle className="text-md flex items-center gap-2">
-                          <TrendingUp className="h-5 w-5 text-green-600"/>
-                          Projected Impact
-                      </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                      <p className="text-foreground font-medium">{rec.impact}</p>
-                  </CardContent>
-              </Card>
-              <div className="flex justify-end space-x-2 pt-4 border-t">
-                  <Button variant="outline">Dismiss</Button>
-                  <Button>Accept & Update Policy</Button>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+    <div className="grid grid-cols-1 gap-6">
+      {recommendations.map((rec, index) => (
+        <Card key={index} className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-sm flex items-center gap-2 text-slate-800">
+                <Lightbulb className="h-4 w-4 text-yellow-500" />
+                Self-Healing Policy Recommendation
+            </CardTitle>
+            <CardDescription className="text-xs text-slate-600">{rec.rule_id}</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h4 className="text-xs font-semibold mb-1 text-slate-700">Insight</h4>
+                    <p className="text-xs text-slate-600">{rec.insight}</p>
+                </div>
+                 <div>
+                    <h4 className="text-xs font-semibold mb-1 text-slate-700">Recommendation</h4>
+                    <p className="text-xs text-slate-600">{rec.recommendation}</p>
+                </div>
+            </div>
+            <Card className="bg-green-50/50 border-green-200/50">
+                <CardHeader className="pb-2">
+                    <CardTitle className="text-xs flex items-center gap-2 text-green-700">
+                        <TrendingUp className="h-3 w-3 text-green-600"/>
+                        Projected Impact
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0">
+                    <p className="text-xs text-green-800 font-medium">{rec.impact}</p>
+                </CardContent>
+            </Card>
+            <div className="flex justify-end space-x-2 pt-2 border-t border-slate-200">
+                <Button variant="outline" size="sm" className="text-xs">Dismiss</Button>
+                <Button size="sm" className="text-xs">Accept & Update Policy</Button>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 }
