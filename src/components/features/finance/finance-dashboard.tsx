@@ -183,38 +183,38 @@ export function FinanceDashboard({
   }, [activeSection, exceptionTransactions, selectedTxn]);
 
   const renderDashboard = () => (
-    <div className="space-y-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+    <div className="space-y-8 p-6">
+      <header className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold text-slate-900 leading-tight">
           Finance Operations
         </h1>
-        <p className="text-slate-600 text-sm font-medium">Welcome back, Alex.</p>
+        <p className="text-slate-600 text-base font-medium">Welcome back, Alex.</p>
       </header>
 
-      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {kpiData.map((kpi, index) => (
           <Card
             key={kpi.title}
-            className={`bg-gradient-to-br ${kpi.bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm relative overflow-hidden group`}
+            className={`bg-gradient-to-br ${kpi.bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm relative overflow-hidden group cursor-pointer`}
             style={{ animationDelay: `${index * 100}ms` }}
           >
             <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
             <div className="relative z-10">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xs font-semibold text-slate-700 group-hover:text-slate-800 transition-colors">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors leading-tight">
                   {kpi.title}
                 </CardTitle>
                 <div
-                  className={`w-8 h-8 rounded-lg bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}
+                  className={`w-10 h-10 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}
                 >
-                  <kpi.icon className="h-4 w-4 text-white" />
+                  <kpi.icon className="h-5 w-5 text-white" />
                 </div>
               </CardHeader>
               <CardContent className="pt-0">
-                <div className="text-2xl font-bold text-slate-800 mb-1 group-hover:text-slate-900 transition-colors">
+                <div className="text-3xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
                   {kpi.value}
                 </div>
-                <p className="text-xs text-slate-600 font-medium group-hover:text-slate-700 transition-colors">
+                <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
                   {kpi.description}
                 </p>
               </CardContent>
@@ -223,57 +223,66 @@ export function FinanceDashboard({
         ))}
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="bg-gradient-to-br from-white to-emerald-50/30 border border-emerald-100/40 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-semibold text-slate-700">
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card 
+          className="bg-gradient-to-br from-white to-emerald-50/30 border border-emerald-100/40 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group"
+          onClick={() => setActiveSection("vat_reclaim")}
+        >
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-base font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">
               Automated VAT Reclaim
             </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
-              <HandCoins className="h-4 w-4 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+              <HandCoins className="h-5 w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="text-2xl font-bold text-slate-800 mb-1">
+            <div className="text-3xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
               {currencyFormatter.format(vatReclaimable)}
             </div>
-            <p className="text-xs text-slate-600 font-medium">
+            <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
               Identified in the last 30 days
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-white to-amber-50/30 border border-amber-100/40 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-semibold text-slate-700">
+        <Card 
+          className="bg-gradient-to-br from-white to-amber-50/30 border border-amber-100/40 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group"
+          onClick={() => setActiveSection("policy_insights")}
+        >
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-base font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">
               Policy Insights
             </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center shadow-lg">
-              <Lightbulb className="h-4 w-4 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+              <Lightbulb className="h-5 w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="text-2xl font-bold text-slate-800 mb-1">
+            <div className="text-3xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
               {policyInsightsCount} New Recommendation
             </div>
-            <p className="text-xs text-slate-600 font-medium">
+            <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
               Data-driven suggestions to improve efficiency
             </p>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-white to-green-50/30 border border-green-100/40 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-xs font-semibold text-slate-700">
+        <Card 
+          className="bg-gradient-to-br from-white to-green-50/30 border border-green-100/40 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group"
+          onClick={() => setActiveSection("sustainability")}
+        >
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+            <CardTitle className="text-base font-semibold text-slate-800 group-hover:text-slate-900 transition-colors">
               Sustainability Progress
             </CardTitle>
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center shadow-lg">
-              <Leaf className="h-4 w-4 text-white" />
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+              <Leaf className="h-5 w-5 text-white" />
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="text-2xl font-bold text-slate-800 mb-1">45.2 tons</div>
-            <p className="text-xs text-slate-600 font-medium">
+            <div className="text-3xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">45.2 tons</div>
+            <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
               Quarterly CO₂e on track to meet goal
             </p>
           </CardContent>
@@ -283,23 +292,23 @@ export function FinanceDashboard({
   );
 
   const renderExceptions = () => (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 p-6">
       <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
-        <CardHeader className="flex-shrink-0">
-          <CardTitle className="flex items-center gap-2 text-slate-800">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center">
-              <FileWarning className="h-4 w-4 text-white" />
+        <CardHeader className="flex-shrink-0 pb-6">
+          <CardTitle className="flex items-center gap-3 text-slate-900 text-lg font-semibold">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+              <FileWarning className="h-5 w-5 text-white" />
             </div>
             Exception Queue
           </CardTitle>
-          <CardDescription className="text-slate-600">
+          <CardDescription className="text-slate-600 text-base leading-relaxed">
             Transactions requiring manual review and approval.
           </CardDescription>
-          <div className="relative pt-4">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+          <div className="relative pt-6">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
             <Input
               placeholder="Search exceptions..."
-              className="pl-9 bg-white/50 border-slate-200/50 focus:border-blue-300 transition-colors"
+              className="pl-10 h-11 bg-white/50 border-slate-200/50 focus:border-blue-300 transition-colors text-base"
             />
           </div>
         </CardHeader>
@@ -308,13 +317,13 @@ export function FinanceDashboard({
             <Table>
               <TableHeader className="sticky top-0 bg-white/95 backdrop-blur-sm z-10 border-b border-slate-200/50">
                 <TableRow className="hover:bg-transparent">
-                  <TableHead className="font-semibold text-slate-700">
+                  <TableHead className="font-semibold text-slate-700 text-base">
                     Employee
                   </TableHead>
-                  <TableHead className="font-semibold text-slate-700">
+                  <TableHead className="font-semibold text-slate-700 text-base">
                     Merchant
                   </TableHead>
-                  <TableHead className="text-right font-semibold text-slate-700">
+                  <TableHead className="text-right font-semibold text-slate-700 text-base">
                     Amount
                   </TableHead>
                 </TableRow>
@@ -330,27 +339,27 @@ export function FinanceDashboard({
                         "bg-blue-50/80 border-l-4 border-l-blue-500"
                     )}
                   >
-                    <TableCell className="py-4">
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10 ring-2 ring-white shadow-md">
-                          <AvatarFallback className="bg-gradient-to-r from-slate-600 to-slate-700 text-white font-semibold">
+                    <TableCell className="py-5">
+                      <div className="flex items-center gap-4">
+                        <Avatar className="h-11 w-11 ring-2 ring-white shadow-md">
+                          <AvatarFallback className="bg-gradient-to-r from-slate-600 to-slate-700 text-white font-semibold text-base">
                             {getUserForTxn(txn)?.initials}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
-                          <span className="font-semibold text-sm text-slate-800">
+                          <span className="font-semibold text-base text-slate-800">
                             {getUserForTxn(txn)?.name}
                           </span>
-                          <span className="text-xs text-slate-500 font-medium">
+                          <span className="text-sm text-slate-500 font-medium">
                             {getUserForTxn(txn)?.title}
                           </span>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="font-medium text-slate-700">
+                    <TableCell className="font-medium text-slate-700 text-base py-5">
                       {txn.merchant}
                     </TableCell>
-                    <TableCell className="text-right font-bold text-slate-800">
+                    <TableCell className="text-right font-bold text-slate-800 text-lg py-5">
                       {currencyFormatter.format(txn.amount)}
                     </TableCell>
                   </TableRow>
@@ -362,14 +371,14 @@ export function FinanceDashboard({
       </Card>
 
       <Card className="lg:col-span-3 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
-        <CardHeader className="flex-shrink-0">
-          <CardTitle className="flex items-center gap-2 text-slate-800">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center">
-              <BarChart className="h-4 w-4 text-white" />
+        <CardHeader className="flex-shrink-0 pb-6">
+          <CardTitle className="flex items-center gap-3 text-slate-900 text-lg font-semibold">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <BarChart className="h-5 w-5 text-white" />
             </div>
             Agent Analysis
           </CardTitle>
-          <CardDescription className="text-slate-600">
+          <CardDescription className="text-slate-600 text-base leading-relaxed">
             AI-powered insights for the selected transaction.
           </CardDescription>
         </CardHeader>
