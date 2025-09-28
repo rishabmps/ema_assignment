@@ -40,16 +40,11 @@ export default function DemoPage() {
         </div>
         
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
-          Experience{" "}
-          <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
-            Agentic T&E
-          </span>{" "}
-          in Action
+          AI Agents in Action
         </h1>
         
         <p className="text-lg text-slate-300 leading-relaxed mb-8">
-          Choose a persona below and watch AI agents handle real travel and expense workflows. 
-          Every interaction is powered by production-grade AI—no mockups, just software.
+          Jump into live workflows. Watch real AI agents automate expenses, bookings, and finance operations.
         </p>
 
         <div className="inline-flex items-center gap-2 text-slate-400 mb-8">

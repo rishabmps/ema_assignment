@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { Bot, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { Bot, Sparkles, ChevronDown, ChevronUp, Minimize2, Maximize2 } from 'lucide-react';
 import { AgentActivityItem } from './agent-activity-item';
 import { getAgentDefinition } from './agent-definitions';
 import type { AgentActivity } from './types';
@@ -15,6 +15,7 @@ interface FloatingAgentDisplayProps {
 
 export function FloatingAgentDisplay({ activities, className }: FloatingAgentDisplayProps) {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentActivityId, setCurrentActivityId] = useState<string | null>(null);
 
   // Auto-cycle through activities when there are active ones
@@ -44,22 +45,22 @@ export function FloatingAgentDisplay({ activities, className }: FloatingAgentDis
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 50 }}
       className={cn(
-        // Desktop positioning
-        "lg:fixed lg:right-6 lg:top-1/2 lg:-translate-y-1/2 lg:z-40 lg:w-80",
-        // Mobile positioning - bottom sheet style with safe areas
-        "fixed bottom-20 left-4 right-4 z-30 md:bottom-4",
+        // Always positioned on the right with smaller footprint
+        "fixed right-4 top-1/2 -translate-y-1/2 z-40",
+        isCollapsed ? "w-12 h-12" : "w-72 max-h-[60vh]",
         "bg-white/95 backdrop-blur-lg rounded-2xl border border-white/20 shadow-2xl",
-        "lg:max-h-[80vh] max-h-[50vh] overflow-hidden",
-        // Mobile specific styles
-        "block",
+        "overflow-hidden transition-all duration-300 ease-in-out",
         className
       )}
     >
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 animate-pulse"></div>
-        <div className="relative z-10 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+      {/* Collapsed State */}
+      {isCollapsed && (
+        <div className="flex items-center justify-center w-full h-full">
+          <button
+            onClick={() => setIsCollapsed(false)}
+            className="text-blue-600 hover:text-blue-700 transition-colors group"
+            title="Expand AI Agent Panel"
+          >
             <motion.div
               animate={activeAgents.length > 0 ? { 
                 scale: [1, 1.2, 1], 
@@ -70,29 +71,72 @@ export function FloatingAgentDisplay({ activities, className }: FloatingAgentDis
                 repeat: activeAgents.length > 0 ? Infinity : 0,
                 ease: "easeInOut" 
               }}
-              className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center"
+              className="relative"
             >
-              <Bot className="h-4 w-4" />
+              <Bot className="h-6 w-6" />
+              {activeAgents.length > 0 && (
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border border-white">
+                  <div className="w-full h-full bg-emerald-400 rounded-full animate-pulse"></div>
+                </div>
+              )}
             </motion.div>
-            <div>
-              <h3 className="font-semibold text-sm">AI Agents</h3>
-              <p className="text-xs text-blue-100" title="Real-time AI agent activity feed">
-                {activeAgents.length > 0 ? `${activeAgents.length} working` : `${completedAgents.length} completed`}
-              </p>
-            </div>
-          </div>
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors"
-          >
-            {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
         </div>
-      </div>
+      )}
 
-      {/* Content */}
+      {/* Expanded State */}
+      {!isCollapsed && (
+        <>
+          {/* Header */}
+          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 animate-pulse"></div>
+            <div className="relative z-10 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <motion.div
+                  animate={activeAgents.length > 0 ? { 
+                    scale: [1, 1.2, 1], 
+                    rotate: [0, 180, 360] 
+                  } : {}}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: activeAgents.length > 0 ? Infinity : 0,
+                    ease: "easeInOut" 
+                  }}
+                  className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center"
+                >
+                  <Bot className="h-3 w-3" />
+                </motion.div>
+                <div>
+                  <h3 className="font-semibold text-sm">AI Agents</h3>
+                  <p className="text-xs text-blue-100" title="Real-time AI agent activity feed">
+                    {activeAgents.length > 0 ? `${activeAgents.length} active` : `${completedAgents.length} completed`}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors"
+                  title={isExpanded ? "Collapse details" : "Expand details"}
+                >
+                  {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+                </button>
+                <button
+                  onClick={() => setIsCollapsed(true)}
+                  className="w-6 h-6 bg-white/20 rounded-lg flex items-center justify-center hover:bg-white/30 transition-colors"
+                  title="Minimize panel"
+                >
+                  <Minimize2 className="h-3 w-3" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Content - only show when not collapsed and expanded */}
       <AnimatePresence>
-        {isExpanded && (
+        {!isCollapsed && isExpanded && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}

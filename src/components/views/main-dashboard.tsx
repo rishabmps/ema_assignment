@@ -266,17 +266,17 @@ function MainDashboardContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl font-bold text-white mb-6"
+          className="text-3xl font-bold text-white mb-4"
         >
-          Experience AI in Action
+          Choose Your Demo
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-slate-300 text-xl max-w-3xl mx-auto"
+          className="text-slate-300 text-lg max-w-2xl mx-auto"
         >
-          Jump directly into live AI workflows. Watch real agents handle expenses, bookings, and finance operations.
+          Select a workflow to see AI agents in action
         </motion.p>
       </div>
 
