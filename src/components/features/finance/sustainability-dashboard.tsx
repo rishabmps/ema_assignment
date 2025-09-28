@@ -62,8 +62,8 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
   return (
-    <div className="w-full space-y-4 p-6 md:p-8 flex flex-col h-full bg-slate-50">
-      <header className="flex-shrink-0 flex items-center justify-between">
+    <div className="w-full space-y-6 p-6 md:p-8 bg-slate-50 min-h-full">
+      <header className="flex items-center justify-between">
         <div>
           <Button variant="ghost" onClick={onBack} className="mb-2 -ml-4">
             <ArrowLeft className="mr-2" /> Back to Dashboard
@@ -77,7 +77,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
         </Button>
       </header>
 
-      <div className="flex-grow grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6 flex flex-col">
             <Card>
                 <CardHeader>
@@ -92,7 +92,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                     <Progress value={progress} className="mt-2" />
                 </CardContent>
             </Card>
-            <Card className="flex-grow">
+            <Card>
                 <CardHeader>
                     <CardTitle className='flex items-center justify-between'>
                         Emissions by Department
@@ -103,7 +103,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                     <CardDescription>Sales accounts for 65% of travel emissions but has the highest adoption rate of &apos;Greener Choice&apos; recommendations.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                     <ChartContainer config={chartConfig} className="h-64 w-full">
+                     <ChartContainer config={chartConfig} className="h-48 w-full">
                         <BarChart data={chartData} accessibilityLayer>
                             <CartesianGrid vertical={false} />
                             <XAxis dataKey="department" tickLine={false} tickMargin={10} axisLine={false} />
@@ -116,12 +116,12 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
             </Card>
         </div>
 
-        <Card className="lg:col-span-1 flex flex-col min-h-0">
+        <Card className="lg:col-span-1">
             <CardHeader>
                 <CardTitle>Recommendation Impact</CardTitle>
                 <CardDescription>Log of sustainable travel recommendations made by the CO2 Advisor agent.</CardDescription>
             </CardHeader>
-            <CardContent className="p-0 flex-grow overflow-y-auto">
+            <CardContent className="p-0 max-h-80 overflow-y-auto">
                 <Table>
                     <TableHeader className="sticky top-0 bg-background/95 backdrop-blur-sm z-10">
                     <TableRow>
