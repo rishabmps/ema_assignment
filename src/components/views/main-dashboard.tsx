@@ -954,24 +954,24 @@ function MainDashboardContent() {
                 transition={{ duration: 0.5, ease: "easeOut" }}
                 className="w-full flex justify-center px-4"
               >
-                <div className="w-full max-w-6xl relative my-8 mx-auto">
+                <div className="w-full max-w-[90vw] relative my-4 mx-auto">
                     <div className="relative">
                       <div className="absolute inset-0 bg-slate-800 rounded-3xl transform rotate-1 scale-105 opacity-20 blur-2xl"></div>
                       <div className="relative bg-gradient-to-b from-slate-800 via-slate-700 to-slate-800 rounded-3xl shadow-2xl overflow-hidden">
-                        <div className="h-14 bg-gradient-to-r from-slate-700 to-slate-600 border-b border-slate-600 flex items-center px-8">
+                        <div className="h-16 bg-gradient-to-r from-slate-700 to-slate-600 border-b border-slate-600 flex items-center px-8">
                           <div className="flex space-x-3">
                             <div className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors cursor-pointer"></div>
                             <div className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors cursor-pointer"></div>
                             <div className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors cursor-pointer"></div>
                           </div>
                           <div className="flex-1 mx-8">
-                            <div className="bg-slate-600 rounded-lg px-5 py-2 text-slate-300 text-sm font-mono flex items-center gap-2">
+                            <div className="bg-slate-600 rounded-lg px-6 py-2 text-slate-300 text-sm font-mono flex items-center gap-2">
                               <div className="w-3 h-3 text-slate-400">🔒</div>
                               {currentFinanceUrl}
                             </div>
                           </div>
                         </div>
-                        <div className="bg-white" style={{ height: '80vh', minHeight: '700px', maxHeight: '900px'}}>
+                        <div className="bg-white overflow-hidden" style={{ height: '85vh', minHeight: '800px', maxHeight: '1000px'}}>
                           <Suspense fallback={<DemoLoadingSkeleton type="dashboard" />}>
                             <FinanceDashboard 
                               onUrlChange={setCurrentFinanceUrl}
