@@ -7,7 +7,7 @@ import { TravelerExpenseFeed } from "@/components/features/traveler/traveler-exp
 import { TravelerBookingView } from "@/components/features/traveler/traveler-booking-view";
 import { FinanceDashboard, type FinanceSection } from "@/components/features/finance/finance-dashboard";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Bot, ChevronRight, Plane, FileText, Sparkles, ShieldCheck, Check } from "lucide-react";
+import { Bot, ChevronRight, Plane, FileText, Sparkles, ShieldCheck, Check, Receipt } from "lucide-react";
 import usersData from "@/lib/data/users.json";
 import { AnimatePresence, motion } from "framer-motion";
 import { FloatingAgentDisplay } from "@/components/features/agent-activity";
@@ -229,233 +229,299 @@ function MainDashboardContent() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
       transition={{ duration: 0.6 }}
-      className="max-w-5xl w-full"
+      className="max-w-6xl w-full"
     >
-      <div className="text-center mb-12">
+      <div className="text-center mb-16">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-3xl font-bold text-slate-800 mb-4"
+          className="text-4xl font-bold text-white mb-6"
         >
-          Step 1: Choose a Persona
+          Choose Your Experience
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-slate-600 text-lg"
+          className="text-slate-300 text-xl max-w-2xl mx-auto"
         >
-          Who are you in this story?
+          Select a persona to experience AI-powered travel and expense management from their perspective
         </motion.p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <Card 
-              onClick={() => handlePersonaSelect("traveler")}
-              className="p-8 cursor-pointer hover:border-blue-300 transition-all duration-300 group border-2 border-transparent bg-gradient-to-br from-white to-blue-50/50 hover:shadow-2xl hover:scale-105 transform backdrop-blur-sm relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-6 mb-6">
-                    <div className="relative">
-                      <Avatar className="h-16 w-16 ring-4 ring-blue-100 group-hover:ring-blue-200 transition-all">
-                        <AvatarFallback className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold text-lg">
-                          {traveler?.initials}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
-                      </div>
-                    </div>
-                    <div>
-                        <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-blue-700 transition-colors">
-                          {traveler?.name}
-                        </CardTitle>
-                        <CardDescription className="text-sm text-slate-500 font-medium">
-                          {traveler?.title}
-                        </CardDescription>
-                    </div>
-                </div>
-                <p className="text-slate-600 leading-relaxed mb-6">
-                  I&apos;m on the go, making purchases and booking trips. I want everything to be fast and easy.
-                </p>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2 text-blue-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                    <span className="text-sm font-semibold">Experience as Sarah</span>
-                  </div>
-                  <div className="flex justify-end items-center bg-blue-600 text-white px-4 py-2 rounded-full group-hover:bg-blue-700 transition-all transform group-hover:scale-110">
-                    <span className="text-sm font-semibold mr-2">Start Journey</span>
-                    <ChevronRight className="h-4 w-4" />
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <div
+            onClick={() => handlePersonaSelect("traveler")}
+            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/5 via-transparent to-blue-500/5 border border-blue-500/10 p-1 hover:border-blue-500/30 transition-all duration-500 hover:scale-105"
           >
-            <Card 
-              onClick={() => handlePersonaSelect("finance")}
-              className="p-8 cursor-pointer hover:border-purple-300 transition-all duration-300 group border-2 border-transparent bg-gradient-to-br from-white to-purple-50/50 hover:shadow-2xl hover:scale-105 transform backdrop-blur-sm relative overflow-hidden"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative z-10">
-                <div className="flex items-center gap-6 mb-6">
-                    <div className="relative">
-                      <Avatar className="h-16 w-16 ring-4 ring-purple-100 group-hover:ring-purple-200 transition-all">
-                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold text-lg">
-                          {finance?.initials}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white flex items-center justify-center">
-                        <div className="w-2 h-2 bg-white rounded-full"></div>
-                      </div>
-                    </div>
-                    <div>
-                        <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-purple-700 transition-colors">
-                          {finance?.name}
-                        </CardTitle>
-                        <CardDescription className="text-sm text-slate-500 font-medium">
-                          {finance?.title}
-                        </CardDescription>
-                    </div>
-                </div>
-                <p className="text-slate-600 leading-relaxed mb-6">
-                  I oversee company spending, manage exceptions, and ensure policy compliance.
-                </p>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2 text-purple-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                    <span className="text-sm font-semibold">Experience as Alex</span>
+            <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 h-full">
+              <div className="flex items-center gap-6 mb-8">
+                <div className="relative">
+                  <Avatar className="h-20 w-20 ring-4 ring-blue-500/20 group-hover:ring-blue-500/40 transition-all">
+                    <AvatarFallback className="bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold text-xl">
+                      {traveler?.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full border-4 border-slate-900 flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
                   </div>
-                  <div className="flex justify-end items-center bg-purple-600 text-white px-4 py-2 rounded-full group-hover:bg-purple-700 transition-all transform group-hover:scale-110">
-                    <span className="text-sm font-semibold mr-2">Start Journey</span>
-                    <ChevronRight className="h-4 w-4" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl font-bold text-white group-hover:text-blue-300 transition-colors mb-2">
+                    👩‍💼 {traveler?.name}
+                  </CardTitle>
+                  <CardDescription className="text-blue-300 font-medium text-base">
+                    {traveler?.title} • Mobile-First Experience
+                  </CardDescription>
+                </div>
+              </div>
+              
+              <p className="text-slate-300 text-lg leading-relaxed mb-8">
+                "I'm constantly traveling for deals. I need expense management that works as fast as I do—no friction, just results."
+              </p>
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 text-blue-300 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <Sparkles className="h-5 w-5" />
+                  <span className="font-semibold">Experience Sarah's Journey</span>
+                </div>
+                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-3 rounded-full group-hover:from-blue-600 group-hover:to-blue-700 transition-all transform group-hover:scale-110 shadow-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">Start Demo</span>
+                    <ChevronRight className="h-5 w-5" />
                   </div>
                 </div>
               </div>
-            </Card>
-          </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div
+            onClick={() => handlePersonaSelect("finance")}
+            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-500/5 via-transparent to-purple-500/5 border border-purple-500/10 p-1 hover:border-purple-500/30 transition-all duration-500 hover:scale-105"
+          >
+            <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 h-full">
+              <div className="flex items-center gap-6 mb-8">
+                <div className="relative">
+                  <Avatar className="h-20 w-20 ring-4 ring-purple-500/20 group-hover:ring-purple-500/40 transition-all">
+                    <AvatarFallback className="bg-gradient-to-r from-purple-500 to-purple-600 text-white font-semibold text-xl">
+                      {finance?.initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full border-4 border-slate-900 flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                  </div>
+                </div>
+                <div>
+                  <CardTitle className="text-2xl font-bold text-white group-hover:text-purple-300 transition-colors mb-2">
+                    🧑‍💼 {finance?.name}
+                  </CardTitle>
+                  <CardDescription className="text-purple-300 font-medium text-base">
+                    {finance?.title} • Desktop Dashboard
+                  </CardDescription>
+                </div>
+              </div>
+              
+              <p className="text-slate-300 text-lg leading-relaxed mb-8">
+                "I oversee spend for 200+ employees. I need visibility, control, and automation that scales—with full audit trails."
+              </p>
+              
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 text-purple-300 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <Sparkles className="h-5 w-5" />
+                  <span className="font-semibold">Experience Alex's Dashboard</span>
+                </div>
+                <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-3 rounded-full group-hover:from-purple-600 group-hover:to-purple-700 transition-all transform group-hover:scale-110 shadow-lg">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold">Start Demo</span>
+                    <ChevronRight className="h-5 w-5" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </motion.div>
   );
 
   const renderActSelector = () => (
-     <motion.div
+    <motion.div
       key="act"
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
       transition={{ duration: 0.6 }}
-      className="max-w-5xl w-full"
+      className="max-w-6xl w-full"
     >
-      <div className="text-center mb-12">
+      <div className="text-center mb-16">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-3xl font-bold text-slate-800 mb-4"
+          className="text-4xl font-bold text-white mb-6"
         >
-          Step 2: Choose a Demo
+          Choose Sarah's Adventure
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-slate-600 text-lg"
+          className="text-slate-300 text-xl max-w-2xl mx-auto"
         >
-          What would you like to see?
+          Experience different aspects of AI-powered travel and expense management
         </motion.p>
       </div>
-       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <div
+            onClick={() => handleActSelect("expense")}
+            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/5 via-transparent to-blue-500/5 border border-blue-500/10 p-1 hover:border-blue-500/30 transition-all duration-500 hover:scale-105"
           >
-            <Card 
-              onClick={() => handleActSelect("expense")}
-              className="p-8 cursor-pointer hover:border-emerald-300 transition-all duration-300 group border-2 border-transparent bg-gradient-to-br from-white to-emerald-50/50 hover:shadow-2xl hover:scale-105 transform backdrop-blur-sm relative overflow-hidden flex flex-col h-full"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <FileText className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-emerald-700 transition-colors mb-1">
-                      Act I: The Invisible Expense Report
-                    </CardTitle>
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 bg-emerald-500 rounded-full"></div>
-                      <span className="text-sm text-slate-500 font-medium">Interactive Demo</span>
-                    </div>
-                  </div>
+            <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 h-full">
+              <div className="flex items-start gap-6 mb-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-xl">
+                  <Receipt className="h-10 w-10 text-white" />
                 </div>
-                <p className="text-slate-600 leading-relaxed flex-grow mb-6">
-                  See how AI turns a 20-minute chore into a 5-second task. Experience the magic of automatic expense categorization and receipt matching.
-                </p>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2 text-emerald-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                    <span className="text-sm font-semibold">Try the AI magic</span>
-                  </div>
-                  <div className="flex justify-end items-center bg-emerald-600 text-white px-4 py-2 rounded-full group-hover:bg-emerald-700 transition-all transform group-hover:scale-110">
-                    <span className="text-sm font-semibold mr-2">Start Demo</span>
-                    <ChevronRight className="h-4 w-4" />
+                <div>
+                  <h3 className="text-3xl font-bold text-white mb-3 group-hover:text-blue-300 transition-colors">
+                    Act I: The Receipt Rush
+                  </h3>
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                    <span className="text-blue-300 text-sm font-medium uppercase tracking-wide">Mobile Experience</span>
                   </div>
                 </div>
               </div>
-            </Card>
-          </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <Card 
-              onClick={() => handleActSelect("booking")}
-              className="p-8 cursor-pointer hover:border-sky-300 transition-all duration-300 group border-2 border-transparent bg-gradient-to-br from-white to-sky-50/50 hover:shadow-2xl hover:scale-105 transform backdrop-blur-sm relative overflow-hidden flex flex-col h-full"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-sky-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <div className="relative z-10 flex flex-col h-full">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="flex-shrink-0 w-16 h-16 bg-gradient-to-br from-sky-500 to-sky-600 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                    <Plane className="h-8 w-8 text-white" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <CardTitle className="text-xl font-bold text-slate-800 group-hover:text-sky-700 transition-colors mb-1">
-                      Act II: The Intelligent & Guided Trip
-                    </CardTitle>
-                    <div className="flex items-center gap-2">
-                      <div className="h-2 w-2 bg-sky-500 rounded-full"></div>
-                      <span className="text-sm text-slate-500 font-medium">Conversational AI</span>
-                    </div>
-                  </div>
-                </div>
-                <p className="text-slate-600 leading-relaxed flex-grow mb-6">
-                  Book a trip conversationally and see how the agent guides you to smarter, sustainable choices. Experience AI-powered travel optimization.
+
+              <div className="space-y-6 mb-8">
+                <p className="text-slate-300 text-lg leading-relaxed">
+                  Sarah just landed from a client trip with a phone full of receipts. Watch the Receipt Concierge work its magic.
                 </p>
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2 text-sky-600 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                    <span className="text-sm font-semibold">Chat with AI agent</span>
+                
+                <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
+                  <h4 className="text-white font-semibold mb-3">🪄 What you'll experience:</h4>
+                  <ul className="space-y-2 text-slate-300">
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                      Instant receipt capture and text extraction
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                      Smart matching to corporate card transactions
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                      Automated policy compliance and approval
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="flex flex-wrap gap-4">
+                  <div className="bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-full border border-emerald-500/20">
+                    ⚡ 35 seconds to reimbursement
                   </div>
-                  <div className="flex justify-end items-center bg-sky-600 text-white px-4 py-2 rounded-full group-hover:bg-sky-700 transition-all transform group-hover:scale-110">
-                    <span className="text-sm font-semibold mr-2">Start Demo</span>
-                    <ChevronRight className="h-4 w-4" />
+                  <div className="bg-blue-500/10 text-blue-400 px-4 py-2 rounded-full border border-blue-500/20">
+                    🎯 99.2% policy confidence
                   </div>
                 </div>
               </div>
-            </Card>
-          </motion.div>
+
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-4 rounded-2xl group-hover:from-blue-600 group-hover:to-blue-700 transition-all transform group-hover:scale-105 shadow-lg">
+                <div className="flex items-center justify-center gap-3">
+                  <Sparkles className="h-6 w-6" />
+                  <span className="font-bold text-lg">Experience the Magic</span>
+                  <ChevronRight className="h-6 w-6" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, x: 30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
+          <div
+            onClick={() => handleActSelect("booking")}
+            className="group cursor-pointer relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-500/5 via-transparent to-emerald-500/5 border border-emerald-500/10 p-1 hover:border-emerald-500/30 transition-all duration-500 hover:scale-105"
+          >
+            <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-8 lg:p-10 h-full">
+              <div className="flex items-start gap-6 mb-8">
+                <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 shadow-xl">
+                  <Plane className="h-10 w-10 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-3xl font-bold text-white mb-3 group-hover:text-emerald-300 transition-colors">
+                    Act II: The Smart Booking
+                  </h3>
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                    <span className="text-emerald-300 text-sm font-medium uppercase tracking-wide">Conversational AI</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-6 mb-8">
+                <p className="text-slate-300 text-lg leading-relaxed">
+                  Sarah needs to book a complex multi-city trip. Watch her collaborate with AI for optimal outcomes.
+                </p>
+                
+                <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
+                  <h4 className="text-white font-semibold mb-3">🧠 What you'll experience:</h4>
+                  <ul className="space-y-2 text-slate-300">
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>
+                      Natural conversation with booking AI
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>
+                      Smart optimization for time, cost, and sustainability
+                    </li>
+                    <li className="flex items-center gap-3">
+                      <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>
+                      Duty of care and compliance checks
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="flex flex-wrap gap-4">
+                  <div className="bg-emerald-500/10 text-emerald-400 px-4 py-2 rounded-full border border-emerald-500/20">
+                    🌱 42% CO₂ reduction
+                  </div>
+                  <div className="bg-blue-500/10 text-blue-400 px-4 py-2 rounded-full border border-blue-500/20">
+                    💰 $1,280 saved
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-4 rounded-2xl group-hover:from-emerald-600 group-hover:to-emerald-700 transition-all transform group-hover:scale-105 shadow-lg">
+                <div className="flex items-center justify-center gap-3">
+                  <Bot className="h-6 w-6" />
+                  <span className="font-bold text-lg">Chat with AI Agent</span>
+                  <ChevronRight className="h-6 w-6" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </motion.div>
   );
@@ -463,53 +529,52 @@ function MainDashboardContent() {
   const getBreadcrumb = () => {
     if (step === 'persona') return "Select Persona";
 
-    let path = <span className="cursor-pointer hover:text-blue-600 transition-colors font-medium" onClick={() => setStep('persona')}>Select Persona</span>;
+    let path = <span className="cursor-pointer hover:text-blue-300 transition-colors font-medium text-slate-400" onClick={() => setStep('persona')}>Select Persona</span>;
     
     if (step === 'act' || (step === 'demo' && persona === 'traveler')) {
-      path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-400" /> <span className="text-slate-700 font-medium">{traveler?.name}</span></>;
+      path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="text-slate-300 font-medium">{traveler?.name}</span></>;
     }
     
     if (step === 'demo' && persona === 'finance') {
-       path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-400" /> <span className="text-slate-700 font-medium">{finance?.name}</span></>;
+       path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="text-slate-300 font-medium">{finance?.name}</span></>;
     }
 
     if (step === 'act') {
-        path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-400" /> <span className="text-slate-700 font-medium">Select Demo</span></>;
+        path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="text-slate-300 font-medium">Select Demo</span></>;
     }
 
     if (step === 'demo' && persona === 'traveler') {
-        path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-400" /> <span className="cursor-pointer hover:text-blue-600 transition-colors font-medium" onClick={() => setStep('act')}>Select Demo</span></>;
+        path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="cursor-pointer hover:text-blue-300 transition-colors font-medium text-slate-400" onClick={() => setStep('act')}>Select Demo</span></>;
         let actName = '';
         if (act === 'expense') actName = 'Act I';
         if (act === 'booking') actName = 'Act II';
-        path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-400" /> <span className="text-slate-700 font-medium">{actName}</span></>;
+        path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="text-slate-300 font-medium">{actName}</span></>;
     }
     
     return path;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 relative overflow-hidden w-full">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden w-full">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-float" style={{animationDelay: '2s'}}></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-teal-400 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-pulse"></div>
-      </div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500 rounded-full mix-blend-screen filter blur-3xl opacity-5 animate-float"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-screen filter blur-3xl opacity-5 animate-float" style={{animationDelay: '2s'}}></div>
+    </div>
 
       <div className="w-full py-8 relative z-10">
-        <header className="text-center mb-12">
+        <header className="text-center mb-16">
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="flex items-center justify-center gap-4 mb-6"
+            className="flex items-center justify-center gap-4 mb-8"
           >
             <div className="relative">
-              <Bot className="h-8 w-8 text-blue-600 animate-bounce-subtle" />
-              <div className="absolute -inset-1 bg-blue-600 rounded-full opacity-20 animate-pulse-ring"></div>
+              <Bot className="h-10 w-10 text-blue-400 animate-bounce-subtle" />
+              <div className="absolute -inset-2 bg-blue-400 rounded-full opacity-10 animate-pulse-ring"></div>
             </div>
-            <h2 className="text-3xl font-bold tracking-tight text-gradient bg-gradient-to-r from-blue-600 via-purple-600 to-teal-600 bg-clip-text text-transparent animate-gradient-x leading-tight">
+            <h2 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent leading-tight">
               Interactive Demo Studio
             </h2>
           </motion.div>
@@ -517,7 +582,7 @@ function MainDashboardContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-lg text-slate-600 font-medium max-w-3xl mx-auto leading-relaxed"
+            className="text-xl text-slate-300 font-medium max-w-4xl mx-auto leading-relaxed"
           >
             Choose a persona and watch agents work in real-time. Every interaction is powered by the same AI that runs in production.
           </motion.p>
@@ -527,9 +592,9 @@ function MainDashboardContent() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="mb-12 text-center"
+          className="mb-16 text-center"
         >
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-full border border-slate-200/50 shadow-lg text-slate-600 text-sm font-medium">
+          <div className="inline-flex items-center gap-2 bg-slate-800/80 backdrop-blur-sm px-6 py-3 rounded-full border border-slate-700/50 shadow-lg text-slate-300 text-sm font-medium">
             {getBreadcrumb()}
           </div>
         </motion.div>
@@ -540,48 +605,53 @@ function MainDashboardContent() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.6 }}
-            className="mx-auto mb-10 max-w-6xl px-4"
+            className="mx-auto mb-16 max-w-7xl px-4"
           >
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,0.35fr)]">
-              <div className="relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white/80 p-6 shadow-xl backdrop-blur">
-                <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-600">
-                  <Sparkles className="h-3.5 w-3.5" /> {scenarioDetails.label}
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,0.35fr)]">
+              <div className="relative overflow-hidden rounded-3xl border border-slate-700/50 bg-slate-800/50 p-8 shadow-2xl backdrop-blur">
+                <span className="inline-flex items-center gap-2 rounded-full bg-blue-500/10 border border-blue-500/20 px-4 py-2 text-sm font-semibold uppercase tracking-wide text-blue-400">
+                  <Sparkles className="h-4 w-4" /> {scenarioDetails.label}
                 </span>
-                <h2 className="mt-4 text-2xl font-semibold text-slate-900">
+                <h2 className="mt-6 text-3xl font-bold text-white leading-tight">
                   {scenarioDetails.headline}
                 </h2>
-                <p className="mt-3 text-sm text-slate-600">{scenarioDetails.description}</p>
-                <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50/60 p-4 text-sm text-blue-700">
-                  {scenarioDetails.callout}
+                <p className="mt-4 text-lg text-slate-300 leading-relaxed">{scenarioDetails.description}</p>
+                <div className="mt-6 rounded-2xl border border-blue-500/20 bg-blue-500/10 p-6 text-blue-300">
+                  <div className="flex items-start gap-3">
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span className="text-white text-xs font-bold">!</span>
+                    </div>
+                    <p className="text-sm leading-relaxed">{scenarioDetails.callout}</p>
+                  </div>
                 </div>
-                <ul className="mt-5 space-y-2 text-sm text-slate-600">
+                <ul className="mt-8 space-y-3 text-slate-300">
                   {scenarioDetails.highlights.map((item) => (
-                    <li key={item} className="flex items-start gap-2">
-                      <Check className="mt-0.5 h-4 w-4 text-emerald-500" />
-                      <span>{item}</span>
+                    <li key={item} className="flex items-start gap-3">
+                      <Check className="mt-1 h-5 w-5 text-emerald-400 flex-shrink-0" />
+                      <span className="leading-relaxed">{item}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-              <div className="grid gap-4">
+              <div className="grid gap-6">
                 {scenarioDetails.metrics.map((metric) => (
                   <div
                     key={metric.label}
-                    className="flex flex-col gap-2 rounded-3xl border border-slate-200/60 bg-white/80 p-5 shadow-lg backdrop-blur"
+                    className="flex flex-col gap-3 rounded-3xl border border-slate-700/50 bg-slate-800/50 p-6 shadow-xl backdrop-blur"
                   >
-                    <div className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+                    <div className="text-sm font-semibold uppercase tracking-wide text-slate-400">
                       {metric.label}
                     </div>
-                    <div className="text-3xl font-bold text-slate-900">{metric.value}</div>
-                    <div className="text-sm text-slate-500">{metric.sublabel}</div>
+                    <div className="text-4xl font-bold text-white">{metric.value}</div>
+                    <div className="text-slate-300">{metric.sublabel}</div>
                   </div>
                 ))}
-                <div className="rounded-3xl border border-slate-200/60 bg-slate-50/80 p-5 text-sm text-slate-600 shadow-lg">
-                  <div className="flex items-center gap-2 text-slate-700">
-                    <ShieldCheck className="h-4 w-4 text-blue-500" />
-                    Always-on agent transparency
+                <div className="rounded-3xl border border-emerald-500/20 bg-emerald-500/5 p-6 text-emerald-300 shadow-xl">
+                  <div className="flex items-center gap-3 text-emerald-300 mb-3">
+                    <ShieldCheck className="h-5 w-5 text-emerald-400" />
+                    <span className="font-semibold">Always-on agent transparency</span>
                   </div>
-                  <p className="mt-2">
+                  <p className="text-sm leading-relaxed">
                     Follow the floating agent feed on the right to inspect decision rationale, supporting data, and escalation paths.
                   </p>
                 </div>
