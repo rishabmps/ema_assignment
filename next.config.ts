@@ -30,6 +30,23 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Allow all hosts for Replit proxy environment
+  experimental: {
+    allowedRevalidateHeaderKeys: [],
+  },
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
+      },
+    ]
+  },
 };
 
 export default nextConfig;
