@@ -322,22 +322,43 @@ function MainDashboardContent() {
       className="max-w-7xl w-full"
     >
       <div className="text-center mb-16">
-        <motion.h2 
+        <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-3xl font-bold text-white mb-4"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-6"
         >
-          Choose Your Demo
-        </motion.h2>
-        <motion.p 
+          <Sparkles className="h-4 w-4 text-blue-400" />
+          <span className="text-blue-300 text-sm font-medium">Live AI Agent Demo</span>
+        </motion.div>
+        
+        <motion.h1 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-slate-300 text-lg max-w-2xl mx-auto"
+          className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
         >
-          Select a workflow to see AI agents in action
+          AI Agents in Action
+        </motion.h1>
+        
+        <motion.p 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-lg text-slate-300 leading-relaxed mb-8 max-w-3xl mx-auto"
+        >
+          Jump into live workflows. Watch real AI agents automate expenses, bookings, and finance operations.
         </motion.p>
+
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="inline-flex items-center gap-2 text-slate-400 mb-8"
+        >
+          <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+          <span className="text-sm font-medium">Live Demo Environment</span>
+        </motion.div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
