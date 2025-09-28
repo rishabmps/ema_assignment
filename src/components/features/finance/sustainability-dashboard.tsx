@@ -70,7 +70,43 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                     <CardTitle className="text-lg text-slate-900 font-semibold">Quarterly Travel Emissions</CardTitle>
                     <CardDescription className="text-base text-slate-600 leading-relaxed">On track to meet {budget}-ton CO2e quarterly budget.</CardDescription>
                   </div>
-                  <Button size="lg" className="font-semibold text-base h-12 px-6 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:shadow-lg transition-all duration-200">
+                  <Button 
+                    size="lg" 
+                    className="font-semibold text-base h-12 px-6 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:shadow-lg transition-all duration-200"
+                    onClick={() => {
+                      const esgData = {
+                        reportPeriod: "Q3 2024",
+                        totalEmissions: `${totalEmissions.toFixed(1)} tons CO2e`,
+                        budget: `${budget} tons CO2e`,
+                        progressTowardGoal: `${progress.toFixed(1)}%`,
+                        adoptionRate: `${adoptionRate.toFixed(0)}%`,
+                        departmentBreakdown: chartData,
+                        sustainabilityRecommendations: recommendations.map(rec => ({
+                          route: rec.route,
+                          employee: getUserById(rec.user_id)?.name,
+                          date: format(new Date(rec.date), "yyyy-MM-dd"),
+                          co2SavedKg: rec.co2_saved_kg,
+                          userAction: rec.user_action
+                        })),
+                        companyGoals: targets,
+                        generatedDate: new Date().toISOString()
+                      };
+                      
+                      const blob = new Blob([JSON.stringify(esgData, null, 2)], {
+                        type: "application/json",
+                      });
+                      const url = URL.createObjectURL(blob);
+                      const a = document.createElement("a");
+                      a.href = url;
+                      a.download = `esg-sustainability-report-${new Date().toISOString().split("T")[0]}.json`;
+                      document.body.appendChild(a);
+                      a.click();
+                      document.body.removeChild(a);
+                      URL.revokeObjectURL(url);
+                      
+                      alert(`ESG sustainability report exported successfully! Current emissions: ${totalEmissions.toFixed(1)} tons CO2e (${progress.toFixed(1)}% of budget)`);
+                    }}
+                  >
                     <FileText className="mr-2 h-5 w-5" />
                     Export ESG Report
                   </Button>

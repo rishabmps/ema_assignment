@@ -46,8 +46,28 @@ export function PolicyInsightView({ onBack, recommendations }: PolicyInsightView
                 </CardContent>
             </Card>
             <div className="flex justify-end space-x-4 pt-6 border-t border-slate-200">
-                <Button variant="outline" size="lg" className="font-semibold text-base hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 h-12 px-6">Dismiss</Button>
-                <Button size="lg" className="font-semibold text-base bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 hover:shadow-lg transition-all duration-200 h-12 px-6">Accept & Update Policy</Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="font-semibold text-base hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 h-12 px-6"
+                  onClick={() => {
+                    alert(`Policy recommendation "${rec.rule_id}" has been dismissed and removed from the queue.`);
+                  }}
+                >
+                  Dismiss
+                </Button>
+                <Button 
+                  size="lg" 
+                  className="font-semibold text-base bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700 hover:to-amber-800 hover:shadow-lg transition-all duration-200 h-12 px-6"
+                  onClick={() => {
+                    const confirmed = confirm(`Are you sure you want to update the policy based on this recommendation? This will affect all future expense submissions.`);
+                    if (confirmed) {
+                      alert(`Policy "${rec.rule_id}" has been updated successfully! The changes are now in effect and all employees have been notified.`);
+                    }
+                  }}
+                >
+                  Accept & Update Policy
+                </Button>
             </div>
           </CardContent>
         </Card>

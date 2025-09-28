@@ -38,7 +38,38 @@ export function VatReclaimView({ onBack, transactions, totalReclaimable }: VatRe
         <CardContent>
           <p className="text-4xl font-bold text-slate-900 mb-3">{currencyFormatter.format(totalReclaimable)}</p>
           <p className="text-base text-slate-600 font-medium mb-6">From {reclaimableTransactions.length} international transactions.</p>
-          <Button size="lg" className="font-semibold text-base h-12 px-6 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all duration-200">
+          <Button 
+            size="lg" 
+            className="font-semibold text-base h-12 px-6 bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all duration-200"
+            onClick={() => {
+              const vatData = {
+                totalReclaimable: currencyFormatter.format(totalReclaimable),
+                transactionCount: reclaimableTransactions.length,
+                transactions: reclaimableTransactions.map(txn => ({
+                  date: format(new Date(txn.date), "yyyy-MM-dd"),
+                  merchant: txn.merchant,
+                  country: txn.country_code,
+                  amount: txn.amount_usd || txn.amount,
+                  vatReclaimable: txn.vat_reclaimable_usd
+                })),
+                exportDate: new Date().toISOString()
+              };
+              
+              const blob = new Blob([JSON.stringify(vatData, null, 2)], {
+                type: "application/json",
+              });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `vat-reclaim-export-${new Date().toISOString().split("T")[0]}.json`;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
+              
+              alert(`VAT reclaim data exported successfully! ${reclaimableTransactions.length} transactions totaling ${currencyFormatter.format(totalReclaimable)} in reclaimable VAT.`);
+            }}
+          >
             <FileUp className="mr-2 h-5 w-5" />
             Export for Filing
           </Button>
