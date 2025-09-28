@@ -2,7 +2,7 @@ import Link from "next/link";
 import MainDashboard from "@/components/views/main-dashboard";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, User, Briefcase, Receipt, Plane, BarChart3, Shield, Zap, Leaf } from "lucide-react";
+import { ArrowRight, User, Briefcase, Receipt, Plane, BarChart3, Shield, Zap, Leaf, Sparkles } from "lucide-react";
 
 export const metadata = {
   title: "Demo Studio – Live Experience",
@@ -12,242 +12,261 @@ export const metadata = {
 
 export default function DemoPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-slate-100">
+    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       {/* Navigation */}
-      <nav className="mx-auto max-w-6xl px-6 py-6">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <Link href="/" className="text-slate-300 hover:text-white transition-colors">
-              Home
-            </Link>
-            <span className="text-white font-semibold">Demo Studio</span>
+      <nav className="border-b border-white/10 backdrop-blur-xl bg-slate-950/80">
+        <div className="mx-auto max-w-7xl px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-8">
+              <Link href="/" className="text-slate-400 hover:text-white transition-colors text-sm">
+                ← Home
+              </Link>
+              <div className="flex items-center gap-3">
+                <div className="w-2 h-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
+                <span className="text-white font-semibold text-lg">Demo Studio</span>
+              </div>
+            </div>
+            <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+              Live Experience
+            </Badge>
           </div>
-          <Button size="sm" asChild>
-            <Link href="#demo" className="flex items-center gap-2">
-              Try Live
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
         </div>
       </nav>
 
-      {/* Welcome Section */}
-      <section className="mx-auto max-w-6xl px-6 pt-8 pb-16 text-center">
-        <Badge className="bg-gradient-to-r from-blue-500/20 to-purple-500/20 text-blue-100 border border-blue-400/20 mb-6">
-          Live Demo Studio
-        </Badge>
-        <h1 className="text-balance text-5xl font-bold tracking-tight text-white sm:text-6xl mb-6">
-          Welcome to the Agentic T&E{" "}
-          <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
-            Demo Studio
-          </span>
-        </h1>
-        <p className="max-w-4xl mx-auto text-lg text-slate-300 sm:text-xl leading-relaxed">
-          Leave the marketing behind—step into the product. Experience how real AI agents orchestrate and automate travel and expense management in the shoes of <strong>Sarah</strong> (a busy traveler) and <strong>Alex</strong> (a finance operations lead).
-        </p>
-        <p className="max-w-4xl mx-auto text-lg text-slate-400 mt-4">
-          Choose your journey, trigger actions, and watch agents work in real-time—no slides, just software.
-        </p>
+      {/* Hero Section */}
+      <section className="mx-auto max-w-7xl px-6 pt-16 pb-24">
+        <div className="text-center max-w-4xl mx-auto">
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-full px-4 py-2 mb-8">
+            <Sparkles className="h-4 w-4 text-blue-400" />
+            <span className="text-blue-300 text-sm font-medium">No slides, just software</span>
+          </div>
+          
+          <h1 className="text-6xl md:text-7xl font-bold text-white mb-8 leading-tight">
+            Choose Your{" "}
+            <span className="bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent">
+              Journey
+            </span>
+          </h1>
+          
+          <p className="text-xl text-slate-300 leading-relaxed max-w-3xl mx-auto">
+            Step into real AI agent workflows as <strong className="text-blue-300">Sarah</strong> (traveler) 
+            or <strong className="text-purple-300">Alex</strong> (finance ops). Watch intelligent automation 
+            transform travel and expense management in real-time.
+          </p>
+        </div>
       </section>
 
-      {/* Persona Selection Section */}
-      <section className="mx-auto max-w-6xl px-6 pb-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Choose a Persona</h2>
-          <p className="text-lg text-slate-300">Who are you in this story?</p>
-        </div>
-
-        <div className="grid gap-8 md:grid-cols-2">
+      {/* Persona & Act Selection */}
+      <section className="mx-auto max-w-7xl px-6 pb-24">
+        <div className="grid lg:grid-cols-2 gap-12 xl:gap-16">
           {/* Sarah - Traveler */}
-          <div className="group rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:scale-105">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
-                <User className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-semibold text-white">👩‍💼 Sarah – Traveler</h3>
-              </div>
-            </div>
-            
-            <div className="space-y-6">
-              {/* Act I */}
-              <div className="border-l-2 border-blue-400 pl-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Receipt className="h-5 w-5 text-blue-400" />
-                  <h4 className="text-lg font-semibold text-white">Act I: The Receipt Rush</h4>
+          <div className="group">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-500/5 via-transparent to-blue-500/5 border border-blue-500/10 p-1">
+              <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 lg:p-10 h-full">
+                {/* Persona Header */}
+                <div className="flex items-center gap-6 mb-8">
+                  <div className="relative">
+                    <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl">
+                      <User className="h-10 w-10 text-white" />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-emerald-400 rounded-full flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-white mb-2">👩‍💼 Sarah Chen</h2>
+                    <p className="text-blue-300 font-medium">Sales Director • Always Traveling</p>
+                  </div>
                 </div>
-                <p className="text-slate-300 mb-3">
-                  Sarah lands after a trip, her phone full of receipts.
-                </p>
-                <p className="text-sm text-slate-400 italic mb-2">
-                  *Trigger the Receipt Concierge by snapping a stack of receipts. Watch as it extracts totals, matches to card transactions, and only pings Sarah if something looks off.*
-                </p>
-                <div className="flex items-center gap-4 text-xs">
-                  <span className="text-emerald-400 font-medium">Time to reimbursement: 35 seconds</span>
-                  <span className="text-blue-400 font-medium">Policy confidence: 99.2%</span>
-                </div>
-              </div>
 
-              {/* Act II */}
-              <div className="border-l-2 border-emerald-400 pl-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Plane className="h-5 w-5 text-emerald-400" />
-                  <h4 className="text-lg font-semibold text-white">Act II: The Smart Booking</h4>
-                </div>
-                <p className="text-slate-300 mb-3">
-                  A new project awaits. Sarah opens the booking panel.
+                <p className="text-slate-300 text-lg mb-8 leading-relaxed">
+                  "I'm constantly on the road closing deals. I need expense management that works as fast as I do—no friction, just results."
                 </p>
-                <p className="text-sm text-slate-400 italic mb-2">
-                  *Co-create an itinerary with the agent. See how it weighs CO₂ impact, preferences, rates, and duty of care before surfacing options.*
-                </p>
-                <div className="flex items-center gap-4 text-xs">
-                  <span className="text-emerald-400 font-medium">CO₂ reduction: 42%</span>
-                  <span className="text-blue-400 font-medium">Negotiated savings: $1,280</span>
+
+                {/* Acts */}
+                <div className="space-y-6">
+                  {/* Act I */}
+                  <div className="group/act bg-gradient-to-r from-blue-500/5 to-transparent border border-blue-500/10 rounded-2xl p-6 hover:border-blue-500/30 transition-all duration-300 hover:bg-blue-500/10">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Receipt className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white mb-2">Act I: The Receipt Rush</h3>
+                        <p className="text-slate-300 mb-3">
+                          Back from a client trip, Sarah's phone is full of receipts that need processing before the weekend.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="pl-16">
+                      <p className="text-slate-400 italic text-sm mb-4">
+                        Watch the Receipt Concierge extract totals, match card transactions, and handle policy compliance—all while Sarah grabs coffee.
+                      </p>
+                      <div className="flex flex-wrap gap-4 text-sm">
+                        <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20">
+                          ⚡ 35s to reimbursement
+                        </div>
+                        <div className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full border border-blue-500/20">
+                          🎯 99.2% policy confidence
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Act II */}
+                  <div className="group/act bg-gradient-to-r from-emerald-500/5 to-transparent border border-emerald-500/10 rounded-2xl p-6 hover:border-emerald-500/30 transition-all duration-300 hover:bg-emerald-500/10">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Plane className="h-6 w-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold text-white mb-2">Act II: The Smart Booking</h3>
+                        <p className="text-slate-300 mb-3">
+                          A new enterprise deal requires travel to three cities. Sarah needs options that balance time, cost, and sustainability.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="pl-16">
+                      <p className="text-slate-400 italic text-sm mb-4">
+                        Co-create an intelligent itinerary that weighs CO₂ impact, preferences, rates, and duty of care before presenting optimized options.
+                      </p>
+                      <div className="flex flex-wrap gap-4 text-sm">
+                        <div className="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full border border-emerald-500/20">
+                          🌱 42% CO₂ reduction
+                        </div>
+                        <div className="bg-blue-500/10 text-blue-400 px-3 py-1 rounded-full border border-blue-500/20">
+                          💰 $1,280 saved
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Alex - Finance Ops */}
-          <div className="group rounded-3xl border border-white/10 bg-gradient-to-b from-white/10 to-white/5 p-8 backdrop-blur-sm transition-all duration-300 hover:border-white/20 hover:scale-105">
-            <div className="flex items-center gap-4 mb-6">
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
-                <Briefcase className="h-6 w-6 text-white" />
-              </div>
-              <div>
-                <h3 className="text-2xl font-semibold text-white">🧑‍💼 Alex – Finance Ops</h3>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              {/* Act I */}
-              <div className="border-l-2 border-red-400 pl-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield className="h-5 w-5 text-red-400" />
-                  <h4 className="text-md font-semibold text-white">Act I: Exception Handling</h4>
+          <div className="group">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-500/5 via-transparent to-purple-500/5 border border-purple-500/10 p-1">
+              <div className="bg-slate-900/80 backdrop-blur-xl rounded-3xl p-8 lg:p-10 h-full">
+                {/* Persona Header */}
+                <div className="flex items-center gap-6 mb-8">
+                  <div className="relative">
+                    <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
+                      <Briefcase className="h-10 w-10 text-white" />
+                    </div>
+                    <div className="absolute -top-1 -right-1 w-6 h-6 bg-emerald-400 rounded-full flex items-center justify-center">
+                      <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-white mb-2">🧑‍💼 Alex Johnson</h2>
+                    <p className="text-purple-300 font-medium">Finance Controller • Policy Guardian</p>
+                  </div>
                 </div>
-                <p className="text-sm text-slate-300 mb-1">
-                  Alex reviews the dashboard as exception queues update in real time.
-                </p>
-                <p className="text-xs text-slate-400 italic mb-1">
-                  *See how the Policy Engine and Fraud Sentinel prioritize exceptions by AI scoring and urgency.*
-                </p>
-                <span className="text-xs text-red-400 font-medium">Exceptions automated: 92%</span>
-              </div>
 
-              {/* Act II */}
-              <div className="border-l-2 border-yellow-400 pl-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <BarChart3 className="h-5 w-5 text-yellow-400" />
-                  <h4 className="text-md font-semibold text-white">Act II: VAT Reclaim</h4>
-                </div>
-                <p className="text-sm text-slate-300 mb-1">
-                  Alex heads to the VAT Reclaim tab for end-of-quarter close.
+                <p className="text-slate-300 text-lg mb-8 leading-relaxed">
+                  "I manage spend across 200+ employees. I need visibility, control, and automation that scales—with full audit trails for compliance."
                 </p>
-                <p className="text-xs text-slate-400 italic mb-1">
-                  *The agents automatically surface reclaimable VAT from transactions worldwide.*
-                </p>
-                <span className="text-xs text-yellow-400 font-medium">Average reclaim per quarter: $4,060</span>
-              </div>
 
-              {/* Act III */}
-              <div className="border-l-2 border-blue-400 pl-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Zap className="h-5 w-5 text-blue-400" />
-                  <h4 className="text-md font-semibold text-white">Act III: Policy Insights & Improvement</h4>
-                </div>
-                <p className="text-sm text-slate-300 mb-1">
-                  Alex consults the Policy Insights panel.
-                </p>
-                <p className="text-xs text-slate-400 italic mb-1">
-                  *The Policy Engine analyzes spending patterns, surfacing real recommendations for improving policy effectiveness.*
-                </p>
-                <span className="text-xs text-blue-400 font-medium">1+ new policy recommendations per review</span>
-              </div>
+                {/* Acts */}
+                <div className="space-y-4">
+                  {/* Act I */}
+                  <div className="group/act bg-gradient-to-r from-red-500/5 to-transparent border border-red-500/10 rounded-2xl p-5 hover:border-red-500/30 transition-all duration-300 hover:bg-red-500/10">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Shield className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white mb-2">Act I: Exception Handling</h3>
+                        <p className="text-slate-400 text-sm mb-2">
+                          Real-time exception queue with AI-powered risk scoring and automated resolution.
+                        </p>
+                        <div className="bg-red-500/10 text-red-400 px-2 py-1 rounded text-xs border border-red-500/20 inline-block">
+                          92% automated
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-              {/* Act IV */}
-              <div className="border-l-2 border-emerald-400 pl-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <Leaf className="h-5 w-5 text-emerald-400" />
-                  <h4 className="text-md font-semibold text-white">Act IV: Sustainability Monitoring</h4>
+                  {/* Act II */}
+                  <div className="group/act bg-gradient-to-r from-yellow-500/5 to-transparent border border-yellow-500/10 rounded-2xl p-5 hover:border-yellow-500/30 transition-all duration-300 hover:bg-yellow-500/10">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <BarChart3 className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white mb-2">Act II: VAT Reclaim</h3>
+                        <p className="text-slate-400 text-sm mb-2">
+                          Automated discovery and processing of reclaimable VAT across global transactions.
+                        </p>
+                        <div className="bg-yellow-500/10 text-yellow-400 px-2 py-1 rounded text-xs border border-yellow-500/20 inline-block">
+                          $4,060/quarter
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Act III */}
+                  <div className="group/act bg-gradient-to-r from-blue-500/5 to-transparent border border-blue-500/10 rounded-2xl p-5 hover:border-blue-500/30 transition-all duration-300 hover:bg-blue-500/10">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Zap className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white mb-2">Act III: Policy Insights</h3>
+                        <p className="text-slate-400 text-sm mb-2">
+                          AI-driven analysis of spend patterns with actionable policy recommendations.
+                        </p>
+                        <div className="bg-blue-500/10 text-blue-400 px-2 py-1 rounded text-xs border border-blue-500/20 inline-block">
+                          Smart recommendations
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Act IV */}
+                  <div className="group/act bg-gradient-to-r from-emerald-500/5 to-transparent border border-emerald-500/10 rounded-2xl p-5 hover:border-emerald-500/30 transition-all duration-300 hover:bg-emerald-500/10">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Leaf className="h-5 w-5 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-lg font-bold text-white mb-2">Act IV: Sustainability Tracking</h3>
+                        <p className="text-slate-400 text-sm mb-2">
+                          Comprehensive CO₂ monitoring with automated compliance reporting.
+                        </p>
+                        <div className="bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded text-xs border border-emerald-500/20 inline-block">
+                          100% coverage
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <p className="text-sm text-slate-300 mb-1">
-                  Alex checks the Sustainability Dashboard.
-                </p>
-                <p className="text-xs text-slate-400 italic mb-1">
-                  *Monitor CO₂ emissions across bookings, surface climate-friendly alternatives, and generate compliance reports.*
-                </p>
-                <span className="text-xs text-emerald-400 font-medium">CO₂ tracking coverage: 100%</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* How to Explore Section */}
-      <section className="mx-auto max-w-6xl px-6 pb-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">How to Explore the Demo</h2>
-        </div>
-
-        <div className="grid gap-8 sm:grid-cols-3">
-          <div className="text-center">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg mb-4">
-              <span className="text-lg font-bold text-white">1</span>
-            </div>
-            <h3 className="font-semibold text-white mb-2">Pick a persona</h3>
-            <p className="text-sm text-slate-300">
-              Start as Sarah or Alex.
+      {/* CTA Section */}
+      <section className="mx-auto max-w-4xl px-6 pb-24">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-emerald-600/20 border border-white/10 p-1">
+          <div className="bg-slate-900/90 backdrop-blur-xl rounded-3xl p-12 text-center">
+            <h2 className="text-4xl font-bold text-white mb-6">Ready to Experience AI in Action?</h2>
+            <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto">
+              Every interaction below is powered by the same AI that runs in production. No mockups—just real agent workflows.
             </p>
-          </div>
-
-          <div className="text-center">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg mb-4">
-              <span className="text-lg font-bold text-white">2</span>
+            <div className="inline-flex items-center gap-2 text-slate-400 mb-8">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium">Live Demo Environment</span>
             </div>
-            <h3 className="font-semibold text-white mb-2">Trigger actions</h3>
-            <p className="text-sm text-slate-300">
-              Upload receipts, book travel, process expenses, review exceptions, reclaim VAT, improve policies, or explore dashboards.
-            </p>
-          </div>
-
-          <div className="text-center">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg mb-4">
-              <span className="text-lg font-bold text-white">3</span>
-            </div>
-            <h3 className="font-semibold text-white mb-2">Inspect reasoning</h3>
-            <p className="text-sm text-slate-300">
-              See agent notes, policy citations, and decision logic for every action.
-            </p>
           </div>
         </div>
       </section>
 
-      {/* Try it Live Section */}
-      <section className="mx-auto max-w-6xl px-6 pb-16">
-        <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-blue-600/20 via-purple-600/20 to-emerald-500/20 p-8 sm:p-12 backdrop-blur-sm text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Try it Live</h2>
-          <p className="text-xl text-slate-300 mb-6">Jump to live demo</p>
-          <Button size="lg" className="bg-white text-slate-900 hover:bg-slate-200 shadow-lg mb-4" asChild>
-            <Link href="#demo" className="flex items-center gap-2">
-              Start Demo
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </Button>
-          <p className="text-sm text-slate-400 italic">
-            (Or select a persona above)
-          </p>
-        </div>
-      </section>
-
-      {/* Live Demo Section */}
-      <section id="demo" className="mx-auto max-w-7xl px-6 pb-20">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-white mb-4">Live Demo Experience</h2>
-          <p className="text-lg text-slate-300 max-w-4xl mx-auto mb-2">
-            Every interaction here is powered by the same AI that runs in production. No mockups—just real agent workflows.
-          </p>
-        </div>
+      {/* Interactive Demo Section */}
+      <section id="demo" className="mx-auto max-w-7xl px-6 pb-24">
         <MainDashboard />
       </section>
     </main>
