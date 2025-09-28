@@ -183,47 +183,48 @@ export function FinanceDashboard({
   }, [activeSection, exceptionTransactions, selectedTxn]);
 
   const renderDashboard = () => (
-    <div className="space-y-8 p-6">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-slate-900 leading-tight">
-          Finance Operations
-        </h1>
-        <p className="text-slate-600 text-base font-medium">Welcome back, Alex.</p>
-      </header>
+    <div className="h-full overflow-y-auto">
+      <div className="space-y-6 p-6 min-h-full">
+        <header className="flex flex-col gap-1">
+          <h1 className="text-2xl font-bold text-slate-900 leading-tight">
+            Finance Operations
+          </h1>
+          <p className="text-slate-600 text-sm font-medium">Welcome back, Alex.</p>
+        </header>
 
-      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {kpiData.map((kpi, index) => (
-          <Card
-            key={kpi.title}
-            className={`bg-gradient-to-br ${kpi.bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm relative overflow-hidden group cursor-pointer`}
-            style={{ animationDelay: `${index * 100}ms` }}
-          >
-            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
-            <div className="relative z-10">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors leading-tight">
-                  {kpi.title}
-                </CardTitle>
-                <div
-                  className={`w-10 h-10 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}
-                >
-                  <kpi.icon className="h-5 w-5 text-white" />
-                </div>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <div className="text-3xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
-                  {kpi.value}
-                </div>
-                <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
-                  {kpi.description}
-                </p>
-              </CardContent>
-            </div>
-          </Card>
-        ))}
-      </section>
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {kpiData.map((kpi, index) => (
+            <Card
+              key={kpi.title}
+              className={`bg-gradient-to-br ${kpi.bgColor} border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 backdrop-blur-sm relative overflow-hidden group cursor-pointer`}
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
+              <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
+              <div className="relative z-10">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                  <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors leading-tight">
+                    {kpi.title}
+                  </CardTitle>
+                  <div
+                    className={`w-9 h-9 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}
+                  >
+                    <kpi.icon className="h-4 w-4 text-white" />
+                  </div>
+                </CardHeader>
+                <CardContent className="pt-0">
+                  <div className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
+                    {kpi.value}
+                  </div>
+                  <p className="text-xs text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
+                    {kpi.description}
+                  </p>
+                </CardContent>
+              </div>
+            </Card>
+          ))}
+        </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Card 
           className="bg-gradient-to-br from-white to-emerald-50/30 border border-emerald-100/40 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group"
           onClick={() => setActiveSection("vat_reclaim")}
@@ -288,48 +289,64 @@ export function FinanceDashboard({
           </CardContent>
         </Card>
       </section>
+      </div>
     </div>
   );
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredExceptions = useMemo(() => {
+    if (!searchQuery.trim()) return exceptionTransactions;
+    return exceptionTransactions.filter(
+      (txn) =>
+        txn.merchant.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        getUserForTxn(txn)?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        txn.amount.toString().includes(searchQuery)
+    );
+  }, [exceptionTransactions, searchQuery]);
+
   const renderExceptions = () => (
-    <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 p-6">
-      <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
-        <CardHeader className="flex-shrink-0 pb-6">
-          <CardTitle className="flex items-center gap-3 text-slate-900 text-lg font-semibold">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-              <FileWarning className="h-5 w-5 text-white" />
+    <div className="h-full overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 p-4 h-full">
+        <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
+          <CardHeader className="flex-shrink-0 pb-4">
+            <CardTitle className="flex items-center gap-2 text-slate-900 text-base font-semibold">
+              <div className="w-8 h-8 rounded-xl bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                <FileWarning className="h-4 w-4 text-white" />
+              </div>
+              Exception Queue
+            </CardTitle>
+            <CardDescription className="text-slate-600 text-sm leading-relaxed">
+              Transactions requiring manual review and approval.
+            </CardDescription>
+            <div className="relative pt-4">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Input
+                placeholder="Search exceptions..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-9 h-9 bg-white/50 border-slate-200/50 focus:border-blue-300 transition-colors text-sm"
+              />
             </div>
-            Exception Queue
-          </CardTitle>
-          <CardDescription className="text-slate-600 text-base leading-relaxed">
-            Transactions requiring manual review and approval.
-          </CardDescription>
-          <div className="relative pt-6">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
-            <Input
-              placeholder="Search exceptions..."
-              className="pl-10 h-11 bg-white/50 border-slate-200/50 focus:border-blue-300 transition-colors text-base"
-            />
-          </div>
-        </CardHeader>
+          </CardHeader>
         <CardContent className="p-0 flex-grow overflow-hidden">
           <div className="h-full overflow-y-auto">
             <Table>
               <TableHeader className="sticky top-0 bg-white/95 backdrop-blur-sm z-10 border-b border-slate-200/50">
                 <TableRow className="hover:bg-transparent">
-                  <TableHead className="font-semibold text-slate-700 text-base">
+                  <TableHead className="font-semibold text-slate-700 text-sm">
                     Employee
                   </TableHead>
-                  <TableHead className="font-semibold text-slate-700 text-base">
+                  <TableHead className="font-semibold text-slate-700 text-sm">
                     Merchant
                   </TableHead>
-                  <TableHead className="text-right font-semibold text-slate-700 text-base">
+                  <TableHead className="text-right font-semibold text-slate-700 text-sm">
                     Amount
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {exceptionTransactions.map((txn) => (
+                {filteredExceptions.map((txn) => (
                   <TableRow
                     key={txn.id}
                     onClick={() => handleTransactionSelect(txn)}
@@ -339,27 +356,27 @@ export function FinanceDashboard({
                         "bg-blue-50/80 border-l-4 border-l-blue-500"
                     )}
                   >
-                    <TableCell className="py-5">
-                      <div className="flex items-center gap-4">
-                        <Avatar className="h-11 w-11 ring-2 ring-white shadow-md">
-                          <AvatarFallback className="bg-gradient-to-r from-slate-600 to-slate-700 text-white font-semibold text-base">
+                    <TableCell className="py-3">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8 ring-2 ring-white shadow-md">
+                          <AvatarFallback className="bg-gradient-to-r from-slate-600 to-slate-700 text-white font-semibold text-xs">
                             {getUserForTxn(txn)?.initials}
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
-                          <span className="font-semibold text-base text-slate-800">
+                          <span className="font-semibold text-sm text-slate-800">
                             {getUserForTxn(txn)?.name}
                           </span>
-                          <span className="text-sm text-slate-500 font-medium">
+                          <span className="text-xs text-slate-500 font-medium">
                             {getUserForTxn(txn)?.title}
                           </span>
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="font-medium text-slate-700 text-base py-5">
+                    <TableCell className="font-medium text-slate-700 text-sm py-3">
                       {txn.merchant}
                     </TableCell>
-                    <TableCell className="text-right font-bold text-slate-800 text-lg py-5">
+                    <TableCell className="text-right font-bold text-slate-800 text-sm py-3">
                       {currencyFormatter.format(txn.amount)}
                     </TableCell>
                   </TableRow>
@@ -423,13 +440,45 @@ export function FinanceDashboard({
                 </div>
               </div>
               <div className="flex justify-end space-x-4 pt-8 border-t border-slate-200/50">
-                <Button variant="outline" size="lg" className="font-semibold text-base hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 h-12 px-6">
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="font-semibold text-base hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 h-12 px-6"
+                  onClick={() => {
+                    if (selectedTxn) {
+                      alert(`Request additional information for ${selectedTxn.merchant} transaction of ${currencyFormatter.format(selectedTxn.amount)}`);
+                    }
+                  }}
+                >
                   Request Info
                 </Button>
-                <Button variant="destructive" size="lg" className="font-semibold text-base hover:shadow-lg transition-all duration-200 h-12 px-6">
+                <Button 
+                  variant="destructive" 
+                  size="lg" 
+                  className="font-semibold text-base hover:shadow-lg transition-all duration-200 h-12 px-6"
+                  onClick={() => {
+                    if (selectedTxn) {
+                      const confirmed = confirm(`Are you sure you want to reject the ${selectedTxn.merchant} expense of ${currencyFormatter.format(selectedTxn.amount)}?`);
+                      if (confirmed) {
+                        alert(`Expense rejected and employee notified. Transaction ID: ${selectedTxn.id}`);
+                      }
+                    }
+                  }}
+                >
                   Reject Expense
                 </Button>
-                <Button size="lg" className="font-semibold text-base bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all duration-200 h-12 px-6">
+                <Button 
+                  size="lg" 
+                  className="font-semibold text-base bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all duration-200 h-12 px-6"
+                  onClick={() => {
+                    if (selectedTxn) {
+                      const confirmed = confirm(`Approve the ${selectedTxn.merchant} exception for ${currencyFormatter.format(selectedTxn.amount)}?`);
+                      if (confirmed) {
+                        alert(`Exception approved! Transaction has been processed and employee notified.`);
+                      }
+                    }
+                  }}
+                >
                   Approve Exception
                 </Button>
               </div>
@@ -449,6 +498,7 @@ export function FinanceDashboard({
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 
@@ -482,19 +532,19 @@ export function FinanceDashboard({
 
   return (
     <div className="w-full h-full bg-white flex flex-col">
-      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-4 py-3">
-        <div className="flex items-center justify-between gap-3">
+      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-4 py-4">
+        <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-xs">AT</span>
+            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+              <span className="text-white font-bold text-sm">AT</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-sm font-semibold text-slate-900">Agentic T&E</span>
-              <span className="text-xs text-slate-500">Enterprise Finance</span>
+              <span className="text-base font-semibold text-slate-900">Agentic T&E</span>
+              <span className="text-sm text-slate-500">Enterprise Finance</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-1 flex-1 justify-center min-w-0">
+          <div className="flex items-center gap-2 flex-1 justify-center min-w-0">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -503,44 +553,44 @@ export function FinanceDashboard({
                   type="button"
                   onClick={() => setActiveSection(item.id)}
                   className={cn(
-                    "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap",
+                    "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all whitespace-nowrap",
                     "border border-transparent shadow-sm",
                     isActive
                       ? "bg-slate-900 text-white shadow-lg"
                       : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                   )}
                 >
-                  <item.icon className="h-3 w-3" />
+                  <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>
                 </button>
               );
             })}
           </div>
 
-          <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="flex items-center gap-3 flex-shrink-0">
             <Button
               variant="outline"
               size="sm"
-              className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-xs"
+              className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-sm h-9 px-3"
               onClick={handleExportData}
               title="Export dashboard data as JSON file"
             >
-              <ExternalLink className="h-3 w-3 mr-1" />
+              <ExternalLink className="h-4 w-4 mr-2" />
               Export Data
             </Button>
-            <div className="flex items-center gap-1.5">
-              <Avatar className="w-6 h-6">
-                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-xs">
+            <div className="flex items-center gap-2">
+              <Avatar className="w-7 h-7">
+                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-sm">
                   AJ
                 </AvatarFallback>
               </Avatar>
-              <span className="text-xs font-medium text-slate-700">Alex Johnson</span>
+              <span className="text-sm font-medium text-slate-700">Alex Johnson</span>
             </div>
           </div>
         </div>
       </nav>
 
-      <div className="flex-1 relative overflow-hidden">
+      <div className="flex-1 relative overflow-hidden min-h-0">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute top-20 right-20 w-32 h-32 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" />
           <div
