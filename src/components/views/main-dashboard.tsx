@@ -563,30 +563,6 @@ function MainDashboardContent() {
     </div>
 
       <div className="w-full py-8 relative z-10">
-        <header className="text-center mb-16">
-          <motion.div 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="flex items-center justify-center gap-4 mb-8"
-          >
-            <div className="relative">
-              <Bot className="h-10 w-10 text-blue-400 animate-bounce-subtle" />
-              <div className="absolute -inset-2 bg-blue-400 rounded-full opacity-10 animate-pulse-ring"></div>
-            </div>
-            <h2 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-blue-400 via-purple-400 to-emerald-400 bg-clip-text text-transparent leading-tight">
-              Interactive Demo Studio
-            </h2>
-          </motion.div>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl text-slate-300 font-medium max-w-4xl mx-auto leading-relaxed"
-          >
-            Choose a persona and watch agents work in real-time. Every interaction is powered by the same AI that runs in production.
-          </motion.p>
-        </header>
 
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
