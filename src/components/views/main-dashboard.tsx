@@ -392,7 +392,7 @@ function MainDashboardContent() {
                   </h3>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                    <span className="text-blue-300 text-sm font-medium">LIVE • Sarah's Mobile</span>
+                    <span className="text-blue-300 text-sm font-medium">LIVE • Sarah&apos;s Mobile</span>
                   </div>
                 </div>
               </div>
@@ -532,7 +532,7 @@ function MainDashboardContent() {
                   </h3>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
-                    <span className="text-purple-300 text-sm font-medium">LIVE • Alex's Dashboard</span>
+                    <span className="text-purple-300 text-sm font-medium">LIVE • Alex&apos;s Dashboard</span>
                   </div>
                 </div>
               </div>
@@ -591,7 +591,7 @@ function MainDashboardContent() {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-4xl font-bold text-white mb-6"
         >
-          Choose Sarah's Adventure
+          Choose Sarah&apos;s Adventure
         </motion.h2>
         <motion.p 
           initial={{ opacity: 0, y: 20 }}
@@ -635,7 +635,7 @@ function MainDashboardContent() {
                 </p>
                 
                 <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
-                  <h4 className="text-white font-semibold mb-3">🪄 What you'll experience:</h4>
+                  <h4 className="text-white font-semibold mb-3">🪄 What you&apos;ll experience:</h4>
                   <ul className="space-y-2 text-slate-300">
                     <li className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
@@ -704,7 +704,7 @@ function MainDashboardContent() {
                 </p>
                 
                 <div className="bg-slate-800/50 rounded-2xl p-6 border border-slate-700/50">
-                  <h4 className="text-white font-semibold mb-3">🧠 What you'll experience:</h4>
+                  <h4 className="text-white font-semibold mb-3">🧠 What you&apos;ll experience:</h4>
                   <ul className="space-y-2 text-slate-300">
                     <li className="flex items-center gap-3">
                       <div className="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>
@@ -746,7 +746,7 @@ function MainDashboardContent() {
   );
   
   const getBreadcrumb = () => {
-    if (step === 'persona') return "Choose Your Experience";
+    if (step === 'persona') return "Demo Studio";
 
     let path = <span className="cursor-pointer hover:text-blue-300 transition-colors font-medium text-slate-400" onClick={() => setStep('persona')}>Select Persona</span>;
     

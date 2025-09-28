@@ -575,10 +575,16 @@ export function FinanceDashboard({
               size="sm"
               className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-xs h-7 px-2"
               onClick={handleExportData}
-              title="Export dashboard data as JSON file"
+              title={
+                activeSection === "dashboard" 
+                  ? "Export dashboard overview data" 
+                  : activeSection === "sustainability" 
+                    ? "Export ESG sustainability report"
+                    : `Export ${activeSection} data`
+              }
             >
               <ExternalLink className="h-3 w-3 mr-1" />
-              Export Data
+              {activeSection === "sustainability" ? "Export ESG" : "Export Data"}
             </Button>
             <div className="flex items-center gap-1.5">
               <Avatar className="w-6 h-6">
