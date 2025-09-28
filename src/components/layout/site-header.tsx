@@ -50,10 +50,10 @@ export function SiteHeader() {
         <div className="hidden items-center gap-3 md:flex">
           <Button
             asChild
-            className="group bg-white text-slate-900 hover:bg-slate-200"
+            className="group bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600"
           >
             <Link href="/demo" className="flex items-center gap-2">
-              Launch demo studio
+              Try Demo
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </Button>
