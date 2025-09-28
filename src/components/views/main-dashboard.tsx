@@ -857,9 +857,9 @@ function MainDashboardContent() {
                     <div className="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-3 rounded-[2.5rem] shadow-2xl">
                       <div className="bg-black p-1 rounded-[2rem]">
                         <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-16 h-6 bg-black rounded-b-2xl z-20"></div>
-                        <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
-                          <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
-                          <div className="h-full">
+                        <div className="aspect-[9/16] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
+                          <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
+                          <div className="h-full p-safe">
                             <Suspense fallback={<DemoLoadingSkeleton type="mobile" />}>
                               <TravelerExpenseFeed hideInlineAgentActivity={true} />
                             </Suspense>
@@ -898,9 +898,9 @@ function MainDashboardContent() {
                     <div className="relative bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 p-3 rounded-[2.5rem] shadow-2xl">
                       <div className="bg-black p-1 rounded-[2rem]">
                         <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-16 h-6 bg-black rounded-b-2xl z-20"></div>
-                        <div className="aspect-[9/19] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
-                          <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
-                          <div className="h-full">
+                        <div className="aspect-[9/16] w-full rounded-[1.75rem] bg-white overflow-hidden relative">
+                          <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/5 to-transparent z-10 pointer-events-none"></div>
+                          <div className="h-full p-safe">
                             <Suspense fallback={<DemoLoadingSkeleton type="chat" />}>
                               <TravelerBookingView hideInlineAgentActivity={true} />
                             </Suspense>
