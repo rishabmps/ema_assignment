@@ -11,9 +11,14 @@ import type { AgentActivity } from './types';
 interface FloatingAgentDisplayProps {
   activities: AgentActivity[];
   className?: string;
+  context?: {
+    persona: 'sarah' | 'alex' | null;
+    demoType: 'expense' | 'booking' | 'finance' | null;
+    section?: string;
+  };
 }
 
-export function FloatingAgentDisplay({ activities, className }: FloatingAgentDisplayProps) {
+export function FloatingAgentDisplay({ activities, className, context }: FloatingAgentDisplayProps) {
   const [isExpanded, setIsExpanded] = useState(true);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentActivityId, setCurrentActivityId] = useState<string | null>(null);
@@ -36,6 +41,46 @@ export function FloatingAgentDisplay({ activities, className }: FloatingAgentDis
   const activeAgents = activities.filter(a => a.status === 'active' || a.status === 'processing');
   const completedAgents = activities.filter(a => a.status === 'completed');
   const hasActivity = activities.length > 0;
+
+  // Get contextual information based on current demo
+  const getContextualInfo = () => {
+    if (!context?.persona || !context?.demoType) {
+      return { title: 'AI Agents', subtitle: 'Monitoring activity' };
+    }
+
+    if (context.persona === 'sarah') {
+      if (context.demoType === 'expense') {
+        return { 
+          title: 'Expense Agents', 
+          subtitle: 'Receipt processing & categorization',
+          accent: 'from-emerald-500 to-green-500'
+        };
+      } else if (context.demoType === 'booking') {
+        return { 
+          title: 'Travel Agents', 
+          subtitle: 'Flight search & booking optimization',
+          accent: 'from-blue-500 to-cyan-500'
+        };
+      }
+    } else if (context.persona === 'alex') {
+      const sectionTitles: Record<string, string> = {
+        'dashboard': 'Overview analysis',
+        'exceptions': 'Exception processing',
+        'vat_reclaim': 'VAT identification',
+        'policy_insights': 'Policy analysis',
+        'sustainability': 'Carbon tracking'
+      };
+      return { 
+        title: 'Finance Agents', 
+        subtitle: context.section ? sectionTitles[context.section] || 'Finance operations' : 'Finance operations',
+        accent: 'from-purple-500 to-violet-500'
+      };
+    }
+
+    return { title: 'AI Agents', subtitle: 'Monitoring activity' };
+  };
+
+  const contextInfo = getContextualInfo();
 
   if (!hasActivity) return null;
 
@@ -88,7 +133,7 @@ export function FloatingAgentDisplay({ activities, className }: FloatingAgentDis
       {!isCollapsed && (
         <>
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 relative overflow-hidden">
+          <div className={`bg-gradient-to-r ${contextInfo.accent || 'from-blue-600 to-purple-600'} text-white p-3 relative overflow-hidden`}>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 animate-pulse"></div>
             <div className="relative z-10 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -107,9 +152,9 @@ export function FloatingAgentDisplay({ activities, className }: FloatingAgentDis
                   <Bot className="h-3 w-3" />
                 </motion.div>
                 <div>
-                  <h3 className="font-semibold text-sm">AI Agents</h3>
+                  <h3 className="font-semibold text-sm">{contextInfo.title}</h3>
                   <p className="text-xs text-blue-100" title="Real-time AI agent activity feed">
-                    {activeAgents.length > 0 ? `${activeAgents.length} active` : `${completedAgents.length} completed`}
+                    {activeAgents.length > 0 ? contextInfo.subtitle : `${completedAgents.length} completed`}
                   </p>
                 </div>
               </div>

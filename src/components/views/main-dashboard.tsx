@@ -980,6 +980,11 @@ function MainDashboardContent() {
       {step === 'demo' && (
         <FloatingAgentDisplay 
           activities={activities}
+          context={{
+            persona: activePersona === 'finance' ? 'alex' : 'sarah',
+            demoType: activePersona === 'finance' ? 'finance' : activeAct,
+            section: activePersona === 'finance' ? currentFinanceSection : undefined
+          }}
         />
       )}
     </div>
