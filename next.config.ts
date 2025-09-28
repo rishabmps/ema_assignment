@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  // Allow cross-origin requests for Replit proxy environment
+  allowedDevOrigins: ['*'],
   images: {
     remotePatterns: [
       {
@@ -29,10 +31,6 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
-  },
-  // Allow all hosts for Replit proxy environment
-  experimental: {
-    allowedRevalidateHeaderKeys: [],
   },
   async headers() {
     return [
