@@ -62,17 +62,18 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
   const currencyFormatter = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 p-6">
-      <div className="lg:col-span-2 space-y-8 flex flex-col">
-          <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
-                  <div>
-                    <CardTitle className="text-lg text-slate-900 font-semibold">Quarterly Travel Emissions</CardTitle>
-                    <CardDescription className="text-base text-slate-600 leading-relaxed">On track to meet {budget}-ton CO2e quarterly budget.</CardDescription>
-                  </div>
+    <div className="h-full overflow-hidden">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-3 h-full">
+        <div className="lg:col-span-2 space-y-4 flex flex-col min-h-0">
+            <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                    <div>
+                      <CardTitle className="text-sm text-slate-900 font-semibold">Quarterly Travel Emissions</CardTitle>
+                      <CardDescription className="text-xs text-slate-600 leading-relaxed">On track to meet {budget}-ton CO2e quarterly budget.</CardDescription>
+                    </div>
                   <Button 
-                    size="lg" 
-                    className="font-semibold text-base h-12 px-6 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:shadow-lg transition-all duration-200"
+                    size="sm" 
+                    className="font-medium text-xs h-7 px-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 hover:shadow-lg transition-all duration-200"
                     onClick={() => {
                       const esgData = {
                         reportPeriod: "Q3 2024",
@@ -107,81 +108,82 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                       alert(`ESG sustainability report exported successfully! Current emissions: ${totalEmissions.toFixed(1)} tons CO2e (${progress.toFixed(1)}% of budget)`);
                     }}
                   >
-                    <FileText className="mr-2 h-5 w-5" />
+                    <FileText className="mr-1 h-3 w-3" />
                     Export ESG Report
                   </Button>
               </CardHeader>
               <CardContent>
-                  <div className="flex items-baseline gap-3 mb-4">
-                      <p className="text-4xl font-bold text-slate-900">{totalEmissions.toFixed(1)} tons</p>
-                      <p className="text-base text-slate-600 font-medium">/ {budget} tons CO2e</p>
+                  <div className="flex items-baseline gap-2 mb-2">
+                      <p className="text-2xl font-bold text-slate-900">{totalEmissions.toFixed(1)} tons</p>
+                      <p className="text-xs text-slate-600 font-medium">/ {budget} tons CO2e</p>
                   </div>
-                  <Progress value={progress} className="mt-4 h-3" />
+                  <Progress value={progress} className="mt-2 h-2" />
               </CardContent>
           </Card>
-          <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
-              <CardHeader className="pb-6">
-                  <CardTitle className='text-lg flex items-center justify-between text-slate-900 font-semibold'>
+          <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex-grow min-h-0">
+              <CardHeader className="pb-3">
+                  <CardTitle className='text-sm flex items-center justify-between text-slate-900 font-semibold'>
                       Emissions by Department
-                      <Badge variant="outline" className='font-semibold text-base bg-background px-4 py-2'>
+                      <Badge variant="outline" className='font-medium text-xs bg-background px-2 py-1'>
                           Adoption Rate: {adoptionRate.toFixed(0)}%
                       </Badge>
                   </CardTitle>
-                  <CardDescription className="text-base text-slate-600 leading-relaxed">Sales accounts for 65% of travel emissions but has the highest adoption rate of &apos;Greener Choice&apos; recommendations.</CardDescription>
+                  <CardDescription className="text-xs text-slate-600 leading-relaxed">Sales accounts for 65% of travel emissions but has the highest adoption rate of &apos;Greener Choice&apos; recommendations.</CardDescription>
               </CardHeader>
               <CardContent>
-                   <ChartContainer config={chartConfig} className="h-48 w-full">
+                   <ChartContainer config={chartConfig} className="h-32 w-full">
                       <BarChart data={chartData} accessibilityLayer>
                           <CartesianGrid vertical={false} />
-                          <XAxis dataKey="department" tickLine={false} tickMargin={8} axisLine={false} fontSize={12} />
-                          <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `${value}t`} fontSize={12} />
+                          <XAxis dataKey="department" tickLine={false} tickMargin={6} axisLine={false} fontSize={10} />
+                          <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `${value}t`} fontSize={10} />
                            <ChartTooltip content={<ChartTooltipContent />} />
-                          <Bar dataKey="emissions" radius={6} />
+                          <Bar dataKey="emissions" radius={4} />
                       </BarChart>
                   </ChartContainer>
               </CardContent>
           </Card>
-      </div>
+        </div>
 
-      <Card className="lg:col-span-1 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
-          <CardHeader className="flex-shrink-0 pb-6">
-              <CardTitle className="text-lg text-slate-900 font-semibold">Recommendation Impact</CardTitle>
-              <CardDescription className="text-base text-slate-600 leading-relaxed">Log of sustainable travel recommendations made by the CO2 Advisor agent.</CardDescription>
-          </CardHeader>
-          <CardContent className="p-0 flex-grow overflow-hidden">
-              <div className="h-full overflow-y-auto">
+        <Card className="lg:col-span-1 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col min-h-0">
+            <CardHeader className="flex-shrink-0 pb-3">
+                <CardTitle className="text-sm text-slate-900 font-semibold">Recommendation Impact</CardTitle>
+                <CardDescription className="text-xs text-slate-600 leading-relaxed">Log of sustainable travel recommendations made by the CO2 Advisor agent.</CardDescription>
+            </CardHeader>
+            <CardContent className="p-0 flex-grow overflow-hidden">
+                <div className="h-full overflow-y-auto">
                 <Table>
                     <TableHeader className="sticky top-0 bg-white/95 backdrop-blur-sm z-10 border-b border-slate-200/50">
                     <TableRow className="hover:bg-transparent">
-                        <TableHead className="text-base font-semibold text-slate-700">Route</TableHead>
-                        <TableHead className="text-base font-semibold text-slate-700">CO2 Saved</TableHead>
-                        <TableHead className="text-base font-semibold text-slate-700">Status</TableHead>
+                        <TableHead className="text-xs font-semibold text-slate-700">Route</TableHead>
+                        <TableHead className="text-xs font-semibold text-slate-700">CO2 Saved</TableHead>
+                        <TableHead className="text-xs font-semibold text-slate-700">Status</TableHead>
                     </TableRow>
                     </TableHeader>
                     <TableBody>
                     {recommendations.map((rec) => (
                         <TableRow key={rec.id} className="transition-all duration-200 hover:bg-slate-50/80">
-                            <TableCell className="py-4">
-                                <div className="text-base font-semibold text-slate-800">{rec.route}</div>
-                                <div className="text-sm text-slate-600 font-medium">{getUserById(rec.user_id)?.name} on {format(new Date(rec.date), "MMM d")}</div>
+                            <TableCell className="py-2">
+                                <div className="text-xs font-semibold text-slate-800">{rec.route}</div>
+                                <div className="text-xs text-slate-600 font-medium">{getUserById(rec.user_id)?.name} on {format(new Date(rec.date), "MMM d")}</div>
                             </TableCell>
-                            <TableCell className="text-emerald-600 font-bold text-lg py-4">
+                            <TableCell className="text-emerald-600 font-bold text-sm py-2">
                                 {rec.co2_saved_kg} kg
                             </TableCell>
-                            <TableCell className="py-4">
+                            <TableCell className="py-2">
                                 {rec.user_action === "Accepted" ? (
-                                    <CheckCircle className="h-6 w-6 text-emerald-600" />
+                                    <CheckCircle className="h-4 w-4 text-emerald-600" />
                                 ) : (
-                                    <XCircle className="h-6 w-6 text-slate-400" />
+                                    <XCircle className="h-4 w-4 text-slate-400" />
                                 )}
                             </TableCell>
                         </TableRow>
                     ))}
                     </TableBody>
                 </Table>
-              </div>
-          </CardContent>
-      </Card>
+                </div>
+            </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

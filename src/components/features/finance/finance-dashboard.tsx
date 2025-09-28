@@ -184,15 +184,15 @@ export function FinanceDashboard({
 
   const renderDashboard = () => (
     <div className="h-full overflow-y-auto">
-      <div className="space-y-6 p-6 min-h-full">
+      <div className="space-y-4 p-4 min-h-full">
         <header className="flex flex-col gap-1">
-          <h1 className="text-2xl font-bold text-slate-900 leading-tight">
+          <h1 className="text-xl font-bold text-slate-900 leading-tight">
             Finance Operations
           </h1>
           <p className="text-slate-600 text-sm font-medium">Welcome back, Alex.</p>
         </header>
 
-        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <section className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
           {kpiData.map((kpi, index) => (
             <Card
               key={kpi.title}
@@ -201,18 +201,18 @@ export function FinanceDashboard({
             >
               <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
               <div className="relative z-10">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                  <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors leading-tight">
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-xs font-semibold text-slate-700 group-hover:text-slate-800 transition-colors leading-tight">
                     {kpi.title}
                   </CardTitle>
                   <div
-                    className={`w-9 h-9 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}
+                    className={`w-8 h-8 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}
                   >
-                    <kpi.icon className="h-4 w-4 text-white" />
+                    <kpi.icon className="h-3 w-3 text-white" />
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <div className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
+                  <div className="text-xl font-bold text-slate-800 mb-1 group-hover:text-slate-900 transition-colors leading-none">
                     {kpi.value}
                   </div>
                   <p className="text-xs text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
@@ -224,7 +224,7 @@ export function FinanceDashboard({
           ))}
         </section>
 
-        <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <section className="grid grid-cols-1 lg:grid-cols-3 gap-3">
         <Card 
           className="bg-gradient-to-br from-white to-emerald-50/30 border border-emerald-100/40 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer group"
           onClick={() => setActiveSection("vat_reclaim")}
@@ -307,25 +307,25 @@ export function FinanceDashboard({
 
   const renderExceptions = () => (
     <div className="h-full overflow-hidden">
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 p-4 h-full">
-        <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
-          <CardHeader className="flex-shrink-0 pb-4">
-            <CardTitle className="flex items-center gap-2 text-slate-900 text-base font-semibold">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
-                <FileWarning className="h-4 w-4 text-white" />
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 p-3 h-full">
+        <Card className="lg:col-span-2 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col min-h-0">
+          <CardHeader className="flex-shrink-0 pb-3">
+            <CardTitle className="flex items-center gap-2 text-slate-900 text-sm font-semibold">
+              <div className="w-6 h-6 rounded-xl bg-gradient-to-r from-red-500 to-red-600 flex items-center justify-center shadow-lg">
+                <FileWarning className="h-3 w-3 text-white" />
               </div>
               Exception Queue
             </CardTitle>
-            <CardDescription className="text-slate-600 text-sm leading-relaxed">
+            <CardDescription className="text-slate-600 text-xs leading-relaxed">
               Transactions requiring manual review and approval.
             </CardDescription>
-            <div className="relative pt-4">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <div className="relative pt-2">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3 w-3 text-slate-400" />
               <Input
                 placeholder="Search exceptions..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 h-9 bg-white/50 border-slate-200/50 focus:border-blue-300 transition-colors text-sm"
+                className="pl-8 h-7 bg-white/50 border-slate-200/50 focus:border-blue-300 transition-colors text-xs"
               />
             </div>
           </CardHeader>
@@ -387,115 +387,117 @@ export function FinanceDashboard({
         </CardContent>
       </Card>
 
-      <Card className="lg:col-span-3 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col">
-        <CardHeader className="flex-shrink-0 pb-6">
-          <CardTitle className="flex items-center gap-3 text-slate-900 text-lg font-semibold">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
-              <BarChart className="h-5 w-5 text-white" />
+      <Card className="lg:col-span-3 bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg flex flex-col min-h-0">
+        <CardHeader className="flex-shrink-0 pb-3">
+          <CardTitle className="flex items-center gap-2 text-slate-900 text-sm font-semibold">
+            <div className="w-6 h-6 rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 flex items-center justify-center shadow-lg">
+              <BarChart className="h-3 w-3 text-white" />
             </div>
             Agent Analysis
           </CardTitle>
-          <CardDescription className="text-slate-600 text-base leading-relaxed">
+          <CardDescription className="text-slate-600 text-xs leading-relaxed">
             AI-powered insights for the selected transaction.
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex-grow overflow-y-auto">
+        <CardContent className="flex-grow overflow-hidden flex flex-col min-h-0">
           {!hideInlineAgentActivity && activities.length > 0 && (
             <div className="mb-4">
               <InlineAgentActivity activities={activities} compact={false} />
             </div>
           )}
 
-          {selectedTxn ? (
-            <div className="space-y-6 flex flex-col justify-between h-full">
-              <div>
-                <div className="mb-8 p-6 bg-gradient-to-r from-slate-50 to-blue-50/50 rounded-xl border border-slate-200/50">
-                  <p className="text-base text-slate-500 font-medium mb-2">
-                    {format(new Date(selectedTxn.date), "EEEE, MMMM d, yyyy 'at' p")}
-                  </p>
-                  <h3 className="text-2xl font-bold text-slate-800 mb-3">
-                    {selectedTxn.merchant}
-                  </h3>
-                  <p className="text-4xl font-bold text-slate-900">
-                    {currencyFormatter.format(selectedTxn.amount)}
-                  </p>
+          <div className="flex flex-col h-full min-h-0">
+            {selectedTxn ? (
+              <>
+                <div className="flex-grow overflow-y-auto">
+                  <div className="mb-4 p-3 bg-gradient-to-r from-slate-50 to-blue-50/50 rounded-lg border border-slate-200/50">
+                    <p className="text-xs text-slate-500 font-medium mb-1">
+                      {format(new Date(selectedTxn.date), "MMM d, yyyy 'at' p")}
+                    </p>
+                    <h3 className="text-lg font-bold text-slate-800 mb-2">
+                      {selectedTxn.merchant}
+                    </h3>
+                    <p className="text-2xl font-bold text-slate-900">
+                      {currencyFormatter.format(selectedTxn.amount)}
+                    </p>
+                  </div>
+                  <div className="space-y-3">
+                    {selectedTxn.policy_check && (
+                      <ExceptionDetailCard
+                        type="policy"
+                        title="Policy Engine Finding"
+                        details={selectedTxn.policy_check.details}
+                        reference={selectedTxn.policy_check.rule_id}
+                      />
+                    )}
+                    {selectedTxn.fraud_check && (
+                      <ExceptionDetailCard
+                        type="fraud"
+                        title="Fraud Sentinel Finding"
+                        details={selectedTxn.fraud_check.details}
+                        reference={selectedTxn.fraud_check.recommendation}
+                      />
+                    )}
+                  </div>
                 </div>
-                <div className="space-y-4">
-                  {selectedTxn.policy_check && (
-                    <ExceptionDetailCard
-                      type="policy"
-                      title="Policy Engine Finding"
-                      details={selectedTxn.policy_check.details}
-                      reference={selectedTxn.policy_check.rule_id}
-                    />
-                  )}
-                  {selectedTxn.fraud_check && (
-                    <ExceptionDetailCard
-                      type="fraud"
-                      title="Fraud Sentinel Finding"
-                      details={selectedTxn.fraud_check.details}
-                      reference={selectedTxn.fraud_check.recommendation}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="flex justify-end space-x-4 pt-8 border-t border-slate-200/50">
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  className="font-semibold text-base hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 h-12 px-6"
-                  onClick={() => {
-                    if (selectedTxn) {
-                      alert(`Request additional information for ${selectedTxn.merchant} transaction of ${currencyFormatter.format(selectedTxn.amount)}`);
-                    }
-                  }}
-                >
-                  Request Info
-                </Button>
-                <Button 
-                  variant="destructive" 
-                  size="lg" 
-                  className="font-semibold text-base hover:shadow-lg transition-all duration-200 h-12 px-6"
-                  onClick={() => {
-                    if (selectedTxn) {
-                      const confirmed = confirm(`Are you sure you want to reject the ${selectedTxn.merchant} expense of ${currencyFormatter.format(selectedTxn.amount)}?`);
-                      if (confirmed) {
-                        alert(`Expense rejected and employee notified. Transaction ID: ${selectedTxn.id}`);
+                <div className="flex-shrink-0 flex justify-end space-x-2 pt-3 border-t border-slate-200/50">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="font-medium text-xs hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 h-7 px-3"
+                    onClick={() => {
+                      if (selectedTxn) {
+                        alert(`Request additional information for ${selectedTxn.merchant} transaction of ${currencyFormatter.format(selectedTxn.amount)}`);
                       }
-                    }
-                  }}
-                >
-                  Reject Expense
-                </Button>
-                <Button 
-                  size="lg" 
-                  className="font-semibold text-base bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all duration-200 h-12 px-6"
-                  onClick={() => {
-                    if (selectedTxn) {
-                      const confirmed = confirm(`Approve the ${selectedTxn.merchant} exception for ${currencyFormatter.format(selectedTxn.amount)}?`);
-                      if (confirmed) {
-                        alert(`Exception approved! Transaction has been processed and employee notified.`);
+                    }}
+                  >
+                    Request Info
+                  </Button>
+                  <Button 
+                    variant="destructive" 
+                    size="sm" 
+                    className="font-medium text-xs hover:shadow-lg transition-all duration-200 h-7 px-3"
+                    onClick={() => {
+                      if (selectedTxn) {
+                        const confirmed = confirm(`Are you sure you want to reject the ${selectedTxn.merchant} expense of ${currencyFormatter.format(selectedTxn.amount)}?`);
+                        if (confirmed) {
+                          alert(`Expense rejected and employee notified. Transaction ID: ${selectedTxn.id}`);
+                        }
                       }
-                    }
-                  }}
-                >
-                  Approve Exception
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="flex h-full items-center justify-center text-slate-500 rounded-xl border-2 border-dashed border-slate-300/50 bg-slate-50/20">
-              <div className="text-center">
-                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-6 shadow-sm">
-                  <BarChart className="h-10 w-10 text-slate-400" />
+                    }}
+                  >
+                    Reject Expense
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    className="font-medium text-xs bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all duration-200 h-7 px-3"
+                    onClick={() => {
+                      if (selectedTxn) {
+                        const confirmed = confirm(`Approve the ${selectedTxn.merchant} exception for ${currencyFormatter.format(selectedTxn.amount)}?`);
+                        if (confirmed) {
+                          alert(`Exception approved! Transaction has been processed and employee notified.`);
+                        }
+                      }
+                    }}
+                  >
+                    Approve Exception
+                  </Button>
                 </div>
-                <p className="font-semibold text-lg text-slate-700 mb-2">Select an exception to view details</p>
-                <p className="text-base text-slate-500">
-                  Click on a transaction above to see AI analysis
-                </p>
+              </>
+            ) : (
+              <div className="flex h-full items-center justify-center text-slate-500 rounded-xl border-2 border-dashed border-slate-300/50 bg-slate-50/20">
+                <div className="text-center">
+                  <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3 shadow-sm">
+                    <BarChart className="h-6 w-6 text-slate-400" />
+                  </div>
+                  <p className="font-semibold text-sm text-slate-700 mb-1">Select an exception to view details</p>
+                  <p className="text-xs text-slate-500">
+                    Click on a transaction above to see AI analysis
+                  </p>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </CardContent>
       </Card>
       </div>
@@ -532,19 +534,19 @@ export function FinanceDashboard({
 
   return (
     <div className="w-full h-full bg-white flex flex-col">
-      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-4 py-4">
+      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-4 py-2">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-sm">AT</span>
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+              <span className="text-white font-bold text-xs">AT</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-base font-semibold text-slate-900">Agentic T&E</span>
-              <span className="text-sm text-slate-500">Enterprise Finance</span>
+              <span className="text-sm font-semibold text-slate-900">Agentic T&E</span>
+              <span className="text-xs text-slate-500">Enterprise Finance</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 flex-1 justify-center min-w-0">
+          <div className="flex items-center gap-1 flex-1 justify-center min-w-0">
             {NAV_ITEMS.map((item) => {
               const isActive = activeSection === item.id;
               return (
@@ -553,38 +555,38 @@ export function FinanceDashboard({
                   type="button"
                   onClick={() => setActiveSection(item.id)}
                   className={cn(
-                    "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all whitespace-nowrap",
+                    "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap",
                     "border border-transparent shadow-sm",
                     isActive
                       ? "bg-slate-900 text-white shadow-lg"
                       : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                   )}
                 >
-                  <item.icon className="h-4 w-4" />
+                  <item.icon className="h-3 w-3" />
                   <span>{item.label}</span>
                 </button>
               );
             })}
           </div>
 
-          <div className="flex items-center gap-3 flex-shrink-0">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <Button
               variant="outline"
               size="sm"
-              className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-sm h-9 px-3"
+              className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-xs h-7 px-2"
               onClick={handleExportData}
               title="Export dashboard data as JSON file"
             >
-              <ExternalLink className="h-4 w-4 mr-2" />
+              <ExternalLink className="h-3 w-3 mr-1" />
               Export Data
             </Button>
-            <div className="flex items-center gap-2">
-              <Avatar className="w-7 h-7">
-                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-sm">
+            <div className="flex items-center gap-1.5">
+              <Avatar className="w-6 h-6">
+                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-xs">
                   AJ
                 </AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-slate-700">Alex Johnson</span>
+              <span className="text-xs font-medium text-slate-700">Alex Johnson</span>
             </div>
           </div>
         </div>
@@ -599,7 +601,7 @@ export function FinanceDashboard({
           />
         </div>
 
-        <div className="relative z-10 h-full overflow-auto p-6 lg:p-10">
+        <div className="relative z-10 h-full overflow-hidden">
           {renderContent()}
         </div>
       </div>
