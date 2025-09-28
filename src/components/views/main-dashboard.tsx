@@ -971,7 +971,7 @@ function MainDashboardContent() {
                             </div>
                           </div>
                         </div>
-                        <div className="bg-white overflow-hidden" style={{ height: '85vh', minHeight: '800px', maxHeight: '1000px'}}>
+                        <div className="bg-white overflow-hidden" style={{ height: '75vh', minHeight: '600px', maxHeight: '750px'}}>
                           <Suspense fallback={<DemoLoadingSkeleton type="dashboard" />}>
                             <FinanceDashboard 
                               onUrlChange={setCurrentFinanceUrl}
