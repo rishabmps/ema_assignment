@@ -212,7 +212,7 @@ export function FinanceDashboard({
                   </div>
                 </CardHeader>
                 <CardContent className="pt-0">
-                  <div className="text-xl font-bold text-slate-800 mb-1 group-hover:text-slate-900 transition-colors leading-none">
+                  <div className="text-2xl font-bold text-slate-800 mb-1 group-hover:text-slate-900 transition-colors leading-none">
                     {kpi.value}
                   </div>
                   <p className="text-xs text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
@@ -238,7 +238,7 @@ export function FinanceDashboard({
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="text-3xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
+            <div className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
               {currencyFormatter.format(vatReclaimable)}
             </div>
             <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
@@ -260,7 +260,7 @@ export function FinanceDashboard({
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="text-3xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
+            <div className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">
               {policyInsightsCount} New Recommendation
             </div>
             <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
@@ -282,7 +282,7 @@ export function FinanceDashboard({
             </div>
           </CardHeader>
           <CardContent className="pt-0">
-            <div className="text-3xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">45.2 tons</div>
+            <div className="text-2xl font-bold text-slate-800 mb-2 group-hover:text-slate-900 transition-colors leading-none">45.2 tons</div>
             <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors leading-relaxed">
               Quarterly CO₂e on track to meet goal
             </p>
@@ -575,10 +575,16 @@ export function FinanceDashboard({
               size="sm"
               className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-xs h-7 px-2"
               onClick={handleExportData}
-              title="Export dashboard data as JSON file"
+              title={
+                activeSection === "dashboard" 
+                  ? "Export dashboard overview data" 
+                  : activeSection === "sustainability" 
+                    ? "Export ESG sustainability report"
+                    : `Export ${activeSection} data`
+              }
             >
               <ExternalLink className="h-3 w-3 mr-1" />
-              Export Data
+              {activeSection === "sustainability" ? "Export ESG" : "Export Data"}
             </Button>
             <div className="flex items-center gap-1.5">
               <Avatar className="w-6 h-6">

@@ -18,6 +18,15 @@ const navItems = [
 export function SiteHeader() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const isDemo = pathname === '/demo';
+  
+  // Different nav items for demo page vs main marketing site
+  const currentNavItems = isDemo 
+    ? [
+        { label: "Demo Studio", href: "/demo" },
+        { label: "Product Overview", href: "/#personas" },
+      ]
+    : navItems;
 
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur">
@@ -30,7 +39,7 @@ export function SiteHeader() {
         </Link>
 
         <nav className="hidden items-center gap-6 text-sm font-medium text-slate-400 md:flex">
-          {navItems.map((item) => {
+          {currentNavItems.map((item) => {
             const isActive = pathname === item.href || (item.href.startsWith("/#") && pathname === "/");
             return (
               <Link
@@ -48,15 +57,29 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <Button
-            asChild
-            className="group bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600"
-          >
-            <Link href="/demo" className="flex items-center gap-2">
-              Try Demo
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </Button>
+          {!isDemo && (
+            <Button
+              asChild
+              className="group bg-gradient-to-r from-blue-500 to-purple-500 text-white hover:from-blue-600 hover:to-purple-600"
+            >
+              <Link href="/demo" className="flex items-center gap-2">
+                Try Demo
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </Button>
+          )}
+          {isDemo && (
+            <Button
+              asChild
+              variant="outline"
+              className="border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white"
+            >
+              <Link href="/" className="flex items-center gap-2">
+                <ArrowRight className="h-4 w-4 rotate-180" />
+                Back to Home
+              </Link>
+            </Button>
+          )}
         </div>
 
         <div className="flex items-center md:hidden">
@@ -73,7 +96,7 @@ export function SiteHeader() {
                 Agentic T&E
               </div>
               <ul className="mt-6 space-y-4 text-sm font-medium text-slate-700">
-                {navItems.map((item) => (
+                {currentNavItems.map((item) => (
                   <li key={item.label}>
                     <Link
                       href={item.href}
@@ -87,11 +110,20 @@ export function SiteHeader() {
                 ))}
               </ul>
               <div className="mt-8 space-y-3">
-                <Button className="w-full bg-white text-slate-900 hover:bg-slate-200" asChild>
-                  <Link href="/demo" onClick={() => setOpen(false)}>
-                    Launch demo studio
-                  </Link>
-                </Button>
+                {!isDemo && (
+                  <Button className="w-full bg-white text-slate-900 hover:bg-slate-200" asChild>
+                    <Link href="/demo" onClick={() => setOpen(false)}>
+                      Launch demo studio
+                    </Link>
+                  </Button>
+                )}
+                {isDemo && (
+                  <Button className="w-full" variant="outline" asChild>
+                    <Link href="/" onClick={() => setOpen(false)}>
+                      Back to Home
+                    </Link>
+                  </Button>
+                )}
               </div>
             </SheetContent>
           </Sheet>

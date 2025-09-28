@@ -63,7 +63,7 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
 
   return (
     <div className="h-full overflow-hidden">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 p-3 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 h-full">
         <div className="lg:col-span-2 space-y-4 flex flex-col min-h-0">
             <Card className="bg-white/80 backdrop-blur-sm border border-slate-200/50 shadow-lg">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
@@ -130,12 +130,12 @@ export function SustainabilityDashboard({ onBack }: { onBack: () => void }) {
                   </CardTitle>
                   <CardDescription className="text-xs text-slate-600 leading-relaxed">Sales accounts for 65% of travel emissions but has the highest adoption rate of &apos;Greener Choice&apos; recommendations.</CardDescription>
               </CardHeader>
-              <CardContent>
-                   <ChartContainer config={chartConfig} className="h-32 w-full">
+              <CardContent className="flex-grow">
+                   <ChartContainer config={chartConfig} className="h-64 w-full">
                       <BarChart data={chartData} accessibilityLayer>
                           <CartesianGrid vertical={false} />
-                          <XAxis dataKey="department" tickLine={false} tickMargin={6} axisLine={false} fontSize={10} />
-                          <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `${value}t`} fontSize={10} />
+                          <XAxis dataKey="department" tickLine={false} tickMargin={10} axisLine={false} fontSize={12} />
+                          <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `${value}t`} fontSize={12} />
                            <ChartTooltip content={<ChartTooltipContent />} />
                           <Bar dataKey="emissions" radius={4} />
                       </BarChart>
