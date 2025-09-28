@@ -392,14 +392,14 @@ export function FinanceDashboard({
           {selectedTxn ? (
             <div className="space-y-6 flex flex-col justify-between h-full">
               <div>
-                <div className="mb-6 p-4 bg-gradient-to-r from-slate-50 to-blue-50/50 rounded-xl border border-slate-200/50">
-                  <p className="text-sm text-slate-500 font-medium mb-1">
+                <div className="mb-8 p-6 bg-gradient-to-r from-slate-50 to-blue-50/50 rounded-xl border border-slate-200/50">
+                  <p className="text-base text-slate-500 font-medium mb-2">
                     {format(new Date(selectedTxn.date), "EEEE, MMMM d, yyyy 'at' p")}
                   </p>
-                  <h3 className="text-xl font-bold text-slate-800 mb-2">
+                  <h3 className="text-2xl font-bold text-slate-800 mb-3">
                     {selectedTxn.merchant}
                   </h3>
-                  <p className="text-3xl font-bold text-slate-900">
+                  <p className="text-4xl font-bold text-slate-900">
                     {currencyFormatter.format(selectedTxn.amount)}
                   </p>
                 </div>
@@ -422,26 +422,26 @@ export function FinanceDashboard({
                   )}
                 </div>
               </div>
-              <div className="flex justify-end space-x-3 pt-6 border-t border-slate-200/50">
-                <Button variant="outline" className="font-medium hover:bg-slate-50 hover:border-slate-300 transition-colors">
+              <div className="flex justify-end space-x-4 pt-8 border-t border-slate-200/50">
+                <Button variant="outline" size="lg" className="font-semibold text-base hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 h-12 px-6">
                   Request Info
                 </Button>
-                <Button variant="destructive" className="font-medium hover:shadow-lg transition-all">
+                <Button variant="destructive" size="lg" className="font-semibold text-base hover:shadow-lg transition-all duration-200 h-12 px-6">
                   Reject Expense
                 </Button>
-                <Button className="font-medium bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all">
+                <Button size="lg" className="font-semibold text-base bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-lg transition-all duration-200 h-12 px-6">
                   Approve Exception
                 </Button>
               </div>
             </div>
           ) : (
-            <div className="flex h-full items-center justify-center text-slate-500 rounded-lg border-2 border-dashed border-slate-300/50">
+            <div className="flex h-full items-center justify-center text-slate-500 rounded-xl border-2 border-dashed border-slate-300/50 bg-slate-50/20">
               <div className="text-center">
-                <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-4">
-                  <BarChart className="h-8 w-8 text-slate-400" />
+                <div className="w-20 h-20 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-6 shadow-sm">
+                  <BarChart className="h-10 w-10 text-slate-400" />
                 </div>
-                <p className="font-medium">Select an exception to view details</p>
-                <p className="text-sm text-slate-400 mt-1">
+                <p className="font-semibold text-lg text-slate-700 mb-2">Select an exception to view details</p>
+                <p className="text-base text-slate-500">
                   Click on a transaction above to see AI analysis
                 </p>
               </div>
