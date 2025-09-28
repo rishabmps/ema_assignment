@@ -59,9 +59,24 @@ export function TravelerBookingView({ hideInlineAgentActivity = false }: Travele
 
   const { simulateBookingFlow: runGlobalBookingFlow } = useDemoAgentContext();
 
+  // Smart auto-scroll: only scroll when new messages are added by agent or user
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    const lastMessage = messages[messages.length - 1];
+    if (!lastMessage) return;
+    
+    // Only auto-scroll for new messages, not when existing messages are modified
+    const timeoutId = setTimeout(() => {
+      if (chatEndRef.current) {
+        chatEndRef.current.scrollIntoView({ 
+          behavior: "smooth", 
+          block: "nearest",
+          inline: "nearest"
+        });
+      }
+    }, 300); // Small delay to avoid interrupting user interactions
+    
+    return () => clearTimeout(timeoutId);
+  }, [messages.length]); // Only trigger on new messages, not content changes
   
   const addMessage = (message: Message) => {
     setMessages((prev) => [...prev, message]);
