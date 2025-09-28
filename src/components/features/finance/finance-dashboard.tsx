@@ -474,60 +474,59 @@ export function FinanceDashboard({
 
   return (
     <div className="w-full h-full bg-white flex flex-col">
-      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-6 py-4">
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-sm">AT</span>
+      <nav className="flex-shrink-0 bg-white border-b border-slate-200 px-4 py-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+              <span className="text-white font-bold text-xs">AT</span>
             </div>
             <div className="flex flex-col">
-              <span className="text-lg font-semibold text-slate-900">Agentic T&E</span>
+              <span className="text-sm font-semibold text-slate-900">Agentic T&E</span>
               <span className="text-xs text-slate-500">Enterprise Finance</span>
             </div>
           </div>
 
-          <div className="flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              {NAV_ITEMS.map((item) => {
-                const isActive = activeSection === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => setActiveSection(item.id)}
-                    className={cn(
-                      "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all",
-                      "border border-transparent shadow-sm",
-                      isActive
-                        ? "bg-slate-900 text-white shadow-lg"
-                        : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
-                    )}
-                  >
-                    <item.icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+          <div className="flex items-center gap-1 flex-1 justify-center min-w-0">
+            {NAV_ITEMS.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setActiveSection(item.id)}
+                  className={cn(
+                    "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium transition-all whitespace-nowrap",
+                    "border border-transparent shadow-sm",
+                    isActive
+                      ? "bg-slate-900 text-white shadow-lg"
+                      : "bg-white text-slate-600 border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                  )}
+                >
+                  <item.icon className="h-3 w-3" />
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <Button
               variant="outline"
-              className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200"
+              size="sm"
+              className="border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all duration-200 text-xs"
               onClick={handleExportData}
               title="Export dashboard data as JSON file"
             >
-              <ExternalLink className="h-4 w-4 mr-2" />
+              <ExternalLink className="h-3 w-3 mr-1" />
               Export Data
             </Button>
-            <div className="flex items-center gap-2">
-              <Avatar className="w-8 h-8">
-                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-sm">
+            <div className="flex items-center gap-1.5">
+              <Avatar className="w-6 h-6">
+                <AvatarFallback className="bg-purple-100 text-purple-600 font-medium text-xs">
                   AJ
                 </AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-slate-700">Alex Johnson</span>
+              <span className="text-xs font-medium text-slate-700">Alex Johnson</span>
             </div>
           </div>
         </div>
