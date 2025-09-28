@@ -112,6 +112,7 @@ function MainDashboardContent() {
   
   // Track current URL for finance dashboard
   const [currentFinanceUrl, setCurrentFinanceUrl] = useState("agentic-te.demo/dashboard");
+  const [currentFinanceSection, setCurrentFinanceSection] = useState<FinanceSection>("dashboard");
 
   const demoRef = useRef<HTMLDivElement>(null);
 
@@ -307,6 +308,7 @@ function MainDashboardContent() {
   }, [step, persona, activateFinanceScenario, getFinanceScenario]);
 
   const handleFinanceSectionChange = useCallback((section: FinanceSection) => {
+    setCurrentFinanceSection(section);
     activateFinanceScenario(getFinanceScenario(section));
   }, [activateFinanceScenario, getFinanceScenario]);
   
@@ -983,7 +985,7 @@ function MainDashboardContent() {
           context={{
             persona: persona === 'finance' ? 'alex' : 'sarah',
             demoType: persona === 'finance' ? 'finance' : act,
-            section: persona === 'finance' ? financeSection : undefined
+            section: persona === 'finance' ? currentFinanceSection : undefined
           }}
         />
       )}
