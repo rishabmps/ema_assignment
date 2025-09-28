@@ -750,11 +750,12 @@ function MainDashboardContent() {
 
     let path = <span className="cursor-pointer hover:text-blue-300 transition-colors font-medium text-slate-400" onClick={() => setStep('persona')}>Select Persona</span>;
     
-    if (step === 'act' || (step === 'demo' && persona === 'traveler')) {
+    // Add persona name based on current selection
+    if ((step === 'act' || step === 'demo') && persona === 'traveler') {
       path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="text-slate-300 font-medium">{traveler?.name}</span></>;
     }
     
-    if (step === 'demo' && persona === 'finance') {
+    if ((step === 'act' || step === 'demo') && persona === 'finance') {
        path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="text-slate-300 font-medium">{finance?.name}</span></>;
     }
 
@@ -768,6 +769,10 @@ function MainDashboardContent() {
         if (act === 'expense') actName = 'Act I';
         if (act === 'booking') actName = 'Act II';
         path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="text-slate-300 font-medium">{actName}</span></>;
+    }
+
+    if (step === 'demo' && persona === 'finance') {
+        path = <>{path} <ChevronRight className="h-3 w-3 inline-block mx-2 text-slate-500" /> <span className="text-slate-300 font-medium">Finance Operations</span></>;
     }
     
     return path;
