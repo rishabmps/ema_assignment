@@ -183,15 +183,15 @@ export function FinanceDashboard({
   }, [activeSection, exceptionTransactions, selectedTxn]);
 
   const renderDashboard = () => (
-    <div className="space-y-10">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+    <div className="space-y-6">
+      <header className="flex flex-col gap-1">
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
           Finance Operations
         </h1>
-        <p className="text-slate-600 text-lg font-medium">Welcome back, Alex.</p>
+        <p className="text-slate-600 text-sm font-medium">Welcome back, Alex.</p>
       </header>
 
-      <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {kpiData.map((kpi, index) => (
           <Card
             key={kpi.title}
@@ -200,81 +200,80 @@ export function FinanceDashboard({
           >
             <div className="absolute inset-0 bg-white/80 backdrop-blur-sm" />
             <div className="relative z-10">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-                <CardTitle className="text-sm font-semibold text-slate-700 group-hover:text-slate-800 transition-colors">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-xs font-semibold text-slate-700 group-hover:text-slate-800 transition-colors">
                   {kpi.title}
                 </CardTitle>
                 <div
-                  className={`w-10 h-10 rounded-xl bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}
+                  className={`w-8 h-8 rounded-lg bg-gradient-to-r ${kpi.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform group-hover:shadow-xl`}
                 >
-                  <kpi.icon className="h-5 w-5 text-white" />
+                  <kpi.icon className="h-4 w-4 text-white" />
                 </div>
               </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-slate-800 mb-1 group-hover:text-slate-900 transition-colors">
+              <CardContent className="pt-0">
+                <div className="text-2xl font-bold text-slate-800 mb-1 group-hover:text-slate-900 transition-colors">
                   {kpi.value}
                 </div>
-                <p className="text-sm text-slate-600 font-medium group-hover:text-slate-700 transition-colors">
+                <p className="text-xs text-slate-600 font-medium group-hover:text-slate-700 transition-colors">
                   {kpi.description}
                 </p>
               </CardContent>
-              <div className="absolute -bottom-2 -right-2 w-16 h-16 bg-gradient-to-br from-slate-200/20 to-slate-300/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 -z-10" />
             </div>
           </Card>
         ))}
       </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <Card className="bg-gradient-to-br from-white to-emerald-50/30 border border-emerald-100/40 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-xs font-semibold text-slate-700">
               Automated VAT Reclaim
             </CardTitle>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
-              <HandCoins className="h-5 w-5 text-white" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg">
+              <HandCoins className="h-4 w-4 text-white" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-slate-800 mb-1">
+          <CardContent className="pt-0">
+            <div className="text-2xl font-bold text-slate-800 mb-1">
               {currencyFormatter.format(vatReclaimable)}
             </div>
-            <p className="text-sm text-slate-600 font-medium">
+            <p className="text-xs text-slate-600 font-medium">
               Identified in the last 30 days
             </p>
           </CardContent>
         </Card>
 
         <Card className="bg-gradient-to-br from-white to-amber-50/30 border border-amber-100/40 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-xs font-semibold text-slate-700">
               Policy Insights
             </CardTitle>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center shadow-lg">
-              <Lightbulb className="h-5 w-5 text-white" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 flex items-center justify-center shadow-lg">
+              <Lightbulb className="h-4 w-4 text-white" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-slate-800 mb-1">
+          <CardContent className="pt-0">
+            <div className="text-2xl font-bold text-slate-800 mb-1">
               {policyInsightsCount} New Recommendation
             </div>
-            <p className="text-sm text-slate-600 font-medium">
+            <p className="text-xs text-slate-600 font-medium">
               Data-driven suggestions to improve efficiency
             </p>
           </CardContent>
         </Card>
 
         <Card className="bg-gradient-to-br from-white to-green-50/30 border border-green-100/40 shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-            <CardTitle className="text-sm font-semibold text-slate-700">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-xs font-semibold text-slate-700">
               Sustainability Progress
             </CardTitle>
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center shadow-lg">
-              <Leaf className="h-5 w-5 text-white" />
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center shadow-lg">
+              <Leaf className="h-4 w-4 text-white" />
             </div>
           </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-slate-800 mb-1">45.2 tons</div>
-            <p className="text-sm text-slate-600 font-medium">
+          <CardContent className="pt-0">
+            <div className="text-2xl font-bold text-slate-800 mb-1">45.2 tons</div>
+            <p className="text-xs text-slate-600 font-medium">
               Quarterly CO₂e on track to meet goal
             </p>
           </CardContent>
